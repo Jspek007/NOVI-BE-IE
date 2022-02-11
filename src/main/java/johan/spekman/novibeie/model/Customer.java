@@ -1,4 +1,4 @@
-package johan.spekman.novibeie.Customer;
+package johan.spekman.novibeie.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
