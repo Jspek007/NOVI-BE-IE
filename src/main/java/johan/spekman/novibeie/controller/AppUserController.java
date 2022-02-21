@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.model.AppUser;
 import johan.spekman.novibeie.model.Authority;
 import johan.spekman.novibeie.service.AppUserService;
+import johan.spekman.novibeie.util.JwtResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,7 +25,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class AppUserController {
     private final AppUserService appUserService;
 
@@ -102,12 +103,7 @@ public class AppUserController {
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
             } catch (Exception exception) {
-                response.setHeader("error", exception.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> errorMessage = new HashMap<>();
-                errorMessage.put("error_message", exception.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), errorMessage);
+                JwtResponse.setResponse(response, exception);
             }
         } else {
             throw new RuntimeException("Refresh token is missing!");
