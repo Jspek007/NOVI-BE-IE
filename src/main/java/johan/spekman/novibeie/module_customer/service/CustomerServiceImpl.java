@@ -1,0 +1,58 @@
+package johan.spekman.novibeie.module_customer.service;
+
+import johan.spekman.novibeie.module_customer.dto.CustomerDto;
+import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.List;
+
+@Service
+@Transactional
+public class CustomerServiceImpl implements CustomerService {
+    private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+        this.customerRepository = customerRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                stringBuilder.append(fieldError.getDefaultMessage());
+                stringBuilder.append("\n");
+            }
+            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
+        } else {
+            String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
+
+            Customer customer = new Customer();
+
+            customer.setFirstName(customerDto.getFirstName());
+            customer.setInsertion(customerDto.getInsertion());
+            customer.setLastName(customerDto.getLastName());
+            customer.setPassword(encryptedPassword);
+            customer.setPhoneNumber(customerDto.getPhoneNumber());
+            customer.setEmailAddress(customerDto.getEmailAddress());
+
+            Customer savedCustomer = customerRepository.save(customer);
+            return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+        }
+    }
+}
