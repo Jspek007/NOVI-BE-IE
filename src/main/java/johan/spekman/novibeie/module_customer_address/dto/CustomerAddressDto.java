@@ -11,9 +11,7 @@ import javax.validation.constraints.Size;
 public class CustomerAddressDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private Long customerId;
+    private Long parentId;
 
     @NotBlank
     private String streetName;
@@ -32,20 +30,12 @@ public class CustomerAddressDto {
 
     private CustomerAddressType customerAddressType;
 
-    public Long getId() {
-        return id;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public String getStreetName() {

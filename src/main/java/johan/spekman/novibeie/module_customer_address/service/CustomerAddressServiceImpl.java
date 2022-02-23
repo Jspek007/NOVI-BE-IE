@@ -37,10 +37,11 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             }
             return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
         } else {
-            Long customerId = customerAddressDto.getId();
+            Long customerId = customerAddressDto.getParentId();
             Customer customer = customerRepository.findByCustomerId(customerId);
 
             CustomerAddress customerAddress = new CustomerAddress();
+            customerAddress.setParentId(customer.getCustomerId());
             customerAddress.setStreetName(customerAddressDto.getStreetName());
             customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());
             customerAddress.setAddition(customerAddressDto.getAddition());
@@ -48,7 +49,8 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             customerAddress.setCity(customerAddressDto.getCity());
             customerAddress.setCustomerAddressType(customerAddressDto.getCustomerAddressType());
 
-            customer.getCustomerAddresses().add(customerAddress);
+
+            customer.addCustomerAddress(customerAddress);
 //            CustomerAddress savedAddress = customerAddressRepository.save(customerAddress);
 //            return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
             return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);

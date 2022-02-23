@@ -1,13 +1,18 @@
 package johan.spekman.novibeie.module_customer_address.model;
 
+import johan.spekman.novibeie.module_customer.model.Customer;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @Entity
-@Table(name = "customer_addresses")
+@Table(name = "addresses")
+@Transactional
 public class CustomerAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long parentId;
     private String streetName;
     private int houseNumber;
     private String addition;
@@ -15,6 +20,9 @@ public class CustomerAddress {
     private String city;
     @Enumerated(EnumType.STRING)
     private CustomerAddressType customerAddressType;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     public Long getId() {
         return id;
@@ -22,6 +30,14 @@ public class CustomerAddress {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public String getStreetName() {
@@ -70,5 +86,13 @@ public class CustomerAddress {
 
     public void setCustomerAddressType(CustomerAddressType customerAddressType) {
         this.customerAddressType = customerAddressType;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

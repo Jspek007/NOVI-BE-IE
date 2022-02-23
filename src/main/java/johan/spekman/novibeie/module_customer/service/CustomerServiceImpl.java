@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -41,6 +42,10 @@ public class CustomerServiceImpl implements CustomerService {
             return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
         } else {
             String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
+            Random random = new Random();
+            long low = 100000L;
+            long high = 999999L;
+            Long customerId = random.nextLong(high-low) + low;
 
             Customer customer = new Customer();
 
@@ -50,6 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setPassword(encryptedPassword);
             customer.setPhoneNumber(customerDto.getPhoneNumber());
             customer.setEmailAddress(customerDto.getEmailAddress());
+            customer.setCustomerId(customerId);
 
             Customer savedCustomer = customerRepository.save(customer);
             return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);

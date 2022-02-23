@@ -1,16 +1,19 @@
 package johan.spekman.novibeie.module_customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
 public class Customer {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private Long customerId;
     private String firstName;
     private String insertion;
@@ -18,8 +21,17 @@ public class Customer {
     private String phoneNumber;
     private String emailAddress;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Collection<CustomerAddress> customerAddresses = new ArrayList<>();
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<CustomerAddress> customerAddresses = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getCustomerId() {
         return customerId;
@@ -77,11 +89,21 @@ public class Customer {
         this.password = password;
     }
 
-    public Collection<CustomerAddress> getCustomerAddresses() {
+    public List<CustomerAddress> getCustomerAddresses() {
         return customerAddresses;
     }
 
-    public void setCustomerAddresses(Collection<CustomerAddress> customerAddresses) {
+    public void setCustomerAddresses(List<CustomerAddress> customerAddresses) {
         this.customerAddresses = customerAddresses;
+    }
+
+    public void addCustomerAddress(CustomerAddress customerAddress) {
+        if (customerAddress != null) {
+            if (customerAddresses == null) {
+                customerAddresses = new ArrayList<>();
+            }
+            customerAddresses.add(customerAddress);
+            customerAddress.setCustomer(this);
+        }
     }
 }
