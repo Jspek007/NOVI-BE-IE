@@ -1,6 +1,9 @@
 package johan.spekman.novibeie.module_customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 
 import javax.persistence.*;
@@ -9,9 +12,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Customer {
     @Id
-    @Column(name = "id")
+    @Column(name = "entity_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long customerId;
@@ -22,7 +29,6 @@ public class Customer {
     private String emailAddress;
     private String password;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
 
     public Long getId() {

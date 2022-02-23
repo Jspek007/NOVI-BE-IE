@@ -1,5 +1,7 @@
 package johan.spekman.novibeie.module_customer_address.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer.model.Customer;
 
 import javax.persistence.*;
@@ -8,7 +10,14 @@ import javax.transaction.Transactional;
 @Entity
 @Table(name = "addresses")
 @Transactional
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class CustomerAddress {
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +29,6 @@ public class CustomerAddress {
     private String city;
     @Enumerated(EnumType.STRING)
     private CustomerAddressType customerAddressType;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 
     public Long getId() {
         return id;
