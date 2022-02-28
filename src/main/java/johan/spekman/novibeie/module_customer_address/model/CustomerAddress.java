@@ -16,12 +16,12 @@ import javax.transaction.Transactional;
 )
 public class CustomerAddress {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "parent_id")
     private Customer customer;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long parentId;
+    private Long customerId;
     private String streetName;
     private int houseNumber;
     private String addition;
@@ -38,12 +38,12 @@ public class CustomerAddress {
         this.id = id;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getStreetName() {

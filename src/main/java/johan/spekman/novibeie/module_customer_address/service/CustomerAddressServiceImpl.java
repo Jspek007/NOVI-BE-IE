@@ -19,11 +19,9 @@ import javax.validation.Valid;
 @Transactional
 public class CustomerAddressServiceImpl implements CustomerAddressService {
     private final CustomerRepository customerRepository;
-    private final CustomerAddressRepository customerAddressRepository;
 
-    public CustomerAddressServiceImpl(CustomerRepository customerRepository, CustomerAddressRepository customerAddressRepository) {
+    public CustomerAddressServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerAddressRepository = customerAddressRepository;
     }
 
     @Override
@@ -41,18 +39,20 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             Customer customer = customerRepository.findByCustomerId(customerId);
 
             CustomerAddress customerAddress = new CustomerAddress();
-            customerAddress.setParentId(customer.getCustomerId());
+            customerAddress.setCustomerId(customer.getCustomerId());
             customerAddress.setStreetName(customerAddressDto.getStreetName());
             customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());
             customerAddress.setAddition(customerAddressDto.getAddition());
             customerAddress.setPostalCode(customerAddressDto.getPostalCode());
             customerAddress.setCity(customerAddressDto.getCity());
-            customerAddress.setCustomerAddressType(customerAddressDto.getCustomerAddressType());
 
+            if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
+                return new ResponseEntity<>("Incorrect postal code format", HttpStatus.BAD_REQUEST);
+            } else {
+                customerAddress.setPostalCode(customerAddressDto.getPostalCode());
+            }
 
             customer.addCustomerAddress(customerAddress);
-//            CustomerAddress savedAddress = customerAddressRepository.save(customerAddress);
-//            return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
             return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
         }
     }

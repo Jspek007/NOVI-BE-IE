@@ -49,11 +49,16 @@ public class CustomerServiceImpl implements CustomerService {
 
             Customer customer = new Customer();
 
+            if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.getPhoneNumber())) {
+                return new ResponseEntity<>("Incorrect phone number format", HttpStatus.BAD_REQUEST);
+            } else {
+                customer.setPhoneNumber(customerDto.getPhoneNumber());
+            }
+
             customer.setFirstName(customerDto.getFirstName());
             customer.setInsertion(customerDto.getInsertion());
             customer.setLastName(customerDto.getLastName());
             customer.setPassword(encryptedPassword);
-            customer.setPhoneNumber(customerDto.getPhoneNumber());
             customer.setEmailAddress(customerDto.getEmailAddress());
             customer.setCustomerId(customerId);
 

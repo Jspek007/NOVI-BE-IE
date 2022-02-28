@@ -1,10 +1,5 @@
 package johan.spekman.novibeie.module_customer.dto;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.TableGenerator;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

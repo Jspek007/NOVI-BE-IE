@@ -25,17 +25,17 @@ public class NoviBeIeApplication {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    CommandLineRunner runner(AppUserService appUserService) {
-        return args -> {
-            appUserService.saveAuthority(new Authority(null, "USER"));
-            appUserService.saveAuthority(new Authority(null, "MANAGER"));
-            appUserService.saveAuthority(new Authority(null, "ADMIN"));
-
-            appUserService.saveUser(new AppUser(null, "Johan Spekman", "Jspek", "Admin123",
-                    new ArrayList<Authority>()));
-
-            appUserService.addRoleToAppUser("Jspek", "ADMIN");
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner(AppUserService appUserService) {
+//        return args -> {
+//            appUserService.saveAuthority(new Authority(null, "USER"));
+//            appUserService.saveAuthority(new Authority(null, "MANAGER"));
+//            appUserService.saveAuthority(new Authority(null, "ADMIN"));
+//
+//            appUserService.saveUser(new AppUser(null, "Johan Spekman", "Jspek", "Admin123",
+//                    new ArrayList<Authority>()));
+//
+//            appUserService.addRoleToAppUser("Jspek", "ADMIN");
+//        };
+//    }
 }

@@ -22,7 +22,6 @@ public class CustomerAddressDto {
     @Size(min = 1, max = 6)
     private String addition;
 
-    @NotBlank
     private String postalCode;
 
     @NotBlank
