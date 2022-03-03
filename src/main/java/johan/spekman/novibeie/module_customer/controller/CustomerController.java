@@ -6,8 +6,11 @@ import johan.spekman.novibeie.module_customer.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,14 +22,21 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("get/all")
+    @GetMapping("/get/all")
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
+    }
+
+    @GetMapping(path = "/get/{email}")
+    public Customer getCustomerByEmailAddress(@PathVariable("email") String customerEmail) {
+        return customerService.getCustomerByEmailAddress(customerEmail);
     }
 
     @PostMapping("/save")
     public ResponseEntity<Object> saveNewCustomer(@Valid @RequestBody CustomerDto customerDto,
                                                   BindingResult bindingResult) {
-        return ResponseEntity.ok().body(customerService.createCustomer(customerDto, bindingResult));
+        URI uri =
+                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customer/save").toUriString());
+        return ResponseEntity.created(uri).body(customerService.createCustomer(customerDto, bindingResult));
     }
 }

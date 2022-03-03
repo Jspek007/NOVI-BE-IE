@@ -1,8 +1,6 @@
 package johan.spekman.novibeie.module_customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 
@@ -19,7 +17,7 @@ import java.util.List;
 public class Customer {
     @Id
     @Column(name = "entity_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long customerId;
     private String firstName;
@@ -30,6 +28,20 @@ public class Customer {
     private String password;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
+
+    public Customer() {
+    }
+
+    public Customer(Long id, Long customerId, String firstName, String insertion, String lastName, String phoneNumber, String emailAddress, String password) {
+        this.id = id;
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.insertion = insertion;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
 
     public Long getId() {
         return id;

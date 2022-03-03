@@ -25,6 +25,15 @@ public class CustomerDto {
     @Size(min = 8, max = 40)
     private String password;
 
+    public CustomerDto(String firstName, String insertion, String lastName, String phoneNumber, String emailAddress, String password) {
+        this.firstName = firstName;
+        this.insertion = insertion;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
+
     public String getFirstName() {
         return firstName;
     }
