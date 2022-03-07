@@ -38,6 +38,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
+
+        // Validate user input before attempting to create a new customer
+
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -46,7 +49,12 @@ public class CustomerServiceImpl implements CustomerService {
             }
             return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
         } else {
+
+            // Encrypt the password of the user
             String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
+
+            // Generate the random customerId
+
             Random random = new Random();
             long low = 100000L;
             long high = 999999L;
@@ -54,12 +62,20 @@ public class CustomerServiceImpl implements CustomerService {
 
             Customer customer = new Customer();
 
+            /*
+                Validate the given phone-number for the correct
+                Dutch format (+31612345678)
+             */
+
             if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.getPhoneNumber())) {
                 return new ResponseEntity<>("Incorrect phone number format", HttpStatus.BAD_REQUEST);
             } else {
                 customer.setPhoneNumber(customerDto.getPhoneNumber());
             }
 
+            /*
+                Create the actual new customer
+             */
             customer.setFirstName(customerDto.getFirstName());
             customer.setInsertion(customerDto.getInsertion());
             customer.setLastName(customerDto.getLastName());

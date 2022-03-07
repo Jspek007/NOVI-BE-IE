@@ -11,6 +11,5 @@ import java.util.List;
 public interface CustomerService {
     List<Customer> getAllCustomers();
     Customer getCustomerByEmailAddress(String emailAddress);
-    ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto,
-                                          BindingResult bindingResult);
+    ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
 }

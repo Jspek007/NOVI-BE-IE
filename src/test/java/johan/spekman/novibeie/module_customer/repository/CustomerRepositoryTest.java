@@ -14,7 +14,7 @@ class CustomerRepositoryTest {
     private CustomerRepository underTest;
 
     @Test
-    void itShouldFindCustomerById() {
+    void findByCustomerId() {
         // given
         Customer customer = new Customer(
                 null,
@@ -34,6 +34,30 @@ class CustomerRepositoryTest {
         // then
         String expected = "Henk" + "de" + "Tester";
         String actual = found.getFirstName() + found.getInsertion() + found.getLastName();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findByEmailAddress() {
+        Customer customer = new Customer(
+                null,
+                123456L,
+                "Henk",
+                "de",
+                "Tester",
+                "+31612345678",
+                "Test@test.nl",
+                "Test123"
+        );
+        underTest.save(customer);
+
+        // when
+        Customer found = underTest.findByEmailAddress("Test@test.nl");
+
+        // then
+        String expected = "Test@test.nl";
+        String actual = found.getEmailAddress();
 
         assertEquals(expected, actual);
     }
