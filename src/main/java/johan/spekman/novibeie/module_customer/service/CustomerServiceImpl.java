@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
             Random random = new Random();
             long low = 100000L;
             long high = 999999L;
-            Long customerId = random.nextLong(high-low) + low;
+            Long customerId = random.nextLong(high - low) + low;
 
             Customer customer = new Customer();
 
@@ -92,5 +92,25 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomerById(Long customerId) {
         Long entityId = customerRepository.findByCustomerId(customerId).getId();
         customerRepository.deleteById(entityId);
+    }
+
+    @Override
+    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto) {
+        Customer foundCustomer = customerRepository.findByCustomerId(customerId);
+        String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
+
+        if (foundCustomer != null) {
+            foundCustomer.setFirstName(newCustomerDto.getFirstName());
+            foundCustomer.setInsertion(newCustomerDto.getInsertion());
+            foundCustomer.setLastName(newCustomerDto.getLastName());
+            foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
+            foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
+            foundCustomer.setPassword(encryptedPassword);
+
+            customerRepository.save(foundCustomer);
+            return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
+        } else {
+            return null;
+        }
     }
 }
