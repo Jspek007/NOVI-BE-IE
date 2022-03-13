@@ -3,12 +3,10 @@ package johan.spekman.novibeie.module_customer_address.service;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
-import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Locale;
+
 
 
 @SpringBootTest
@@ -43,18 +44,6 @@ class CustomerAddressServiceImplTest {
     @Test
     void shouldThrowInvalidAddressException() {
         // Given
-        Customer customer = new Customer(
-                100L,
-                111111L,
-                "Test",
-                "",
-                "Tester",
-                "+3112345678",
-                "Test@test.com",
-                "Test123!"
-        );
-        customerRepository.save(customer);
-
         CustomerAddressDto customerAddressDto = new CustomerAddressDto(
                 111111L,
                 "Teststreet",
@@ -66,13 +55,10 @@ class CustomerAddressServiceImplTest {
         );
         BindingResult bindingResult = new BindException(customerAddressDto, "customerAddress");
 
-        customerRepository.findByCustomerId(111111L);
-
         // When
-        underTest.createNewAddress(customerAddressDto, bindingResult);
+        String result = String.valueOf(underTest.createNewAddress(customerAddressDto, bindingResult));
 
         // Then
-        ArgumentCaptor<CustomerAddress> customerAddressArgumentCaptor = ArgumentCaptor.forClass(CustomerAddress.class);
-        verify(customerAddressArgumentCaptor).toString();
+        assertThat(result.toLowerCase(Locale.ROOT)).isEqualTo("<400 bad_request bad request,incorrect postal code format,[]>");
     }
 }

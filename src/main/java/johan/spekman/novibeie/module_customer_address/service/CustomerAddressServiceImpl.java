@@ -35,22 +35,34 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             }
             return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
         } else {
+            CustomerAddress customerAddress = new CustomerAddress();
+
+            /*
+                Validate customer postal code
+             */
+            if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
+                return new ResponseEntity<>("Incorrect postal code format", HttpStatus.BAD_REQUEST);
+            } else {
+                customerAddress.setPostalCode(customerAddressDto.getPostalCode());
+            }
+
+            /*
+                Generate customerNumber
+             */
+
             Long customerId = customerAddressDto.getParentId();
             Customer customer = customerRepository.findByCustomerId(customerId);
 
-            CustomerAddress customerAddress = new CustomerAddress();
+            /*
+                Save customer address after checks has been successful
+             */
+
             customerAddress.setCustomerId(customer.getCustomerId());
             customerAddress.setStreetName(customerAddressDto.getStreetName());
             customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());
             customerAddress.setAddition(customerAddressDto.getAddition());
             customerAddress.setPostalCode(customerAddressDto.getPostalCode());
             customerAddress.setCity(customerAddressDto.getCity());
-
-            if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
-                return new ResponseEntity<>("Incorrect postal code format", HttpStatus.BAD_REQUEST);
-            } else {
-                customerAddress.setPostalCode(customerAddressDto.getPostalCode());
-            }
 
             customer.addCustomerAddress(customerAddress);
             return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
