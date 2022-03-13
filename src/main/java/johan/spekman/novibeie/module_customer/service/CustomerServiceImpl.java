@@ -74,6 +74,14 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             /*
+                Check if given email is already used for an existing customer
+             */
+            Customer customerByEmail = customerRepository.findByEmailAddress(customerDto.getEmailAddress());
+            if (customerByEmail != null) {
+                return new ResponseEntity<>("Account with this e-mail already exists", HttpStatus.FORBIDDEN);
+            }
+
+            /*
                 Create the actual new customer
              */
             customer.setFirstName(customerDto.getFirstName());

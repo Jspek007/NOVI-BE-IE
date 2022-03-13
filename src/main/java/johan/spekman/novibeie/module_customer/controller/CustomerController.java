@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.controller;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,11 @@ public class CustomerController {
     @PostMapping("/save")
     public ResponseEntity<Object> saveNewCustomer(@Valid @RequestBody CustomerDto customerDto,
                                                   BindingResult bindingResult) {
+        Customer customer = customerService.getCustomerByEmailAddress(customerDto.getEmailAddress());
+        if (customer != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account with this e-mail already exists!");
+        }
+
         URI uri =
                 URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customer/save").toUriString());
         return ResponseEntity.created(uri).body(customerService.createCustomer(customerDto, bindingResult));
