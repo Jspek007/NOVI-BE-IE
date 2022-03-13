@@ -5,8 +5,10 @@ import johan.spekman.novibeie.module_customer_address.service.CustomerAddressSer
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/customer/address")
@@ -22,6 +24,10 @@ public class CustomerAddressController {
             @Valid @RequestBody
             CustomerAddressDto customerAddressDto,
             BindingResult bindingResult) {
-        return ResponseEntity.ok().body(customerAddressService.createNewAddress(customerAddressDto, bindingResult));
+        URI uri =
+                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/customer/address/save")
+                        .toUriString());
+        return ResponseEntity.created(uri).body(customerAddressService.createNewAddress(customerAddressDto,
+                bindingResult));
     }
 }

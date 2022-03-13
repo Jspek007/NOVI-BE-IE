@@ -30,21 +30,6 @@ public class CustomerAddress {
     @Enumerated(EnumType.STRING)
     private CustomerAddressType customerAddressType;
 
-    public CustomerAddress() {
-    }
-
-    public CustomerAddress(Customer customer, Long id, Long customerId, String streetName, int houseNumber, String addition, String postalCode, String city, CustomerAddressType customerAddressType) {
-        this.customer = customer;
-        this.id = id;
-        this.customerId = customerId;
-        this.streetName = streetName;
-        this.houseNumber = houseNumber;
-        this.addition = addition;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.customerAddressType = customerAddressType;
-    }
-
     public Long getId() {
         return id;
     }

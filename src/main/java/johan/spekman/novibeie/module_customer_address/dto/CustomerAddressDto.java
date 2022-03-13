@@ -29,6 +29,19 @@ public class CustomerAddressDto {
 
     private CustomerAddressType customerAddressType;
 
+    public CustomerAddressDto() {
+    }
+
+    public CustomerAddressDto(Long parentId, String streetName, int houseNumber, String addition, String postalCode, String city, CustomerAddressType customerAddressType) {
+        this.parentId = parentId;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.addition = addition;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.customerAddressType = customerAddressType;
+    }
+
     public Long getParentId() {
         return parentId;
     }

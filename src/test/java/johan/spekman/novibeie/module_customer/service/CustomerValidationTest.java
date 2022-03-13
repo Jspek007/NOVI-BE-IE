@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerValidationTest {
 
     @Test
-    void shouldReturnFalseOnCustomerPhoneNumbercheck() {
+    void shouldReturnFalseOnCustomerPhoneNumberCheck() {
         String phonenumber = "12345";
 
         boolean expected = false;
@@ -25,7 +25,7 @@ class CustomerValidationTest {
     }
 
     @Test
-    void shouldReturnTrueOnCustomerPhoneNumbercheck() {
+    void shouldReturnTrueOnCustomerPhoneNumberCheck() {
         String phonenumber = "+31612345678";
 
         boolean expected = true;
