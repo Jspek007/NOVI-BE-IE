@@ -38,4 +38,9 @@ public class CustomerController {
                 URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customer/save").toUriString());
         return ResponseEntity.created(uri).body(customerService.createCustomer(customerDto, bindingResult));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteCustomerById(@PathVariable("id") Long customerId) {
+        customerService.deleteCustomerById(customerId);
+    }
 }

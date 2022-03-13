@@ -12,4 +12,5 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
     Customer getCustomerByEmailAddress(String emailAddress);
     ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
+    void deleteCustomerById(Long customerId);
 }

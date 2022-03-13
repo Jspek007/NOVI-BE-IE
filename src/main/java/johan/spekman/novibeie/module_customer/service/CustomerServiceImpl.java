@@ -87,4 +87,10 @@ public class CustomerServiceImpl implements CustomerService {
             return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
         }
     }
+
+    @Override
+    public void deleteCustomerById(Long customerId) {
+        Long entityId = customerRepository.findByCustomerId(customerId).getId();
+        customerRepository.deleteById(entityId);
+    }
 }
