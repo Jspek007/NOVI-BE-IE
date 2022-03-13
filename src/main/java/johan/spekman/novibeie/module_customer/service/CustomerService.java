@@ -15,6 +15,5 @@ public interface CustomerService {
     Customer getCustomerByEmailAddress(String emailAddress);
     ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
     void deleteCustomerById(Long customerId);
-    ResponseEntity<Object> updateCustomer(@PathVariable("customerId") Long customerId,
-                                          @Valid @RequestBody CustomerDto newCustomerDto);
+    ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
 }

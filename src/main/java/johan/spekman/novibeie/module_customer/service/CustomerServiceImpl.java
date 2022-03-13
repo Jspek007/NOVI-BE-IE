@@ -95,7 +95,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto) {
+    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                stringBuilder.append(fieldError.getDefaultMessage());
+                stringBuilder.append("\n");
+            }
+            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
+        }
+
         Customer foundCustomer = customerRepository.findByCustomerId(customerId);
         String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
 
