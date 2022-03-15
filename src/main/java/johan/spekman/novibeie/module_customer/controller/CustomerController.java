@@ -41,7 +41,7 @@ public class CustomerController {
         }
 
         URI uri =
-                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customer/save").toUriString());
+                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/customer/save").toUriString());
         return ResponseEntity.created(uri).body(customerService.createCustomer(customerDto, bindingResult));
     }
 

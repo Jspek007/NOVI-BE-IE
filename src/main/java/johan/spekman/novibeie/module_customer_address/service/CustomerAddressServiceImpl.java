@@ -4,7 +4,6 @@ import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
-import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
