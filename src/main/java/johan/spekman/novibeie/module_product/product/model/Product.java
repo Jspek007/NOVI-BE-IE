@@ -1,5 +1,7 @@
 package johan.spekman.novibeie.module_product.product.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 
 import javax.persistence.*;
@@ -9,6 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "catalog_products")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Product {
     @Id
     @Column(name = "entity_id")

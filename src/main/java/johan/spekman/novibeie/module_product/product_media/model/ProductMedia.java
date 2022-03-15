@@ -1,11 +1,17 @@
 package johan.spekman.novibeie.module_product.product_media.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_product.product.model.Product;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_media_gallery")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class ProductMedia {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parent_id")

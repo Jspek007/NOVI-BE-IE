@@ -62,6 +62,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             customerAddress.setAddition(customerAddressDto.getAddition());
             customerAddress.setPostalCode(customerAddressDto.getPostalCode());
             customerAddress.setCity(customerAddressDto.getCity());
+            customerAddress.setCustomerAddressType(customerAddressDto.getCustomerAddressType());
 
             customer.addCustomerAddress(customerAddress);
             return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
