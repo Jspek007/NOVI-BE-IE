@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Service
@@ -21,7 +22,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     private final ProductRepository productRepository;
 
     public ProductMediaServiceImpl(ProductMediaRepository productMediaRepository,
-                                   ProductRepository productRepository)  {
+                                   ProductRepository productRepository) {
         this.productMediaRepository = productMediaRepository;
         this.productRepository = productRepository;
     }
@@ -38,12 +39,24 @@ public class ProductMediaServiceImpl implements ProductMediaService {
         Product product = productRepository.findBySku(sku);
         product.addProductMedia(productMedia);
         return productMediaRepository.save(productMedia);
-
     }
 
-        @Override
-        public byte[] getMediaFile(Long fileId) {
+    @Override
+    public boolean storeMultipleFiles(MultipartFile[] files, String sku) {
+        Arrays.stream(files).forEach(file -> {
+            try {
+                storeFile(file, sku);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        return true;
+    }
+
+
+    @Override
+    public byte[] getMediaFile(Long fileId) {
         ProductMedia productMedia = productMediaRepository.getById(fileId);
-            return ProductMediaCompressor.decompressBytes(productMedia.getData());
-        }
+        return ProductMediaCompressor.decompressBytes(productMedia.getData());
     }
+}

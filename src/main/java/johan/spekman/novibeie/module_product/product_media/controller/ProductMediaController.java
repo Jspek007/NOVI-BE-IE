@@ -42,19 +42,14 @@ public class ProductMediaController {
     }
 
     @PostMapping(path = "/upload/mass/{sku}")
-    public List<ResponseEntity<Object>> uploadMultipleFiles(@PathVariable("sku") String sku,
-                                                            @RequestBody MultipartFile[] files
-    ) {
-        return Arrays.stream(files)
-                .map(file -> {
-                    try {
-                        return uploadFile(sku, file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .collect(Collectors.toList());
+    public ResponseEntity<Object> uploadMultipleFiles(@PathVariable("sku") String sku,
+                                                      MultipartFile[] files) throws IOException {
+        if (productMediaService.storeMultipleFiles(files, sku)) {
+            return ResponseEntity.ok().body("Files uploaded: " + files.length);
+        } else {
+            return ResponseEntity.badRequest().header("Invalid file upload", "File upload" +
+                    " has not succeeded").body("Something went wrong while uploading the files!");
+        }
     }
 
     @GetMapping(path = "/download/{fileId}")
@@ -63,7 +58,7 @@ public class ProductMediaController {
             productMediaService.getMediaFile(fileId);
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(productMediaService.getMediaFile(fileId));
         } catch (Exception exception) {
-            return ResponseEntity.internalServerError().body(exception.getMessage())
+            return ResponseEntity.internalServerError().body(exception.getMessage());
         }
     }
 }
