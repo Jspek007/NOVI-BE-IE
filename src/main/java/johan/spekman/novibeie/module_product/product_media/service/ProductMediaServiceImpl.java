@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Objects;
@@ -43,8 +42,8 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     }
 
         @Override
-        public ProductMedia getFile(String sku) {
-        Long parentId = productRepository.findBySku(sku).getId();
-            return productMediaRepository.findByParentId(parentId);
+        public byte[] getMediaFile(Long fileId) {
+        ProductMedia productMedia = productMediaRepository.getById(fileId);
+            return ProductMediaCompressor.decompressBytes(productMedia.getData());
         }
     }

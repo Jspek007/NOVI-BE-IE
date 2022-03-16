@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface ProductMediaService {
     ProductMedia storeFile(MultipartFile file, String sku) throws IOException;
-    ProductMedia getFile(String sku);
+    byte[] getMediaFile(Long fileId);
 }

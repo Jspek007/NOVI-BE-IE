@@ -1,10 +1,9 @@
 package johan.spekman.novibeie.module_product.product_media.controller;
 
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
+import johan.spekman.novibeie.module_product.product_media.repository.ProductMediaRepository;
 import johan.spekman.novibeie.module_product.product_media.service.ProductMediaCompressor;
 import johan.spekman.novibeie.module_product.product_media.service.ProductMediaService;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +15,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/v1/products/media/gallery")
 public class ProductMediaController {
     private final ProductMediaService productMediaService;
+    private final ProductMediaRepository productMediaRepository;
 
-    public ProductMediaController(ProductMediaService productMediaService) {
+    public ProductMediaController(ProductMediaService productMediaService, ProductMediaRepository productMediaRepository) {
         this.productMediaService = productMediaService;
+        this.productMediaRepository = productMediaRepository;
     }
 
     @PostMapping(path = "/upload/{sku}")
@@ -42,7 +44,7 @@ public class ProductMediaController {
     @PostMapping(path = "/upload/mass/{sku}")
     public List<ResponseEntity<Object>> uploadMultipleFiles(@PathVariable("sku") String sku,
                                                             @RequestBody MultipartFile[] files
-                                                  ) {
+    ) {
         return Arrays.stream(files)
                 .map(file -> {
                     try {
@@ -55,10 +57,13 @@ public class ProductMediaController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/download/{sku}")
-    public ResponseEntity<byte[]> getProductMedia(@PathVariable String sku) {
-        ProductMedia productMedia = productMediaService.getFile(sku);
-        byte[] image = ProductMediaCompressor.decompressBytes(productMedia.getData());
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
+    @GetMapping(path = "/download/{fileId}")
+    public ResponseEntity<Object> getProductMedia(@PathVariable Long fileId) {
+        try {
+            productMediaService.getMediaFile(fileId);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(productMediaService.getMediaFile(fileId));
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(exception.getMessage())
+        }
     }
 }
