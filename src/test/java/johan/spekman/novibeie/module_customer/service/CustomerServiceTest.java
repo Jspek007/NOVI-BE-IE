@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.service;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
+import johan.spekman.novibeie.utililies.InputValidation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ public class CustomerServiceTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private InputValidation inputValidation;
 
     @BeforeEach
     void setUp() {
