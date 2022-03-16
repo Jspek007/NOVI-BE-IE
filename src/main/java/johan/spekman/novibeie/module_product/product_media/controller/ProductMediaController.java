@@ -1,8 +1,6 @@
 package johan.spekman.novibeie.module_product.product_media.controller;
 
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
-import johan.spekman.novibeie.module_product.product_media.repository.ProductMediaRepository;
-import johan.spekman.novibeie.module_product.product_media.service.ProductMediaCompressor;
 import johan.spekman.novibeie.module_product.product_media.service.ProductMediaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,20 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/v1/products/media/gallery")
 public class ProductMediaController {
     private final ProductMediaService productMediaService;
-    private final ProductMediaRepository productMediaRepository;
 
-    public ProductMediaController(ProductMediaService productMediaService, ProductMediaRepository productMediaRepository) {
+    public ProductMediaController(ProductMediaService productMediaService) {
         this.productMediaService = productMediaService;
-        this.productMediaRepository = productMediaRepository;
     }
 
     @PostMapping(path = "/upload/{sku}")
