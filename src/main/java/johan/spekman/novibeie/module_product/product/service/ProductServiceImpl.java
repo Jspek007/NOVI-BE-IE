@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
