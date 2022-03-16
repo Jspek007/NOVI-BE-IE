@@ -21,35 +21,30 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     private final ProductMediaRepository productMediaRepository;
     private final ProductRepository productRepository;
 
-    public ProductMediaServiceImpl(ProductMediaRepository productMediaRepository, ProductRepository productRepository) {
+    public ProductMediaServiceImpl(ProductMediaRepository productMediaRepository,
+                                   ProductRepository productRepository)  {
         this.productMediaRepository = productMediaRepository;
         this.productRepository = productRepository;
     }
 
     @Override
-    public ProductMedia storeFile(MultipartFile file, String sku) {
+    public ProductMedia storeFile(MultipartFile file, String sku) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
-        try {
-            if (fileName.contains("..")) {
-                throw new IllegalArgumentException("Filename contains invalid path sequence");
-            }
-
-            ProductMedia productMedia = new ProductMedia();
-            productMedia.setData(file.getBytes());
-            productMedia.setFileName(fileName);
-            Product product = productRepository.findBySku(sku);
-            product.addProductMedia(productMedia);
-            return productMediaRepository.save(productMedia);
-
-        } catch (IOException ioException) {
-            throw new IllegalArgumentException("Could not store file " + fileName + ". Please try again");
+        if (fileName.contains("..")) {
+            throw new IllegalArgumentException("Filename contains invalid path sequence");
         }
+        ProductMedia productMedia = new ProductMedia();
+        productMedia.setData(ProductMediaCompressor.compressBytes(file.getBytes()));
+        productMedia.setFileName(fileName);
+        Product product = productRepository.findBySku(sku);
+        product.addProductMedia(productMedia);
+        return productMediaRepository.save(productMedia);
+
     }
 
         @Override
-        public ProductMedia getFile(Long fileId) {
-            return productMediaRepository.findById(fileId)
-                    .orElseThrow(() -> new EntityNotFoundException("File not found with id " + fileId));
+        public ProductMedia getFile(String sku) {
+        Long parentId = productRepository.findBySku(sku).getId();
+            return productMediaRepository.findByParentId(parentId);
         }
     }
