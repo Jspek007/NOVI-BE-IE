@@ -2,6 +2,7 @@ package johan.spekman.novibeie.module_customer.controller;
 
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer.service.CsvExportService;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +10,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.DateFormatter;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final CsvExportService csvExportService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CsvExportService csvExportService) {
         this.customerService = customerService;
+        this.csvExportService = csvExportService;
     }
 
     @GetMapping("/get/all")
@@ -59,5 +68,17 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(customer);
+    }
+
+    @GetMapping(path = "/export/all", produces = "text/csv")
+    public void exportAllCustomers(HttpServletResponse response) throws IOException {
+        Date date = new Date(System.currentTimeMillis());
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
+        /*
+            write actual data to CSV file
+         */
+        response.setContentType("text/csv");
+        response.addHeader("Content-Disposition", "attachment; filename=\"customers_" + format.format(date) + ".csv\"");
+        csvExportService.exportCustomersToCsv(response.getWriter());
     }
 }
