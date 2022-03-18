@@ -2,7 +2,7 @@ package johan.spekman.novibeie.module_customer.controller;
 
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_customer.service.CsvExportService;
+import johan.spekman.novibeie.module_customer.service.ExportService.CsvExportService;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.DateFormatter;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
