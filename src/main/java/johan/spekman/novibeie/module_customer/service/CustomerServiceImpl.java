@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.service;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
+import johan.spekman.novibeie.module_customer.service.ImportService.CsvImportService;
 import johan.spekman.novibeie.utililies.InputValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +38,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomerByEmailAddress(String emailAddress) {
         return customerRepository.findByEmailAddress(emailAddress);
+    }
+
+    @Override
+    public void saveAll(MultipartFile file) {
+        try {
+            List<Customer> customerList = CsvImportService.csvToCustomers(file.getInputStream());
+            customerRepository.saveAll(customerList);
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to store csv data: " + exception.getMessage());
+        }
     }
 
     @Override
