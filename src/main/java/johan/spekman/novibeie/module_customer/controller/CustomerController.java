@@ -4,10 +4,12 @@ import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.ExportService.CsvExportService;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
+import johan.spekman.novibeie.module_customer.service.ImportService.CsvImportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -79,5 +81,22 @@ public class CustomerController {
         response.setContentType("text/csv");
         response.addHeader("Content-Disposition", "attachment; filename=\"customers_" + format.format(date) + ".csv\"");
         csvExportService.exportCustomersToCsv(response.getWriter());
+    }
+
+    @PostMapping(path = "/import")
+    public ResponseEntity<Object> importCustomers(@RequestParam("file")MultipartFile file) {
+        String message = "";
+        if (CsvImportService.hasCSVFormat(file)) {
+            try {
+                customerService.saveAll(file);
+                message = "Uploaded the file succesfully: " + file.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.OK).body(message);
+            } catch (Exception exception) {
+                message = "Could not upload the file: " + file.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+            }
+        }
+        message = "Please upload a csv file!";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }
