@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.validation.BindingResult;
 
 import java.util.Date;
@@ -74,7 +73,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void canSaveNewProduct() throws Exception {
+    void shouldReturnErrorOnProductCreation() throws Exception {
         String uri = "/api/v1/products/save";
         Product product = new Product();
         product.setId(1L);
@@ -82,21 +81,22 @@ public class ProductControllerTest {
         mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    void shouldReturnErrorOnProductCreation() throws Exception {
+    void shouldCreateNewProduct() throws Exception {
+        String uri = "/api/v1/products/save";
         ProductDto productDto = new ProductDto();
         productDto.setSku("sku_123456");
         productDto.setProductTitle("Test product");
-        productDto.setProductDescription("");
+        productDto.setProductDescription("Dit is een test product");
         productDto.setProductPrice(11.99);
         productDto.setTaxPercentage(21);
         productDto.setEnabled(false);
-
-        given(productService.createProduct(productDto, bindingResult)).willReturn(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
-
-
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDto)))
+                .andExpect(status().isCreated());
     }
 }
