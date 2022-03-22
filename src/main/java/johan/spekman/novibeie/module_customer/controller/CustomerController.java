@@ -2,9 +2,7 @@ package johan.spekman.novibeie.module_customer.controller;
 
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_customer.service.ExportService.CsvExportService;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
-import johan.spekman.novibeie.module_customer.service.ImportService.CsvImportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,11 +24,9 @@ import java.util.List;
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
-    private final CsvExportService csvExportService;
 
-    public CustomerController(CustomerService customerService, CsvExportService csvExportService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.csvExportService = csvExportService;
     }
 
     @GetMapping("/get/all")
@@ -80,13 +77,16 @@ public class CustomerController {
          */
         response.setContentType("text/csv");
         response.addHeader("Content-Disposition", "attachment; filename=\"customers_" + format.format(date) + ".csv\"");
-        csvExportService.exportCustomersToCsv(response.getWriter());
+        customerService.exportCustomersToCsv(response.getWriter());
     }
 
     @PostMapping(path = "/import")
-    public ResponseEntity<Object> importCustomers(@RequestParam("file")MultipartFile file) {
+    public ResponseEntity<Object> importCustomers(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (CsvImportService.hasCSVFormat(file)) {
+        if (!customerService.hasCSVFormat(file)) {
+            message = "Please upload a csv file!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        } else {
             try {
                 customerService.saveAll(file);
                 message = "Uploaded the file succesfully: " + file.getOriginalFilename();
@@ -96,7 +96,5 @@ public class CustomerController {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
             }
         }
-        message = "Please upload a csv file!";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }

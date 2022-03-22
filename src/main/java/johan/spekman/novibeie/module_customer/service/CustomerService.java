@@ -7,6 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.InputStream;
+import java.io.Writer;
 import java.util.List;
 
 public interface CustomerService {
@@ -16,4 +18,7 @@ public interface CustomerService {
     void saveAll(MultipartFile file);
     void deleteCustomerById(Long customerId);
     ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
+    void exportCustomersToCsv(Writer writer);
+    List<Customer> csvToCustomers(InputStream inputStream);
+    boolean hasCSVFormat(MultipartFile file);
 }

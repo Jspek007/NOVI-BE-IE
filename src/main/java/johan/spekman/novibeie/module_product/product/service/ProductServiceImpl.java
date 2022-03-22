@@ -23,6 +23,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public ResponseEntity<Object> createProduct(ProductDto productDto, BindingResult bindingResult) {
         // Validate the input before attempting to create a new product
         InputValidation inputValidation = new InputValidation();
@@ -41,10 +46,5 @@ public class ProductServiceImpl implements ProductService {
             Product savedProduct = productRepository.save(product);
             return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
         }
-    }
-
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
     }
 }

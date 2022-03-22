@@ -35,6 +35,9 @@ public class ProductDto {
         this.enabled = enabled;
     }
 
+    public ProductDto() {
+    }
+
     public String getSku() {
         return sku;
     }
