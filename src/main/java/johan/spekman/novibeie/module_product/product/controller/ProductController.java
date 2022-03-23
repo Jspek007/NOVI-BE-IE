@@ -24,10 +24,13 @@ public class ProductController {
     @PostMapping(path = "/save")
     private ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDto productDto,
                                                  BindingResult bindingResult) {
-        URI uri =
-                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/v1/products/save").toUriString());
-        return ResponseEntity.created(uri).body(productService.createProduct(productDto, bindingResult));
+        if (!bindingResult.hasErrors()) {
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/v1/products/save").toUriString());
+            return ResponseEntity.created(uri).body(productService.createProduct(productDto, bindingResult));
+        } else {
+            return ResponseEntity.badRequest().body(bindingResult.getFieldError());
+        }
     }
 
     @GetMapping(path = "/get/all")

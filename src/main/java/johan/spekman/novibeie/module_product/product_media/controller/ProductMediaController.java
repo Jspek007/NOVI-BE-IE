@@ -22,15 +22,17 @@ public class ProductMediaController {
 
     @PostMapping(path = "/upload/{sku}")
     public ResponseEntity<Object> uploadFile(@PathVariable("sku") String sku,
-                                             @RequestBody MultipartFile file) throws IOException {
-        ProductMedia productMedia = productMediaService.storeFile(file, sku);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/products/media/download/")
-                .path(String.valueOf(productMedia.getId()))
-                .toUriString();
-
-        return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);
+                                             @RequestBody MultipartFile file) {
+        try {
+            ProductMedia productMedia = productMediaService.storeFile(file, sku);
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/v1/products/media/download/")
+                    .path(String.valueOf(productMedia.getId()))
+                    .toUriString();
+            return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);
+        } catch (IOException exception) {
+            return ResponseEntity.badRequest().body("Invalid file upload: " + exception.getMessage());
+        }
     }
 
     @PostMapping(path = "/upload/mass/{sku}")

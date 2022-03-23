@@ -3,8 +3,11 @@ package johan.spekman.novibeie.module_customer.service;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
-import johan.spekman.novibeie.module_customer.service.ImportService.CsvImportService;
 import johan.spekman.novibeie.utililies.InputValidation;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static java.lang.Boolean.TYPE;
 
 @Service
 @Transactional
@@ -38,16 +44,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomerByEmailAddress(String emailAddress) {
         return customerRepository.findByEmailAddress(emailAddress);
-    }
-
-    @Override
-    public void saveAll(MultipartFile file) {
-        try {
-            List<Customer> customerList = CsvImportService.csvToCustomers(file.getInputStream());
-            customerRepository.saveAll(customerList);
-        } catch (IOException exception) {
-            throw new RuntimeException("Failed to store csv data: " + exception.getMessage());
-        }
     }
 
     @Override
@@ -97,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setCustomerId(customerId);
 
             Customer savedCustomer = customerRepository.save(customer);
-            return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+            return new ResponseEntity<>("Customer has been created: " + savedCustomer, HttpStatus.CREATED);
         }
     }
 
@@ -134,5 +130,65 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void exportCustomersToCsv(Writer writer) {
+        String[] headers = {"Id", "Customer Id", "Firstname", "Insertion", "Lastname", "E-mail", "Password", "Phone number"};
+
+        List<Customer> customerList = getAllCustomers();
+        try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(headers))) {
+            for (Customer customer : customerList) {
+                csvPrinter.printRecord(customer.getId(), customer.getCustomerId(), customer.getFirstName(),
+                        customer.getInsertion(), customer.getLastName(), customer.getEmailAddress(),
+                        customer.getPassword(), customer.getPhoneNumber());
+            }
+        } catch (IOException exception) {
+            System.out.println("Error while creating Csv file: " + exception);
+        }
+    }
+
+    @Override
+    public List<Customer> csvToCustomers(InputStream inputStream) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+            List<Customer> customers = new ArrayList<>();
+            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+            for (CSVRecord csvRecord : csvRecords) {
+                Customer customer = new Customer(
+                        Long.parseLong(csvRecord.get("Id")),
+                        Long.parseLong(csvRecord.get("Customer Id")),
+                        csvRecord.get("Firstname"),
+                        csvRecord.get("Insertion"),
+                        csvRecord.get("Lastname"),
+                        csvRecord.get("E-mail"),
+                        csvRecord.get("Password"),
+                        csvRecord.get("Phone number")
+                );
+                customers.add(customer);
+            }
+            return customers;
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to parse CSV file: " + exception.getMessage());
+        }
+    }
+
+    @Override
+    public void saveAll(MultipartFile file) {
+        try {
+            List<Customer> customerList = csvToCustomers(file.getInputStream());
+            customerRepository.saveAll(customerList);
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to store csv data: " + exception.getMessage());
+        }
+    }
+
+    public boolean hasCSVFormat(MultipartFile file) {
+        String TYPE = "text/csv";
+        if (!TYPE.equals(file.getContentType())) {
+            return false;
+        }
+        return true;
     }
 }

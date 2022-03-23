@@ -38,8 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers(POST, "/login", "/api/token/refresh").permitAll()
-                .antMatchers(GET, "/api/appusers/**").hasAuthority("USER")
                 .antMatchers(POST, "/api/v1/**").hasAuthority("ADMIN")
+                .antMatchers("/").permitAll()
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().addFilter(new CustomAuthenticationFilter(authenticationManagerBean()))
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
