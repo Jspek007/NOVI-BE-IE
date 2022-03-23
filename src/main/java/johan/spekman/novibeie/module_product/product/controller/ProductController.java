@@ -21,9 +21,36 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping(path = "/get/all")
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping(path = "/get/{sku}")
+    public Product getProductBySku(@PathVariable("sku") String sku) {
+        return productService.getProductBySku(sku);
+    }
+
+    @DeleteMapping(path = "/delete/{sku}")
+    public ResponseEntity<String> deleteProductBySku(@PathVariable("sku") String sku) {
+        productService.deleteProductBySku(sku);
+        return ResponseEntity.ok("Product with sku: " + sku + " had been deleted.");
+    }
+
+    @PutMapping(path = "/update/{sku}")
+    public ResponseEntity<Object> updateProduct(@PathVariable("sku") String sku,
+                                                @Valid @RequestBody ProductDto productDto,
+                                                BindingResult bindingResult) {
+        ResponseEntity<Object> product = productService.updateProduct(sku, productDto, bindingResult);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(product);
+    }
+
     @PostMapping(path = "/save")
-    private ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDto productDto,
-                                                 BindingResult bindingResult) {
+    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDto productDto,
+                                                BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/api/v1/products/save").toUriString());
@@ -31,10 +58,5 @@ public class ProductController {
         } else {
             return ResponseEntity.badRequest().body(bindingResult.getFieldError());
         }
-    }
-
-    @GetMapping(path = "/get/all")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
     }
 }

@@ -105,30 +105,26 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                stringBuilder.append(fieldError.getDefaultMessage());
-                stringBuilder.append("\n");
-            }
-            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
-        }
-
-        Customer foundCustomer = customerRepository.findByCustomerId(customerId);
-        String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
-
-        if (foundCustomer != null) {
-            foundCustomer.setFirstName(newCustomerDto.getFirstName());
-            foundCustomer.setInsertion(newCustomerDto.getInsertion());
-            foundCustomer.setLastName(newCustomerDto.getLastName());
-            foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
-            foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
-            foundCustomer.setPassword(encryptedPassword);
-
-            customerRepository.save(foundCustomer);
-            return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
+        InputValidation inputValidation = new InputValidation();
+        if (inputValidation.validate(bindingResult) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
         } else {
-            return null;
+            Customer foundCustomer = customerRepository.findByCustomerId(customerId);
+            String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
+
+            if (foundCustomer != null) {
+                foundCustomer.setFirstName(newCustomerDto.getFirstName());
+                foundCustomer.setInsertion(newCustomerDto.getInsertion());
+                foundCustomer.setLastName(newCustomerDto.getLastName());
+                foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
+                foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
+                foundCustomer.setPassword(encryptedPassword);
+
+                customerRepository.save(foundCustomer);
+                return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
+            } else {
+                return null;
+            }
         }
     }
 
