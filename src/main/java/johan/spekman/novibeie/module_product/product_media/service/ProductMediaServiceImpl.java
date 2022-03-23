@@ -3,18 +3,15 @@ package johan.spekman.novibeie.module_product.product_media.service;
 
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
+import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 import johan.spekman.novibeie.module_product.product_media.repository.ProductMediaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Objects;
 
 @Service
