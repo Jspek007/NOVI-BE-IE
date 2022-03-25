@@ -9,5 +9,5 @@ import java.io.IOException;
 
 public interface CategoryService {
     ResponseEntity<Object> createCategory(@Valid CategoryDto categoryDto, BindingResult bindingResult);
-    ResponseEntity<Object> addProductsToCategory(Long categoryId, String[] skus) throws IOException;
+    void addProductsToCategory(Long categoryId, String[] skus) throws IOException;
 }

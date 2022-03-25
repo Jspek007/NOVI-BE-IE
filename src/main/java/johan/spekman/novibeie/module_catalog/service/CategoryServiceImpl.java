@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<Object> addProductsToCategory(Long categoryId, String[] skus) {
+    public void addProductsToCategory(Long categoryId, String[] skus) {
         Category category = categoryRepository.getById(categoryId);
 
         try {
@@ -59,8 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
                 productRepository.save(product);
             });
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
-        return null;
     }
 }
