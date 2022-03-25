@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.controller;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
+import johan.spekman.novibeie.utililies.CSVFormatCheck;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,9 +24,11 @@ import java.util.List;
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final CSVFormatCheck csvFormatCheck;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CSVFormatCheck csvFormatCheck) {
         this.customerService = customerService;
+        this.csvFormatCheck = csvFormatCheck;
     }
 
     @GetMapping("/get/all")
@@ -82,7 +85,7 @@ public class CustomerController {
     @PostMapping(path = "/import")
     public ResponseEntity<Object> importCustomers(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (!customerService.hasCSVFormat(file)) {
+        if (!csvFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         } else {

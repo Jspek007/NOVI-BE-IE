@@ -20,5 +20,4 @@ public interface CustomerService {
     ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
     void exportCustomersToCsv(Writer writer);
     List<Customer> csvToCustomers(InputStream inputStream);
-    boolean hasCSVFormat(MultipartFile file);
 }

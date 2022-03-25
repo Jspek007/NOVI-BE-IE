@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -22,8 +21,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static java.lang.Boolean.TYPE;
 
 @Service
 @Transactional
@@ -178,13 +175,5 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (IOException exception) {
             throw new RuntimeException("Failed to store csv data: " + exception.getMessage());
         }
-    }
-
-    public boolean hasCSVFormat(MultipartFile file) {
-        String TYPE = "text/csv";
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
     }
 }
