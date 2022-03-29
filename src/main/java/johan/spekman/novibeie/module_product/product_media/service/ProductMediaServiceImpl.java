@@ -49,7 +49,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     }
 
     @Override
-    public boolean storeMultipleFiles(MultipartFile[] files, String sku) {
+    public void storeMultipleFiles(MultipartFile[] files, String sku) {
         Arrays.stream(files).forEach(file -> {
             try {
                 storeFile(file, sku);
@@ -57,7 +57,6 @@ public class ProductMediaServiceImpl implements ProductMediaService {
                 e.printStackTrace();
             }
         });
-        return true;
     }
 
     @Override

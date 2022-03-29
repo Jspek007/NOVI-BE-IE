@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductMediaService {
     void storeFile(MultipartFile file, String sku) throws IOException;
-    boolean storeMultipleFiles(MultipartFile[] files, String sku) throws IOException;
+    void storeMultipleFiles(MultipartFile[] files, String sku) throws IOException;
     byte[] getMediaFile(Long fileId);
     List<byte[]> getAllMediaBySku(String sku);
 }

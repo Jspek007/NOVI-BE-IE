@@ -1,6 +1,5 @@
 package johan.spekman.novibeie.module_product.product.controller;
 
-import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_product.product.dto.ProductDto;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.service.ProductService;
@@ -10,12 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
