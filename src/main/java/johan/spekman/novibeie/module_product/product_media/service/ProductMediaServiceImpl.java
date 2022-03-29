@@ -1,6 +1,7 @@
 package johan.spekman.novibeie.module_product.product_media.service;
 
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
@@ -9,13 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 @Service
-@Transactional
 public class ProductMediaServiceImpl implements ProductMediaService {
 
     private final ProductMediaRepository productMediaRepository;
@@ -28,22 +26,18 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     }
 
     @Override
-    public ProductMedia storeFile(MultipartFile file, String sku)
+    public void storeFile(MultipartFile file, String sku)
             throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String contentType = "image/png";
-        // Check for file name
         if (fileName.contains("..")) {
-            throw new IOException("Invalid file name");
+            throw new ApiRequestException("Invalid file name");
         }
-
-        /*
-            Check for correct content type
-            allowed content type is image/png
-         */
-
         if (!Objects.equals(file.getContentType(), contentType)) {
-            throw new IOException("Filetype is not correct. Allowed file type is: " + contentType);
+            throw new ApiRequestException("File is not csv format");
+        }
+        if (productRepository.findBySku(sku) == null) {
+            throw new ApiRequestException("No product found with sku: " + sku);
         }
 
         ProductMedia productMedia = new ProductMedia();
@@ -51,7 +45,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
         productMedia.setFileName(fileName);
         Product product = productRepository.findBySku(sku);
         product.addProductMedia(productMedia);
-        return productMediaRepository.save(productMedia);
+        productMediaRepository.save(productMedia);
     }
 
     @Override
@@ -70,5 +64,17 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     public byte[] getMediaFile(Long fileId) {
         ProductMedia productMedia = productMediaRepository.getById(fileId);
         return ProductMediaCompressor.decompressBytes(productMedia.getData());
+    }
+
+    @Override
+    public List<byte[]> getAllMediaBySku(String sku) {
+        Long parentId = productRepository.findBySku(sku).getId();
+        List<ProductMedia> compressedMediaFiles = productMediaRepository.findByParentId(parentId);
+        List<byte[]> decompressedMedia = new ArrayList<>();
+
+        compressedMediaFiles.forEach(productMedia ->
+                decompressedMedia.add(ProductMediaCompressor.decompressBytes(productMedia.getData()))
+        );
+        return decompressedMedia;
     }
 }

@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_product.product.controller;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_product.product.dto.ProductDto;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.service.ProductService;
@@ -43,32 +44,22 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/delete/{sku}")
-    public ResponseEntity<String> deleteProductBySku(@PathVariable("sku") String sku) {
+    public void deleteProductBySku(@PathVariable("sku") String sku) {
         productService.deleteProductBySku(sku);
-        return ResponseEntity.ok("Product with sku: " + sku + " had been deleted.");
     }
 
     @PutMapping(path = "/update/{sku}")
-    public ResponseEntity<Object> updateProduct(@PathVariable("sku") String sku,
+    public void updateProduct(@PathVariable("sku") String sku,
                                                 @Valid @RequestBody ProductDto productDto,
                                                 BindingResult bindingResult) {
-        ResponseEntity<Object> product = productService.updateProduct(sku, productDto, bindingResult);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(product);
+        productService.updateProduct(sku, productDto, bindingResult);
     }
 
     @PostMapping(path = "/save")
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDto productDto,
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void createProduct(@Valid @RequestBody ProductDto productDto,
                                                 BindingResult bindingResult) throws ParseException {
-        if (!bindingResult.hasErrors()) {
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/v1/products/save").toUriString());
-            return ResponseEntity.created(uri).body(productService.createProduct(productDto, bindingResult));
-        } else {
-            return ResponseEntity.badRequest().body(bindingResult.getFieldError());
-        }
+        productService.createProduct(productDto, bindingResult);
     }
 
     @GetMapping(path = "/export/all", produces = "text/csv")
@@ -86,7 +77,7 @@ public class ProductController {
     @PostMapping(path = "/import")
     public ResponseEntity<Object> productImport(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (!csvFormatCheck.hasCSVFormat(file)) {
+        if (csvFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         } else {

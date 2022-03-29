@@ -42,9 +42,6 @@ public class ProductMediaControllerTest {
                 "image".getBytes()
         );
 
-        given(productMediaController.uploadFile(product.getSku(), file)).
-                willReturn(ResponseEntity.ok("Image uploaded"));
-
         mockMvc.perform(multipart(uri)
                 .file("file", file.getBytes()))
                 .andExpect(status().isOk());

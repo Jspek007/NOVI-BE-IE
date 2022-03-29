@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_product.product.service;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_product.product.dto.ProductDto;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
@@ -13,16 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,9 +31,11 @@ import java.util.List;
 @Transactional
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final DuplicateProductCheck duplicateProductCheck;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, DuplicateProductCheck duplicateProductCheck) {
         this.productRepository = productRepository;
+        this.duplicateProductCheck = duplicateProductCheck;
     }
 
     @Override
@@ -47,21 +50,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductBySku(String sku) {
-        Long productId = productRepository.findBySku(sku).getId();
-        productRepository.deleteById(productId);
-        ResponseEntity.ok("Product with sku: " + sku + " has been deleted.");
+        if (productRepository.findBySku(sku) == null) {
+            throw new ApiRequestException(sku + " No product found with this SKU.");
+        }
+        productRepository.deleteById(productRepository.findBySku(sku).getId());
+        ResponseEntity.ok().body("Product with sku: " + sku + " has been deleted.");
     }
 
     @Override
-    public ResponseEntity<Object> updateProduct(String sku, ProductDto productDto, BindingResult bindingResult) {
+    public void updateProduct(String sku, ProductDto productDto, BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
+            throw new ApiRequestException(bindingResult.toString());
         } else {
             Product existingProduct = productRepository.findBySku(sku);
-
             if (existingProduct == null) {
-                return null;
+                throw new ApiRequestException("Product not found with sku: " + sku);
             } else {
                 existingProduct.setSku(productDto.getSku());
                 existingProduct.setProductTitle(productDto.getProductTitle());
@@ -69,25 +73,25 @@ public class ProductServiceImpl implements ProductService {
                 existingProduct.setProductPrice(productDto.getProductPrice());
                 existingProduct.setEnabled(productDto.isEnabled());
                 productRepository.save(existingProduct);
-
-                return new ResponseEntity<>(existingProduct, HttpStatus.OK);
+                ResponseEntity.ok().body("Product with sku: " + sku + " has been updated");
             }
         }
     }
 
     @Override
-    public ResponseEntity<Object> createProduct(ProductDto productDto, BindingResult bindingResult) throws ParseException {
+    public void createProduct(ProductDto productDto, BindingResult bindingResult) throws ParseException {
         // Validate the input before attempting to create a new product
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
+            throw new ApiRequestException(bindingResult.toString());
+        } else if (duplicateProductCheck.checkDuplicateProduct(productDto.getSku())) {
+            throw new ApiRequestException("Product with this sku already exists.");
         } else {
             Product product = new Product();
-            Date date = new Date(System.currentTimeMillis());
             DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
             String currentDate = format.format(date);
             Date setDate = format.parse(currentDate);
-
 
             product.setSku(productDto.getSku());
             product.setProductTitle(productDto.getProductTitle());
@@ -95,9 +99,8 @@ public class ProductServiceImpl implements ProductService {
             product.setProductPrice(productDto.getProductPrice());
             product.setCreatedAtDate(setDate);
             product.setEnabled(productDto.isEnabled());
-
-            Product savedProduct = productRepository.save(product);
-            return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+            productRepository.save(product);
+            ResponseEntity.status(HttpStatus.CREATED).body(product);
         }
     }
 

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_product.product.controller.ProductController;
 import johan.spekman.novibeie.module_product.product.dto.ProductDto;
 import johan.spekman.novibeie.module_product.product.model.Product;
+import johan.spekman.novibeie.module_product.product.service.DuplicateProductCheck;
 import johan.spekman.novibeie.module_product.product.service.ProductService;
+import johan.spekman.novibeie.utililies.CSVFormatCheck;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +44,8 @@ public class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
-
-    @Mock
-    private BindingResult bindingResult;
+    @MockBean
+    private CSVFormatCheck csvFormatCheck;
 
     @Test
     void shouldGetAllProducts() throws Exception {
@@ -70,18 +71,6 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[1].taxPercentage", is(21)))
                 .andExpect(jsonPath("$[0].productTitle", is("Test product")));
-    }
-
-    @Test
-    void shouldReturnErrorOnProductCreation() throws Exception {
-        String uri = "/api/v1/products/save";
-        Product product = new Product();
-        product.setId(1L);
-        product.setProductDescription("Dit is een test product");
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
