@@ -82,9 +82,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
         </dependency>
-
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -93,5 +91,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
