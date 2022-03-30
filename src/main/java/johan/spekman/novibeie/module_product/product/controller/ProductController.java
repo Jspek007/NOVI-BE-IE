@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_product.product.controller;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_product.product.dto.ProductDto;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.service.ProductService;
@@ -62,10 +63,8 @@ public class ProductController {
     @GetMapping(path = "/export/all", produces = "text/csv")
     public void productExport(HttpServletResponse response) throws IOException {
         Date date = new Date(System.currentTimeMillis());
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
-        /*
-            write actual data to CSV file
-         */
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
         response.setContentType("text/csv");
         response.addHeader("Content-Disposition", "attachment; filename=\"products" + format.format(date) + ".csv\"");
         productService.productExport(response.getWriter());
@@ -73,18 +72,17 @@ public class ProductController {
 
     @PostMapping(path = "/import")
     public ResponseEntity<Object> productImport(@RequestParam("file") MultipartFile file) {
-        String message = "";
+        String message;
         if (csvFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+            throw new ApiRequestException(message);
         } else {
             try {
                 productService.saveAll(file);
                 message = "Uploaded the file succesfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(message);
             } catch (Exception exception) {
-                message = "Could not upload the file: " + file.getOriginalFilename();
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+                throw new ApiRequestException("Could not upload the file. " + exception.getMessage());
             }
         }
     }

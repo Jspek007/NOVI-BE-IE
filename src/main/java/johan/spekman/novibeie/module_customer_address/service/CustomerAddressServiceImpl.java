@@ -1,9 +1,11 @@
 package johan.spekman.novibeie.module_customer_address.service;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.utililies.InputValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,46 +28,26 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
     @Override
     public ResponseEntity<Object> createNewAddress(@Valid @RequestBody CustomerAddressDto customerAddressDto,
                                                    BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                stringBuilder.append(fieldError.getDefaultMessage());
-                stringBuilder.append("\n");
-            }
-            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.BAD_REQUEST);
-        } else {
-            CustomerAddress customerAddress = new CustomerAddress();
-
-            /*
-                Validate customer postal code
-             */
-            if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
-                return new ResponseEntity<>("Incorrect postal code format", HttpStatus.BAD_REQUEST);
-            } else {
-                customerAddress.setPostalCode(customerAddressDto.getPostalCode());
-            }
-
-            /*
-                Generate customerNumber
-             */
-
-            Long customerId = customerAddressDto.getParentId();
-            Customer customer = customerRepository.findByCustomerId(customerId);
-
-            /*
-                Save customer address after checks has been successful
-             */
-
-            customerAddress.setCustomerId(customer.getCustomerId());
-            customerAddress.setStreetName(customerAddressDto.getStreetName());
-            customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());
-            customerAddress.setAddition(customerAddressDto.getAddition());
-            customerAddress.setPostalCode(customerAddressDto.getPostalCode());
-            customerAddress.setCity(customerAddressDto.getCity());
-            customerAddress.setCustomerAddressType(customerAddressDto.getCustomerAddressType());
-
-            customer.addCustomerAddress(customerAddress);
-            return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
+        InputValidation inputValidation = new InputValidation();
+        if (inputValidation.validate(bindingResult) != null) {
+            throw new ApiRequestException("Malformed input: " + bindingResult.getFieldError());
         }
+        if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
+            throw new ApiRequestException("Postal code is not valid");
+        }
+        CustomerAddress customerAddress = new CustomerAddress();
+        customerAddress.setPostalCode(customerAddressDto.getPostalCode());
+        Long customerId = customerAddressDto.getParentId();
+        Customer customer = customerRepository.findByCustomerId(customerId);
+        customerAddress.setCustomerId(customer.getCustomerId());
+        customerAddress.setStreetName(customerAddressDto.getStreetName());
+        customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());
+        customerAddress.setAddition(customerAddressDto.getAddition());
+        customerAddress.setPostalCode(customerAddressDto.getPostalCode());
+        customerAddress.setCity(customerAddressDto.getCity());
+        customerAddress.setCustomerAddressType(customerAddressDto.getCustomerAddressType());
+
+        customer.addCustomerAddress(customerAddress);
+        return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
     }
 }

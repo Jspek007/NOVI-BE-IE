@@ -23,9 +23,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Transactional
@@ -88,16 +91,16 @@ public class ProductServiceImpl implements ProductService {
             throw new ApiRequestException("Product with this sku already exists.");
         } else {
             Product product = new Product();
-            DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
-            Date date = new Date(System.currentTimeMillis());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date((System.currentTimeMillis()));
             String currentDate = format.format(date);
-            Date setDate = format.parse(currentDate);
+            Date createdAtDate = format.parse(currentDate);
 
             product.setSku(productDto.getSku());
             product.setProductTitle(productDto.getProductTitle());
             product.setProductDescription(productDto.getProductDescription());
             product.setProductPrice(productDto.getProductPrice());
-            product.setCreatedAtDate(setDate);
+            product.setCreatedAtDate(createdAtDate);
             product.setEnabled(productDto.isEnabled());
             productRepository.save(product);
             ResponseEntity.status(HttpStatus.CREATED).body(product);
@@ -124,7 +127,7 @@ public class ProductServiceImpl implements ProductService {
                 );
             }
         } catch (IOException exception) {
-            System.out.println("Error while creating Csv file: " + exception);
+            throw new ApiRequestException("Product export could not be completed " + exception.getMessage());
         }
     }
 
@@ -136,8 +139,9 @@ public class ProductServiceImpl implements ProductService {
             List<Product> productList = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-                Date date = simpleDateFormat.parse(csvRecord.get("createdAtDate"));
+                String date = (csvRecord.get("createdAtDate"));
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date createdDate = formatter.parse(date);
                 System.out.println(date);
                 Product product = new Product(
                         Long.parseLong(csvRecord.get("Id")),
@@ -146,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
                         csvRecord.get("productDescription"),
                         Double.parseDouble(csvRecord.get("productPrice")),
                         Integer.parseInt(csvRecord.get("taxPercentage")),
-                        date,
+                        createdDate,
                         Boolean.parseBoolean(csvRecord.get("isEnabled"))
                 );
                 productList.add(product);

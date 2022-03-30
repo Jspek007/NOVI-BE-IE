@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().antMatchers(POST, "/login", "/api/token/refresh").permitAll()
                 .antMatchers(POST, "/api/v1/**").hasAuthority("ADMIN")
                 .antMatchers("/").permitAll()
-                .and().authorizeRequests().anyRequest().authenticated()
+                .and().authorizeRequests().anyRequest().authenticated().and().httpBasic()
                 .and().addFilter(new CustomAuthenticationFilter(authenticationManagerBean()))
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

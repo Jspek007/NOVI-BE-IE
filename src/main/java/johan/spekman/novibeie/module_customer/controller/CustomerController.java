@@ -73,7 +73,7 @@ public class CustomerController {
     @GetMapping(path = "/export/all", produces = "text/csv")
     public void exportAllCustomers(HttpServletResponse response) throws IOException {
         Date date = new Date(System.currentTimeMillis());
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         /*
             write actual data to CSV file
          */
