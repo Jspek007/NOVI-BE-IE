@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_catalog.service;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
 import johan.spekman.novibeie.module_catalog.model.Category;
 import johan.spekman.novibeie.module_catalog.repository.CategoryRepository;
@@ -60,6 +61,20 @@ public class CategoryServiceImpl implements CategoryService {
             });
         } catch (Exception exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        }
+    }
+
+    @Override
+    public void removeProductFromCategory(Long categoryId, String[] skus) {
+        Category category = categoryRepository.getById(categoryId);
+
+        try {
+            Arrays.stream(skus).forEach(sku -> {
+                Product product = productRepository.findBySku(sku);
+                product.getCategories().remove(category);
+            });
+        } catch (Exception exception) {
+            throw new ApiRequestException("Products could not be removed from the category" + exception.getMessage());
         }
     }
 }

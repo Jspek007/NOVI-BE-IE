@@ -36,4 +36,11 @@ public class CategoryController {
         categoryService.addProductsToCategory(categoryId, skus);
         return ResponseEntity.status(HttpStatus.OK).body("Category has been updated! " + categoryId + " " + Arrays.toString(skus));
     }
+
+    @DeleteMapping(path = "/products/remove/{categoryId}")
+    public ResponseEntity<Object> removeProductFromCategory(@PathVariable("categoryId") Long categoryId,
+                                                            @RequestBody String[] skus) {
+        categoryService.removeProductFromCategory(categoryId, skus);
+        return new ResponseEntity<>("Category has been updated", HttpStatus.OK);
+    }
 }

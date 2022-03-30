@@ -10,4 +10,5 @@ import java.io.IOException;
 public interface CategoryService {
     ResponseEntity<Object> createCategory(@Valid CategoryDto categoryDto, BindingResult bindingResult);
     void addProductsToCategory(Long categoryId, String[] skus) throws IOException;
+    void removeProductFromCategory(Long categoryId, String[] skus);
 }
