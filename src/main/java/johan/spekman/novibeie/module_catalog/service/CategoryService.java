@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface CategoryService {
     List<Category> getCategories();
+    Category getSpecificCategory(Long categoryId);
     ResponseEntity<Object> createCategory(@Valid CategoryDto categoryDto, BindingResult bindingResult);
     void addProductsToCategory(Long categoryId, String[] skus) throws IOException;
     void removeProductFromCategory(Long categoryId, String[] skus);

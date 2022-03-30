@@ -35,10 +35,12 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
         if (!CustomerAddressValidation.checkPostalCode(customerAddressDto.getPostalCode())) {
             throw new ApiRequestException("Postal code is not valid");
         }
+        Customer customer = customerRepository.findByCustomerId(customerAddressDto.getParentId());
+        if (customer == null) {
+            throw new ApiRequestException("Customer not found");
+        }
         CustomerAddress customerAddress = new CustomerAddress();
         customerAddress.setPostalCode(customerAddressDto.getPostalCode());
-        Long customerId = customerAddressDto.getParentId();
-        Customer customer = customerRepository.findByCustomerId(customerId);
         customerAddress.setCustomerId(customer.getCustomerId());
         customerAddress.setStreetName(customerAddressDto.getStreetName());
         customerAddress.setHouseNumber(customerAddressDto.getHouseNumber());

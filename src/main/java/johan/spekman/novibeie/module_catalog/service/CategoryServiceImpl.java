@@ -33,6 +33,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category getSpecificCategory(Long categoryId) {
+        return categoryRepository.getById(categoryId);
+    }
+
+    @Override
     public ResponseEntity<Object> createCategory(CategoryDto categoryDto, BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {

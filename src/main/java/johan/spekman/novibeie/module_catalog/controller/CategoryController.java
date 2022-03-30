@@ -29,6 +29,11 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
+    @GetMapping(path = "/get/{categoryId}")
+    public Category getSpecificCategory(@PathVariable Long categoryId) {
+        return categoryService.getSpecificCategory(categoryId);
+    }
+
     @PostMapping(path = "/save")
     public ResponseEntity<Object> createNewCategory(@Valid @RequestBody CategoryDto categoryDto,
                                                     BindingResult bindingResult) {
