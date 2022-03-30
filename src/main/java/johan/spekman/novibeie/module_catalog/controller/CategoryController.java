@@ -1,6 +1,7 @@
 package johan.spekman.novibeie.module_catalog.controller;
 
 import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
+import johan.spekman.novibeie.module_catalog.model.Category;
 import johan.spekman.novibeie.module_catalog.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/category")
@@ -20,6 +22,11 @@ public class CategoryController {
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
+    }
+
+    @GetMapping(path = "/get/all")
+    public List<Category> getAllCategories() {
+        return categoryService.getCategories();
     }
 
     @PostMapping(path = "/save")

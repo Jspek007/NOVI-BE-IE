@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Transactional
@@ -24,6 +25,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+    }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 
     @Override
