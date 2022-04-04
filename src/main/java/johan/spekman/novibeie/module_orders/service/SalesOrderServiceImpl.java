@@ -28,7 +28,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final InputValidation inputValidation;
     private final CreateTimeStamp createTimeStamp;
     private final SalesOrderRepository salesOrderRepository;
-    private final CustomerAddressService customerAddressService;
     private final CustomerAddressRepository customerAddressRepository;
 
     public SalesOrderServiceImpl(CustomerRepository customerRepository,
@@ -36,14 +35,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                                  InputValidation inputValidation,
                                  CreateTimeStamp createTimeStamp,
                                  SalesOrderRepository salesOrderRepository,
-                                 CustomerAddressService customerAddressService,
                                  CustomerAddressRepository customerAddressRepository) {
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.inputValidation = inputValidation;
         this.createTimeStamp = createTimeStamp;
         this.salesOrderRepository = salesOrderRepository;
-        this.customerAddressService = customerAddressService;
         this.customerAddressRepository = customerAddressRepository;
     }
 
