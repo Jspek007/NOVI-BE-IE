@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.controller;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
+import johan.spekman.novibeie.utililies.CSVFormatCheck;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,9 +24,11 @@ import java.util.List;
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final CSVFormatCheck csvFormatCheck;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CSVFormatCheck csvFormatCheck) {
         this.customerService = customerService;
+        this.csvFormatCheck = csvFormatCheck;
     }
 
     @GetMapping("/get/all")
@@ -71,7 +73,7 @@ public class CustomerController {
     @GetMapping(path = "/export/all", produces = "text/csv")
     public void exportAllCustomers(HttpServletResponse response) throws IOException {
         Date date = new Date(System.currentTimeMillis());
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         /*
             write actual data to CSV file
          */
@@ -83,7 +85,7 @@ public class CustomerController {
     @PostMapping(path = "/import")
     public ResponseEntity<Object> importCustomers(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (!customerService.hasCSVFormat(file)) {
+        if (csvFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         } else {

@@ -28,9 +28,11 @@ public class CustomerServiceTest {
     private CustomerServiceImpl underTest;
     private AutoCloseable autoCloseable;
 
+    @MockBean
+    private InputValidation inputValidation;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    private InputValidation inputValidation;
 
     @BeforeEach
     void setUp() {
@@ -72,8 +74,7 @@ public class CustomerServiceTest {
                 "Tester",
                 "+31612345678",
                 "Test@test.nl",
-                encryptedPassword
-        );
+                encryptedPassword);
         BindingResult bindingResult = new BindException(customerDto, "customer");
         // When
         underTest.createCustomer(customerDto, bindingResult);

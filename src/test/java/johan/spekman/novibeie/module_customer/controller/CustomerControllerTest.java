@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_customer.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
+import johan.spekman.novibeie.utililies.CSVFormatCheck;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,6 +36,8 @@ class CustomerControllerTest {
 
     @MockBean
     private CustomerService customerService;
+    @MockBean
+    private CSVFormatCheck csvFormatCheck;
 
     @Test
     void canGetAllCustomers() throws Exception {

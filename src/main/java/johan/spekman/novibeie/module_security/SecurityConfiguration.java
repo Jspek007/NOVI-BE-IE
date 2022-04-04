@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -40,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().antMatchers(POST, "/login", "/api/token/refresh").permitAll()
                 .antMatchers(POST, "/api/v1/**").hasAuthority("ADMIN")
                 .antMatchers("/").permitAll()
-                .and().authorizeRequests().anyRequest().authenticated()
+                .and().authorizeRequests().anyRequest().authenticated().and().httpBasic()
                 .and().addFilter(new CustomAuthenticationFilter(authenticationManagerBean()))
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -22,8 +21,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static java.lang.Boolean.TYPE;
 
 @Service
 @Transactional
@@ -49,42 +46,26 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
-        // Validate user input before attempting to create a new customer
         if (inputValidation.validate(bindingResult) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
         } else {
-            // Encrypt the password of the user
             String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
 
-            // Generate the random customerId
             Random random = new Random();
             long low = 100000L;
             long high = 999999L;
             Long customerId = random.nextLong(high - low) + low;
 
             Customer customer = new Customer();
-            /*
-                Validate the given phone-number for the correct
-                Dutch format (+31612345678)
-             */
-
             if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.getPhoneNumber())) {
                 return new ResponseEntity<>("Incorrect phone number format", HttpStatus.BAD_REQUEST);
             } else {
                 customer.setPhoneNumber(customerDto.getPhoneNumber());
             }
-
-            /*
-                Check if given email is already used for an existing customer
-             */
             Customer customerByEmail = customerRepository.findByEmailAddress(customerDto.getEmailAddress());
             if (customerByEmail != null) {
                 return new ResponseEntity<>("Account with this e-mail already exists", HttpStatus.FORBIDDEN);
             }
-
-            /*
-                Create the actual new customer
-             */
             customer.setFirstName(customerDto.getFirstName());
             customer.setInsertion(customerDto.getInsertion());
             customer.setLastName(customerDto.getLastName());
@@ -178,13 +159,5 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (IOException exception) {
             throw new RuntimeException("Failed to store csv data: " + exception.getMessage());
         }
-    }
-
-    public boolean hasCSVFormat(MultipartFile file) {
-        String TYPE = "text/csv";
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
     }
 }

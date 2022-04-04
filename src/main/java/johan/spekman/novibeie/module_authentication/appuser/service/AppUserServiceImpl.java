@@ -17,14 +17,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service @Transactional @Slf4j
+@Service
+@Transactional
+@Slf4j
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AppUserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository,
-                              PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
@@ -34,19 +36,15 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = userRepository.findByUsername(username);
         if (appUser == null) {
-            log.error("User not found in the database");
             throw new UsernameNotFoundException("User not found in the database");
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        appUser.getAuthorities().forEach(authority ->
-                authorities.add(new SimpleGrantedAuthority(authority.getName()))
-        );
+        appUser.getAuthorities().forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority.getName())));
         return new org.springframework.security.core.userdetails.User(
                 appUser.getUsername(),
                 appUser.getPassword(),
-                authorities
-        );
+                authorities);
     }
 
     @Override

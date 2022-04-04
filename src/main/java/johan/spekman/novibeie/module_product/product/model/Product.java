@@ -1,7 +1,9 @@
 package johan.spekman.novibeie.module_product.product.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import johan.spekman.novibeie.module_catalog.model.Category;
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 
 import javax.persistence.*;
@@ -15,6 +17,7 @@ import java.util.List;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
     @Id
     @Column(name = "entity_id")
@@ -29,6 +32,14 @@ public class Product {
     private boolean enabled;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductMedia> productMediaList = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "catalog_category_products",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    @JsonIgnoreProperties("productList")
+    private List<Category> categories = new ArrayList<Category>();
 
     public Product() {
     }
@@ -116,6 +127,14 @@ public class Product {
 
     public void setProductMediaList(List<ProductMedia> productMediaList) {
         this.productMediaList = productMediaList;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public void addProductMedia(ProductMedia productMedia) {
