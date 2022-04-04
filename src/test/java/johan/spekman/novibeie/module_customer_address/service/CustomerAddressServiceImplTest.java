@@ -38,7 +38,7 @@ class CustomerAddressServiceImplTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new CustomerAddressServiceImpl(customerRepository);
+        underTest = new CustomerAddressServiceImpl(customerRepository, customerAddressRepository);
     }
 
     @AfterEach
