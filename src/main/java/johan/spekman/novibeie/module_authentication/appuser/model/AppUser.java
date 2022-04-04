@@ -19,9 +19,6 @@ public class AppUser {
     private Collection<Authority> authorities = new ArrayList<>();
 
     public AppUser() {
-        this.name = name;
-        this.username = username;
-        this.password = password;
     }
 
     public AppUser(Long id, String name, String username, String password, Collection<Authority> authorities) {

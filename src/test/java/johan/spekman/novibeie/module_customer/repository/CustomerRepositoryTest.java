@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
-
 @DataJpaTest
 class CustomerRepositoryTest {
 
@@ -26,8 +24,7 @@ class CustomerRepositoryTest {
                 "Tester",
                 "+31612345678",
                 "Test@test.nl",
-                "Test123"
-        );
+                "Test123");
         underTest.save(customer);
 
         // when
@@ -50,8 +47,7 @@ class CustomerRepositoryTest {
                 "Tester",
                 "+31612345678",
                 "Test@test.nl",
-                "Test123"
-        );
+                "Test123");
         underTest.save(customer);
 
         // when

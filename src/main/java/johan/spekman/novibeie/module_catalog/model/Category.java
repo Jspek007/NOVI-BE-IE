@@ -1,8 +1,6 @@
 package johan.spekman.novibeie.module_catalog.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_product.product.model.Product;
 
 import javax.persistence.*;
@@ -11,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Category {
     @Id
     @Column(name = "entity_id")
@@ -21,11 +19,7 @@ public class Category {
 
     private String categoryDescription;
 
-    @ManyToMany(
-            mappedBy = "categories",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
-    )
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categories")
     private List<Product> productList = new ArrayList<Product>();
 

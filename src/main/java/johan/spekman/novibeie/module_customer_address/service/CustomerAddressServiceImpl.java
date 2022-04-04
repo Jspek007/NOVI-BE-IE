@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
@@ -27,7 +26,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
 
     @Override
     public ResponseEntity<Object> createNewAddress(@Valid @RequestBody CustomerAddressDto customerAddressDto,
-                                                   BindingResult bindingResult) {
+            BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Malformed input: " + bindingResult.getFieldError());
