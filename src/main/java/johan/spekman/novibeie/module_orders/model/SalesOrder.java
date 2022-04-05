@@ -29,56 +29,20 @@ public class SalesOrder {
     @JoinColumn(name = "billing_address_id")
     private CustomerAddress billingAddress;
 
-    public long getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(long entityId) {
-        this.entityId = entityId;
-    }
-
-    public Date getCreatedAtDate() {
-        return createdAtDate;
-    }
-
     public void setCreatedAtDate(Date createdAtDate) {
         this.createdAtDate = createdAtDate;
-    }
-
-    public List<SalesOrderItem> getOrderItemList() {
-        return orderItemList;
-    }
-
-    public void setOrderItemList(List<SalesOrderItem> orderItemList) {
-        this.orderItemList = orderItemList;
-    }
-
-    public int getTotalItems() {
-        return totalItems;
     }
 
     public void setTotalItems(int totalItems) {
         this.totalItems = totalItems;
     }
 
-    public double getGrandTotal() {
-        return grandTotal;
-    }
-
     public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
     }
 
-    public CustomerAddress getShippingAddress() {
-        return shippingAddress;
-    }
-
     public void setShippingAddress(CustomerAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
-    }
-
-    public CustomerAddress getBillingAddress() {
-        return billingAddress;
     }
 
     public void setBillingAddress(CustomerAddress billingAddress) {

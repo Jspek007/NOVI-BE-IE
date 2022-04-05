@@ -10,7 +10,7 @@ import java.util.Date;
 @Service
 public class CreateTimeStamp {
 
-    public Date CreateTimeStamp() throws ParseException {
+    public Date createTimeStamp() throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date((System.currentTimeMillis()));
         String currentDate = format.format(date);

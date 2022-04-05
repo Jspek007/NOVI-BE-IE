@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -24,7 +23,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
     private final CustomerAddressRepository customerAddressRepository;
 
     public CustomerAddressServiceImpl(CustomerRepository customerRepository,
-                                      CustomerAddressRepository customerAddressRepository) {
+            CustomerAddressRepository customerAddressRepository) {
         this.customerRepository = customerRepository;
         this.customerAddressRepository = customerAddressRepository;
     }

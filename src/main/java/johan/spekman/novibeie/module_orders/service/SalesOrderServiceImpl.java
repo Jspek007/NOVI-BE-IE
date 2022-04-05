@@ -35,12 +35,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final ProductRepository productRepository;
 
     public SalesOrderServiceImpl(CustomerRepository customerRepository,
-                                 InputValidation inputValidation,
-                                 CreateTimeStamp createTimeStamp,
-                                 SalesOrderItemRepository salesOrderItemRepository,
-                                 CustomerAddressRepository customerAddressRepository,
-                                 SalesOrderRepository salesOrderRepository,
-                                 ProductRepository productRepository) {
+            InputValidation inputValidation,
+            CreateTimeStamp createTimeStamp,
+            SalesOrderItemRepository salesOrderItemRepository,
+            CustomerAddressRepository customerAddressRepository,
+            SalesOrderRepository salesOrderRepository,
+            ProductRepository productRepository) {
         this.customerRepository = customerRepository;
         this.inputValidation = inputValidation;
         this.createTimeStamp = createTimeStamp;
@@ -52,17 +52,19 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
-                            BindingResult bindingResult) throws ParseException {
+            BindingResult bindingResult) throws ParseException {
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Invalid input" + bindingResult.getFieldErrors());
         }
         if (customerRepository.findByEmailAddress(salesOrderItemDto.getCustomer().getEmailAddress()) == null) {
-            throw new ApiRequestException("No customer found with this e-mail: " + salesOrderItemDto.getCustomer().getEmailAddress());
+            throw new ApiRequestException(
+                    "No customer found with this e-mail: " + salesOrderItemDto.getCustomer().getEmailAddress());
         }
         SalesOrder salesOrder = new SalesOrder();
         salesOrderRepository.save(salesOrder);
 
-        Customer existingCustomer = customerRepository.findByEmailAddress(salesOrderItemDto.getCustomer().getEmailAddress());
+        Customer existingCustomer = customerRepository
+                .findByEmailAddress(salesOrderItemDto.getCustomer().getEmailAddress());
         ArrayList<Product> products = salesOrderItemDto.getProducts();
 
         for (Product product : products) {
@@ -79,11 +81,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
         salesOrder.setGrandTotal(sum);
         salesOrder.setTotalItems(products.size());
-        salesOrder.setShippingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                "shipping"));
-        salesOrder.setBillingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                "billing"));
-        salesOrder.setCreatedAtDate(createTimeStamp.CreateTimeStamp());
+        salesOrder.setShippingAddress(
+                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                        "shipping"));
+        salesOrder.setBillingAddress(
+                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                        "billing"));
+        salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
         salesOrderRepository.save(salesOrder);
     }
 }
