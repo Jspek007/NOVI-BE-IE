@@ -1,49 +1,40 @@
 package johan.spekman.novibeie.module_orders.model;
 
-import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
-import johan.spekman.novibeie.module_product.product.model.Product;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "sales_orders")
 public class SalesOrder {
     @Id
-    @Column(name = "entity_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    @JoinColumn(name = "customer_entity_id")
-    private Customer customer;
+    @Column(name = "entity_id")
+    private long entityId;
+    @Column(name = "created_at_date")
     private Date createdAtDate;
-    @ManyToOne
-    @JoinColumn(name = "order_item_entity_id")
-    private Product orderItem;
-    private double productPrice;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_entity_id")
+    private List<SalesOrderItem> orderItemList;
+    @Column(name = "sales_order_items_total")
+    private int totalItems;
+    @Column(name = "grand_total")
     private double grandTotal;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_address_id")
     private CustomerAddress shippingAddress;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id")
     private CustomerAddress billingAddress;
 
-    public Long getId() {
-        return id;
+    public long getEntityId() {
+        return entityId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setEntityId(long entityId) {
+        this.entityId = entityId;
     }
 
     public Date getCreatedAtDate() {
@@ -54,20 +45,20 @@ public class SalesOrder {
         this.createdAtDate = createdAtDate;
     }
 
-    public Product getOrderItem() {
-        return orderItem;
+    public List<SalesOrderItem> getOrderItemList() {
+        return orderItemList;
     }
 
-    public void setOrderItem(Product orderItem) {
-        this.orderItem = orderItem;
+    public void setOrderItemList(List<SalesOrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 
-    public double getProductPrice() {
-        return productPrice;
+    public int getTotalItems() {
+        return totalItems;
     }
 
-    public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
     }
 
     public double getGrandTotal() {

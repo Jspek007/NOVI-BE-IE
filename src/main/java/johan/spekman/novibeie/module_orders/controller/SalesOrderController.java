@@ -1,6 +1,6 @@
 package johan.spekman.novibeie.module_orders.controller;
 
-import johan.spekman.novibeie.module_orders.dto.SalesOrderDto;
+import johan.spekman.novibeie.module_orders.dto.SalesOrderItemDto;
 import johan.spekman.novibeie.module_orders.service.SalesOrderService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +22,8 @@ public class SalesOrderController {
     }
 
     @PostMapping(path = "create")
-    public void createOrder(@Valid @RequestBody SalesOrderDto salesOrderDto,
+    public void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
                             BindingResult bindingResult) throws ParseException {
-        salesOrderService.createOrder(salesOrderDto, bindingResult);
+        salesOrderService.createOrder(salesOrderItemDto, bindingResult);
     }
 }
