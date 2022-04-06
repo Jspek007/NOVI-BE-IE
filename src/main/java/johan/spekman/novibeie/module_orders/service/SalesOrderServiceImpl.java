@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -50,6 +50,39 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.productRepository = productRepository;
     }
 
+    public void saveOrderItems(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+        for (Product product : products) {
+            SalesOrderItem salesOrderItem = new SalesOrderItem();
+            Product orderItem = productRepository.findBySku(product.getSku());
+            if (orderItem == null) {
+                throw new ApiRequestException("No product found with SKU: " + product.getSku());
+            }
+            salesOrderItem.setOrderItem(productRepository.findBySku(orderItem.getSku()));
+            salesOrderItem.setProductPrice(orderItem.getProductPrice());
+            salesOrderItem.setCustomer(existingCustomer);
+            salesOrderItem.setOrderId(salesOrder);
+            salesOrderItemRepository.save(salesOrderItem);
+        }
+    }
+
+    public void saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer existingCustomer)
+            throws ParseException {
+        double sum = 0;
+        for (Product product : products) {
+            sum += product.getProductPrice();
+        }
+        salesOrder.setGrandTotal(sum);
+        salesOrder.setTotalItems(products.size());
+        salesOrder.setShippingAddress(
+                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                        "shipping"));
+        salesOrder.setBillingAddress(
+                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                        "billing"));
+        salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
+        salesOrderRepository.save(salesOrder);
+    }
+
     @Override
     public void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
             BindingResult bindingResult) throws ParseException {
@@ -65,29 +98,18 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
         Customer existingCustomer = customerRepository
                 .findByEmailAddress(salesOrderItemDto.getCustomer().getEmailAddress());
-        ArrayList<Product> products = salesOrderItemDto.getProducts();
+        List<Product> products = salesOrderItemDto.getProducts();
 
-        for (Product product : products) {
-            SalesOrderItem salesOrderItem = new SalesOrderItem();
-            salesOrderItem.setOrderItem(productRepository.findBySku(product.getSku()));
-            salesOrderItem.setProductPrice(product.getProductPrice());
-            salesOrderItem.setCustomer(existingCustomer);
-            salesOrderItem.setOrderId(salesOrder);
-            salesOrderItemRepository.save(salesOrderItem);
+        try {
+            saveOrderItems(products, salesOrder, existingCustomer);
+        } catch (Exception exception) {
+            throw new ApiRequestException("Could not save order items: " + exception.getMessage());
         }
-        double sum = 0;
-        for (Product product : products) {
-            sum += product.getProductPrice();
+
+        try {
+            saveSalesOrder(products, salesOrder, existingCustomer);
+        } catch (Exception exception) {
+            throw new ApiRequestException("Could not save sales order: " + exception.getMessage());
         }
-        salesOrder.setGrandTotal(sum);
-        salesOrder.setTotalItems(products.size());
-        salesOrder.setShippingAddress(
-                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                        "shipping"));
-        salesOrder.setBillingAddress(
-                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                        "billing"));
-        salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
-        salesOrderRepository.save(salesOrder);
     }
 }

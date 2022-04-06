@@ -22,7 +22,7 @@ public interface CustomerService {
 
     void deleteCustomerById(Long customerId);
 
-    void updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
+    ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
 
     void exportCustomersToCsv(Writer writer);
 
