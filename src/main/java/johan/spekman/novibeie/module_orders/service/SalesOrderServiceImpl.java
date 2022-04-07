@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +51,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.productRepository = productRepository;
     }
 
-    public void saveOrderItems(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+    public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+        List<SalesOrderItem> salesOrderItems = new ArrayList<>();
         for (Product product : products) {
             SalesOrderItem salesOrderItem = new SalesOrderItem();
             Product orderItem = productRepository.findBySku(product.getSku());
@@ -62,7 +64,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             salesOrderItem.setCustomer(existingCustomer);
             salesOrderItem.setOrderId(salesOrder);
             salesOrderItemRepository.save(salesOrderItem);
+            salesOrderItems.add(salesOrderItem);
         }
+        return salesOrderItems;
     }
 
     public void saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer existingCustomer)
