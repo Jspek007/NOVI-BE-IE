@@ -69,27 +69,32 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         return salesOrderItems;
     }
 
-    public void saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer existingCustomer)
-            throws ParseException {
-        double sum = 0;
-        for (Product product : products) {
-            sum += product.getProductPrice();
+    public void saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+        String shipping = "shipping";
+        String billing = "billing";
+        try {
+            double sum = 0;
+            for (Product product : products) {
+                sum += product.getProductPrice();
+            }
+            salesOrder.setGrandTotal(sum);
+            salesOrder.setTotalItems(products.size());
+            salesOrder.setShippingAddress(
+                    customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                            shipping));
+            salesOrder.setBillingAddress(
+                    customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                            billing));
+            salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
+            salesOrderRepository.save(salesOrder);
+        } catch (Exception exception) {
+            throw new ApiRequestException("Sales order could not be saved: " + exception.getMessage());
         }
-        salesOrder.setGrandTotal(sum);
-        salesOrder.setTotalItems(products.size());
-        salesOrder.setShippingAddress(
-                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                        "shipping"));
-        salesOrder.setBillingAddress(
-                customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
-                        "billing"));
-        salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
-        salesOrderRepository.save(salesOrder);
     }
 
     @Override
     public void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
-            BindingResult bindingResult) throws ParseException {
+            BindingResult bindingResult) {
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Invalid input" + bindingResult.getFieldErrors());
         }

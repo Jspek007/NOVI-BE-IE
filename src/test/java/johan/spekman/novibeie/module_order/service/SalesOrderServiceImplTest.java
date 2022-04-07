@@ -1,10 +1,14 @@
 package johan.spekman.novibeie.module_order.service;
 
+import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import johan.spekman.novibeie.module_orders.dto.SalesOrderItemDto;
 import johan.spekman.novibeie.module_orders.model.SalesOrder;
 import johan.spekman.novibeie.module_orders.model.SalesOrderItem;
@@ -28,6 +32,7 @@ import johan.spekman.novibeie.module_orders.service.SalesOrderServiceImpl;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import johan.spekman.novibeie.utililies.InputValidation;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,6 +44,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -70,13 +76,13 @@ public class SalesOrderServiceImplTest {
     SalesOrder salesOrder;
 
     @Mock
-    SalesOrderItem salesOrderItem;
-
-    @Mock
     Product product;
 
     @Mock
     Customer customer;
+
+    @Mock
+    CustomerAddress customerAddress;
 
 
 
@@ -117,12 +123,58 @@ public class SalesOrderServiceImplTest {
     }
 
     @Test
-    public void shouldSaveSalesOrder()
-            throws ParseException {
+    public void shouldThrowErrorOnOrderItemsSave() {
+        Product product = new Product();
+        List<Product> salesOrderItems = new ArrayList<>();
+        salesOrderItems.add(product);
+
+        assertThrows(ApiRequestException.class, () -> underTest.saveOrderItems(salesOrderItems, salesOrder, customer));
     }
 
     @Test
-    public void createOrder() throws ParseException {
+    public void shouldThrowErrorOnSalesOrderSave() {
+        List<Product> salesOrderItems = new ArrayList<>();
+        salesOrderItems.add(product);
+
+        assertThrows(ApiRequestException.class, () -> underTest.saveSalesOrder(salesOrderItems, salesOrder, customer));
+    }
+
+    @Test
+    public void shouldSaveSalesOrder() {
+        Product product = new Product(
+                1L,
+                "Sku_111111",
+                "Test product",
+                "This is a test",
+                11.99,
+                21,
+                new Date(),
+                true
+        );
+        Customer customer = new Customer(
+                1L,
+                123456L,
+                "Henk",
+                "de",
+                "Tester",
+                "+31612345678",
+                "Test@test.nl",
+                "Test123");
+        customerRepository.save(customer);
+        List<Product> salesOrderItems = new ArrayList<>();
+        salesOrderItems.add(product);
+        productRepository.save(product);
+
+        underTest.saveSalesOrder(salesOrderItems, salesOrder, customer);
+
+        int expected = 1;
+        int actual = salesOrderRepository.findAll().size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void createOrder() {
     }
 
 }
