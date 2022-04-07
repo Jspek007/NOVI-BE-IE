@@ -33,6 +33,7 @@ import johan.spekman.novibeie.module_product.product.repository.ProductRepositor
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import johan.spekman.novibeie.utililies.InputValidation;
 import org.springframework.security.core.parameters.P;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -132,14 +133,6 @@ public class SalesOrderServiceImplTest {
     }
 
     @Test
-    public void shouldThrowErrorOnSalesOrderSave() {
-        List<Product> salesOrderItems = new ArrayList<>();
-        salesOrderItems.add(product);
-
-        assertThrows(ApiRequestException.class, () -> underTest.saveSalesOrder(salesOrderItems, salesOrder, customer));
-    }
-
-    @Test
     public void shouldSaveSalesOrder() {
         Product product = new Product(
                 1L,
@@ -174,7 +167,42 @@ public class SalesOrderServiceImplTest {
     }
 
     @Test
-    public void createOrder() {
+    public void shouldCreateCompleteSalesOrder() {
+        Product product = new Product(
+                1L,
+                "Sku_111111",
+                "Test product",
+                "This is a test",
+                11.99,
+                21,
+                new Date(),
+                true
+        );
+        ArrayList<Product> salesOrderItems = new ArrayList<>();
+        salesOrderItems.add(product);
+        productRepository.save(product);
+        Customer customer = new Customer(
+                1L,
+                123456L,
+                "Henk",
+                "de",
+                "Tester",
+                "+31612345678",
+                "Test@test.nl",
+                "Test123");
+        customerRepository.save(customer);
+
+        SalesOrderItemDto salesOrderItemDto = new SalesOrderItemDto(
+                customer,
+                salesOrderItems
+        );
+        BindingResult bindingResult = new BindException(salesOrderItemDto, "salesOrder");
+
+        underTest.createOrder(salesOrderItemDto, bindingResult);
+        int expected = 1;
+        int actual = salesOrderRepository.findAll().size();
+
+        assertEquals(expected, actual);
     }
 
 }
