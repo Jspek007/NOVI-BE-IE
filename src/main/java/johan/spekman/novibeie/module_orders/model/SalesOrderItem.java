@@ -1,5 +1,7 @@
 package johan.spekman.novibeie.module_orders.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_product.product.model.Product;
 
@@ -12,14 +14,17 @@ public class SalesOrderItem {
     @Column(name = "entity_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_entity_id")
     private SalesOrder orderId;
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_entity_id")
     private Customer customer;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_item_entity_id")
+    @JsonIgnoreProperties({"productMediaList", "categories", "createdAtDate", "enabled", "productDescription"})
     private Product orderItem;
     private double productPrice;
 

@@ -1,5 +1,8 @@
 package johan.spekman.novibeie.module_orders.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 
 import javax.persistence.*;
@@ -8,11 +11,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "sales_orders")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class SalesOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entity_id")
-    private long entityId;
+    private Long entityId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_entity_id")
+    @JsonIgnoreProperties("password")
+    private Customer customer;
     @Column(name = "created_at_date")
     private Date createdAtDate;
     @OneToMany(cascade = CascadeType.ALL)
@@ -29,20 +37,64 @@ public class SalesOrder {
     @JoinColumn(name = "billing_address_id")
     private CustomerAddress billingAddress;
 
+    public Long getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(Long entityId) {
+        this.entityId = entityId;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Date getCreatedAtDate() {
+        return createdAtDate;
+    }
+
     public void setCreatedAtDate(Date createdAtDate) {
         this.createdAtDate = createdAtDate;
+    }
+
+    public List<SalesOrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<SalesOrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
+
+    public int getTotalItems() {
+        return totalItems;
     }
 
     public void setTotalItems(int totalItems) {
         this.totalItems = totalItems;
     }
 
+    public double getGrandTotal() {
+        return grandTotal;
+    }
+
     public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
     }
 
+    public CustomerAddress getShippingAddress() {
+        return shippingAddress;
+    }
+
     public void setShippingAddress(CustomerAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public CustomerAddress getBillingAddress() {
+        return billingAddress;
     }
 
     public void setBillingAddress(CustomerAddress billingAddress) {

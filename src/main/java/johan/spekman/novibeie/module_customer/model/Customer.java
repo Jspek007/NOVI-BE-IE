@@ -1,8 +1,10 @@
 package johan.spekman.novibeie.module_customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.module_orders.model.SalesOrder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,6 +30,9 @@ public class Customer {
     private String password;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<SalesOrder> customerOrders = new ArrayList<>();
 
     public Customer() {
     }
@@ -113,6 +118,14 @@ public class Customer {
 
     public void setCustomerAddresses(List<CustomerAddress> customerAddresses) {
         this.customerAddresses = customerAddresses;
+    }
+
+    public List<SalesOrder> getCustomerOrders() {
+        return customerOrders;
+    }
+
+    public void setCustomerOrders(List<SalesOrder> customerOrders) {
+        this.customerOrders = customerOrders;
     }
 
     public void addCustomerAddress(CustomerAddress customerAddress) {

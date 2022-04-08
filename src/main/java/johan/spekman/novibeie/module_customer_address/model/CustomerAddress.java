@@ -1,6 +1,8 @@
 package johan.spekman.novibeie.module_customer_address.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer.model.Customer;
 
@@ -15,12 +17,14 @@ import javax.transaction.Transactional;
         property = "id"
 )
 public class CustomerAddress {
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parent_id")
     private Customer customer;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonIgnoreProperties("customerId")
     private Long customerId;
     private String streetName;
     private int houseNumber;

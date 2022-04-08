@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.productRepository = productRepository;
     }
 
-    public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+    public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder,
+            Customer existingCustomer) {
         List<SalesOrderItem> salesOrderItems = new ArrayList<>();
         for (Product product : products) {
             SalesOrderItem salesOrderItem = new SalesOrderItem();
@@ -86,6 +86,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
                             billing));
             salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
+            salesOrder.setCustomer(existingCustomer);
             salesOrderRepository.save(salesOrder);
         } catch (Exception exception) {
             throw new ApiRequestException("Sales order could not be saved: " + exception.getMessage());
@@ -119,6 +120,16 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             saveSalesOrder(products, salesOrder, existingCustomer);
         } catch (Exception exception) {
             throw new ApiRequestException("Could not save sales order: " + exception.getMessage());
+        }
+    }
+
+    @Override
+    public List<SalesOrder> getOrdersByCustomerEmail(String email) {
+        try {
+            Long customerId = customerRepository.findByEmailAddress(email).getId();
+            return salesOrderRepository.findByCustomerId(customerId);
+        } catch (Exception exception) {
+            throw new ApiRequestException("No existing customer found with: " + email);
         }
     }
 }
