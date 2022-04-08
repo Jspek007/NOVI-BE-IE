@@ -5,8 +5,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CSVFormatCheck {
-    public boolean hasCSVFormat(MultipartFile file) {
+    public static boolean hasCSVFormat(MultipartFile file) {
         String TYPE = "text/csv";
-        return !TYPE.equals(file.getContentType());
+        if (!TYPE.matches(file.getContentType())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
