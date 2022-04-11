@@ -4,15 +4,13 @@ import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
-import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.validation.BindException;
@@ -21,14 +19,16 @@ import org.springframework.validation.BindingResult;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
+
+import javax.transaction.Transactional;
 
 @SpringBootTest
+@Transactional
 class CustomerAddressServiceImplTest {
 
-    @Mock
+    @Autowired
     private CustomerRepository customerRepository;
-    @Mock
+    @Autowired
     private CustomerAddressRepository customerAddressRepository;
 
     @MockBean
@@ -38,7 +38,7 @@ class CustomerAddressServiceImplTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new CustomerAddressServiceImpl(customerRepository);
+        underTest = new CustomerAddressServiceImpl(customerRepository, customerAddressRepository);
     }
 
     @AfterEach
@@ -89,10 +89,9 @@ class CustomerAddressServiceImplTest {
 
         underTest.createNewAddress(customerAddressDto, bindingResult);
         // Then
-        ArgumentCaptor<CustomerAddress> customerArgumentCaptor = ArgumentCaptor.forClass(CustomerAddress.class);
-        verify(customerAddressRepository).save(customerArgumentCaptor.capture());
+        long result = customerAddressRepository.count();
+        long expected = 1;
 
-        CustomerAddress capturedAddress = customerArgumentCaptor.getValue();
-        assertThat(capturedAddress.getPostalCode()).isEqualTo(customerAddressDto.getPostalCode());
+        assertThat(expected == result);
     }
 }

@@ -7,23 +7,23 @@ import javax.validation.constraints.Size;
 
 public class CustomerDto {
     @NotBlank
-    private String firstName;
+    private final String firstName;
 
-    private String insertion;
-
-    @NotBlank
-    private String lastName;
+    private final String insertion;
 
     @NotBlank
-    private String phoneNumber;
+    private final String lastName;
+
+    @NotBlank
+    private final String phoneNumber;
 
     @NotEmpty
     @Email
-    private String emailAddress;
+    private final String emailAddress;
 
     @NotBlank
     @Size(min = 8, max = 40)
-    private String password;
+    private final String password;
 
     public CustomerDto(String firstName, String insertion, String lastName, String phoneNumber, String emailAddress, String password) {
         this.firstName = firstName;

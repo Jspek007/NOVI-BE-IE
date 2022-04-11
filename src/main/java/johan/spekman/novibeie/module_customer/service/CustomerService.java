@@ -13,11 +13,18 @@ import java.util.List;
 
 public interface CustomerService {
     List<Customer> getAllCustomers();
+
     Customer getCustomerByEmailAddress(String emailAddress);
+
     ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
+
     void saveAll(MultipartFile file);
+
     void deleteCustomerById(Long customerId);
+
     ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
+
     void exportCustomersToCsv(Writer writer);
+
     List<Customer> csvToCustomers(InputStream inputStream);
 }

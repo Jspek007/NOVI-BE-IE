@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_customer.service;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,10 +29,14 @@ import java.util.Random;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final InputValidation inputValidation;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+            PasswordEncoder passwordEncoder,
+            InputValidation inputValidation) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
+        this.inputValidation = inputValidation;
     }
 
     @Override
@@ -45,7 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
-        InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
         } else {
@@ -85,33 +90,38 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult) {
+    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto,
+            BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
+            throw new ApiRequestException("Request could not be processed: " + bindingResult.getFieldErrorCount());
         } else {
             Customer foundCustomer = customerRepository.findByCustomerId(customerId);
             String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
 
             if (foundCustomer != null) {
-                foundCustomer.setFirstName(newCustomerDto.getFirstName());
-                foundCustomer.setInsertion(newCustomerDto.getInsertion());
-                foundCustomer.setLastName(newCustomerDto.getLastName());
-                foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
-                foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
-                foundCustomer.setPassword(encryptedPassword);
+                try {
+                    foundCustomer.setFirstName(newCustomerDto.getFirstName());
+                    foundCustomer.setInsertion(newCustomerDto.getInsertion());
+                    foundCustomer.setLastName(newCustomerDto.getLastName());
+                    foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
+                    foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
+                    foundCustomer.setPassword(encryptedPassword);
 
-                customerRepository.save(foundCustomer);
-                return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
-            } else {
-                return null;
+                    customerRepository.save(foundCustomer);
+                    return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
+                } catch (Exception exception) {
+                    throw new ApiRequestException("Customer could not be saved: " + exception.getMessage());
+                }
             }
         }
+        return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 
     @Override
     public void exportCustomersToCsv(Writer writer) {
-        String[] headers = {"Id", "Customer Id", "Firstname", "Insertion", "Lastname", "E-mail", "Password", "Phone number"};
+        String[] headers = { "Id", "Customer Id", "Firstname", "Insertion", "Lastname", "E-mail", "Password",
+                "Phone number" };
 
         List<Customer> customerList = getAllCustomers();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(headers))) {
@@ -127,9 +137,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> csvToCustomers(InputStream inputStream) {
-        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-             CSVParser csvParser = new CSVParser(fileReader,
-                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                CSVParser csvParser = new CSVParser(fileReader,
+                        CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
             List<Customer> customers = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
@@ -141,8 +151,7 @@ public class CustomerServiceImpl implements CustomerService {
                         csvRecord.get("Lastname"),
                         csvRecord.get("E-mail"),
                         csvRecord.get("Password"),
-                        csvRecord.get("Phone number")
-                );
+                        csvRecord.get("Phone number"));
                 customers.add(customer);
             }
             return customers;

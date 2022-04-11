@@ -5,6 +5,7 @@ import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import johan.spekman.novibeie.utililies.InputValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,12 @@ import javax.validation.Valid;
 @Transactional
 public class CustomerAddressServiceImpl implements CustomerAddressService {
     private final CustomerRepository customerRepository;
+    private final CustomerAddressRepository customerAddressRepository;
 
-    public CustomerAddressServiceImpl(CustomerRepository customerRepository) {
+    public CustomerAddressServiceImpl(CustomerRepository customerRepository,
+            CustomerAddressRepository customerAddressRepository) {
         this.customerRepository = customerRepository;
+        this.customerAddressRepository = customerAddressRepository;
     }
 
     @Override
@@ -50,5 +54,16 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
 
         customer.addCustomerAddress(customerAddress);
         return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
+    }
+
+    @Override
+    public CustomerAddress getShippingAddress(Customer customer) {
+        Long customerId = customerRepository.findByEmailAddress(customer.getEmailAddress()).getId();
+        return customerAddressRepository.getCustomerAddressByCustomerAndType(customerId, "shipping");
+    }
+
+    @Override
+    public CustomerAddress getBillingAddress(Customer customer) {
+        return customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(), "billing");
     }
 }

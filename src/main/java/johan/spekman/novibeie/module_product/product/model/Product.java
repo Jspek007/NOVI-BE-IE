@@ -39,7 +39,7 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     @JsonIgnoreProperties("productList")
-    private List<Category> categories = new ArrayList<Category>();
+    private List<Category> categories = new ArrayList<>();
 
     public Product() {
     }
