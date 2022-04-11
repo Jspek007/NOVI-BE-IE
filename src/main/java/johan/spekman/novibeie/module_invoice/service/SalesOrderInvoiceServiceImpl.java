@@ -42,7 +42,7 @@ public class SalesOrderInvoiceServiceImpl implements SalesOrderInvoiceService {
 
     @Override
     public ResponseEntity<Object> processPayment(@PathVariable("orderId") Long orderId,
-                                         @RequestBody Payment request) {
+                                                 @RequestBody Payment request) {
         try {
             SalesOrder salesOrder = salesOrderRepository.getById(orderId);
             Customer customer = salesOrder.getCustomer();
@@ -70,10 +70,14 @@ public class SalesOrderInvoiceServiceImpl implements SalesOrderInvoiceService {
         salesInvoice.setSalesOrder(salesOrder);
         salesInvoice.setCreatedAtDate(createTimeStamp.createTimeStamp());
         salesInvoice.setGrandTotal(payment.getPaymentAmount());
-        salesInvoice.setBillingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId()
-                , "billing"));
-        salesInvoice.setShippingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
-                "shipping"));
+        salesInvoice.setBillingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(
+                        salesOrder.getCustomer().getId(), "billing"
+                )
+        );
+        salesInvoice.setShippingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(
+                        salesOrder.getCustomer().getId(), "shipping"
+                )
+        );
         return salesInvoiceRepository.save(salesInvoice);
     }
 
