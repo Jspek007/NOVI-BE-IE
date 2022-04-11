@@ -1,5 +1,7 @@
 package johan.spekman.novibeie.module_invoice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_orders.model.SalesOrder;
@@ -21,9 +23,11 @@ public class SalesInvoice {
     private SalesOrder salesOrder;
     private Date createdAtDate;
     private double grandTotal;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "shipping_address_id")
     private CustomerAddress shippingAddress;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "billing_address_id")
     private CustomerAddress billingAddress;

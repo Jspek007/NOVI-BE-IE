@@ -55,14 +55,12 @@ public class SalesOrderInvoiceServiceImpl implements SalesOrderInvoiceService {
                 throw new ApiRequestException("Paid amount is not sufficient for orders grand total.");
             } else {
                 createPayment(request, salesOrder);
-                SalesInvoice salesInvoice =  createInvoice(request, salesOrder, customer);
                 salesOrder.setAmountPaid(request.getPaymentAmount());
-                return new ResponseEntity<Object>(salesInvoice, HttpStatus.CREATED);
+                return new ResponseEntity<>(createInvoice(request, salesOrder, customer), HttpStatus.CREATED);
             }
         } catch (Exception exception) {
             throw new ApiRequestException("Payment could not be processed successfully: " + exception.getMessage());
         }
-
     }
 
     @Override
@@ -76,17 +74,14 @@ public class SalesOrderInvoiceServiceImpl implements SalesOrderInvoiceService {
                 , "billing"));
         salesInvoice.setShippingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
                 "shipping"));
-        salesInvoiceRepository.save(salesInvoice);
-        return salesInvoice;
+        return salesInvoiceRepository.save(salesInvoice);
     }
 
     @Override
-    public Payment createPayment(Payment payment, SalesOrder salesOrder) {
+    public void createPayment(Payment payment, SalesOrder salesOrder) {
         payment.setSalesOrder(salesOrder);
         payment.setCustomer(salesOrder.getCustomer());
         payment.setPaymentAmount(salesOrder.getGrandTotal());
         paymentRepository.save(payment);
-        return payment;
     }
-
 }

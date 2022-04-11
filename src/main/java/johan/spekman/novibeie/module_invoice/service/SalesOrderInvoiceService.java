@@ -16,5 +16,5 @@ public interface SalesOrderInvoiceService {
 
     SalesInvoice createInvoice(Payment payment, SalesOrder salesOrder, Customer customer) throws ParseException;
 
-    Payment createPayment(Payment payment, SalesOrder salesOrder);
+    void createPayment(Payment payment, SalesOrder salesOrder);
 }

@@ -22,6 +22,7 @@ public class SalesOrder {
     private Customer customer;
     @Column(name = "created_at_date")
     private Date createdAtDate;
+    @JsonIgnoreProperties("productPrice")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_entity_id")
     private List<SalesOrderItem> orderItemList;
