@@ -52,7 +52,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
-public class SalesOrderServiceImplTest {
+public class SalesOrderInvoiceServiceImplTest {
     @Autowired
     private SalesOrderRepository salesOrderRepository;
     @Autowired
