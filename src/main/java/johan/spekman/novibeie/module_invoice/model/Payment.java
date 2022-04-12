@@ -17,14 +17,6 @@ public class Payment {
     @OneToOne
     private SalesOrder salesOrder;
 
-    public Long getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
-    }
-
     public double getPaymentAmount() {
         return paymentAmount;
     }

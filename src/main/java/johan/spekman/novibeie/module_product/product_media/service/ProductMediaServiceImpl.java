@@ -34,7 +34,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
             throw new ApiRequestException("Invalid file name");
         }
         if (!Objects.equals(file.getContentType(), contentType)) {
-            throw new ApiRequestException("File is not csv format");
+            throw new ApiRequestException("Uploaded content type is not supported, please upload: " + contentType);
         }
         if (productRepository.findBySku(sku) == null) {
             throw new ApiRequestException("No product found with sku: " + sku);

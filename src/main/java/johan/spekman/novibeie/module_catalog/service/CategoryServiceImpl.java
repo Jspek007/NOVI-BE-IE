@@ -54,25 +54,31 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void addProductsToCategory(Long categoryId, String[] skus) {
+    public ResponseEntity<Object> addProductsToCategory(Long categoryId, String[] skus) {
         Category category = categoryRepository.getById(categoryId);
 
         try {
             Arrays.stream(skus).forEach(sku -> {
-                Product product = productRepository.findBySku(sku);
-                /*
-                    Check if the category is already linked to one of the products
-                    If yes, skip that sku and continue on the next
-                 */
-                if (category.getProductList().contains(product)) {
-                    return;
+                if (productRepository.findBySku(sku) == null) {
+                    throw new ApiRequestException("No product found with sku: " + sku);
+                } else {
+                    Product product = productRepository.findBySku(sku);
+                    /*
+                        Check if the category is already linked to one of the products
+                        If yes, skip that sku and continue on the next
+                    */
+                    if (category.getProductList().contains(product)) {
+                        return;
+                    }
+                    product.getCategories().add(category);
+                    productRepository.save(product);
                 }
-                product.getCategories().add(category);
-                productRepository.save(product);
             });
         } catch (Exception exception) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
+        return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
+                "updated: " + Arrays.toString(skus));
     }
 
     @Override
