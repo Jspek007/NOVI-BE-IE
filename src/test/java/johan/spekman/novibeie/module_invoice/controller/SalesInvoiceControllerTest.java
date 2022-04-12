@@ -27,9 +27,6 @@ public class SalesInvoiceControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
-    private SalesOrderInvoiceService salesOrderInvoiceService;
-
     @Mock
     Payment payment;
 
