@@ -11,11 +11,11 @@ public class ProductDto {
     private String sku;
 
     @NotBlank
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     private String productTitle;
 
     @NotBlank
-    @Size(min = 0, max = 250)
+    @Size(max = 250)
     private String productDescription;
 
     @NotNull

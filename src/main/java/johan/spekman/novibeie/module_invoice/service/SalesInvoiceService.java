@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 
-public interface SalesOrderInvoiceService {
+public interface SalesInvoiceService {
     ResponseEntity<Object> processPayment(@PathVariable("orderId") Long orderId,
                                           @RequestBody Payment payment);
 

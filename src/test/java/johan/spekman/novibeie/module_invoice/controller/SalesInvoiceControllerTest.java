@@ -2,7 +2,7 @@ package johan.spekman.novibeie.module_invoice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_invoice.model.Payment;
-import johan.spekman.novibeie.module_invoice.service.SalesOrderInvoiceService;
+import johan.spekman.novibeie.module_invoice.service.SalesInvoiceService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +28,9 @@ public class SalesInvoiceControllerTest {
 
     @Mock
     Payment payment;
+
+    @MockBean
+    private SalesInvoiceService salesInvoiceService;
 
     @Test
     void correctPayment_ShouldReturn200OkStatus() throws Exception {

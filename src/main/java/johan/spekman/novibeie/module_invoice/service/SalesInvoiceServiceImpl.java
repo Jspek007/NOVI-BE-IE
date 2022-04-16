@@ -21,18 +21,18 @@ import java.text.ParseException;
 
 @Service
 @Transactional
-public class SalesOrderInvoiceServiceImpl implements SalesOrderInvoiceService {
+public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     private final SalesOrderRepository salesOrderRepository;
     private final PaymentRepository paymentRepository;
     private final CreateTimeStamp createTimeStamp;
     private final SalesInvoiceRepository salesInvoiceRepository;
     private final CustomerAddressRepository customerAddressRepository;
 
-    public SalesOrderInvoiceServiceImpl(SalesOrderRepository salesOrderRepository,
-                                        PaymentRepository paymentRepository,
-                                        CreateTimeStamp createTimeStamp,
-                                        SalesInvoiceRepository salesInvoiceRepository,
-                                        CustomerAddressRepository customerAddressRepository) {
+    public SalesInvoiceServiceImpl(SalesOrderRepository salesOrderRepository,
+                                   PaymentRepository paymentRepository,
+                                   CreateTimeStamp createTimeStamp,
+                                   SalesInvoiceRepository salesInvoiceRepository,
+                                   CustomerAddressRepository customerAddressRepository) {
         this.salesOrderRepository = salesOrderRepository;
         this.paymentRepository = paymentRepository;
         this.createTimeStamp = createTimeStamp;
