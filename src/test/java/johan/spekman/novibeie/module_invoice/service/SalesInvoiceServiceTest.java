@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_invoice.service;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +25,7 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -96,7 +97,27 @@ public class SalesInvoiceServiceTest {
 
     @Test
     public void shouldProcessPaymentSuccessfully() {
+        Customer customer = new Customer(
+                1L,
+                123456L,
+                "Henk",
+                "de",
+                "Tester",
+                "+31612345678",
+                "Test@test.nl",
+                "Test123");
+        SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setEntityId(1L);
+        salesOrder.setGrandTotal(11.99);
+        salesOrder.setCustomer(customer);
+        salesOrderRepository.save(salesOrder);
+        Payment payment = new Payment();
+        payment.setPaymentAmount(11.99);
+        payment.setSalesOrder(salesOrder);
+        paymentRepository.save(payment);
 
+
+        underTest.processPayment(1L, payment);
     }
 
 }

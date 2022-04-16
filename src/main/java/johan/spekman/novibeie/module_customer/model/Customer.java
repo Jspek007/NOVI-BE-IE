@@ -34,7 +34,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SalesOrder> customerOrders = new ArrayList<>();
 
     public Customer() {
