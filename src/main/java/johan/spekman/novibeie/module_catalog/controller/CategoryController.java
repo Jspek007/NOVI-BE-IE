@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_catalog.controller;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
 import johan.spekman.novibeie.module_catalog.model.Category;
 import johan.spekman.novibeie.module_catalog.service.CategoryService;
@@ -45,8 +46,7 @@ public class CategoryController {
     @PostMapping(path = "/products/save/{categoryId}")
     public ResponseEntity<Object> addProductsToCategory(@PathVariable("categoryId") Long categoryId,
                                                         @RequestBody String[] skus) throws IOException {
-        categoryService.addProductsToCategory(categoryId, skus);
-        return ResponseEntity.status(HttpStatus.OK).body("Category has been updated! " + categoryId + " " + Arrays.toString(skus));
+        return categoryService.addProductsToCategory(categoryId, skus);
     }
 
     @DeleteMapping(path = "/products/remove/{categoryId}")

@@ -30,7 +30,7 @@ class CSVFormatCheckTest {
     }
 
     @Test
-    public void csvFileFormatShouldReturnTrue() throws IOException {
+    public void csvFileFormatShouldReturnTrue() {
     MockMultipartFile mockMultipartFile = new MockMultipartFile("data", "dummy.csv", "text/csv",
             "some dataset".getBytes());
     assertTrue(csvFormatCheck.hasCSVFormat(mockMultipartFile));

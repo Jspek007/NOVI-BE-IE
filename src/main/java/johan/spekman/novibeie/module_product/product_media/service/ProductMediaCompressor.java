@@ -38,7 +38,7 @@ public class ProductMediaCompressor {
             }
             outputStream.close();
         } catch (IOException exception) {
-            System.out.println("Something went wrong decompressing the file");
+            System.out.println("Something went wrong decompressing the file: " + exception.getMessage());
         } catch (DataFormatException dataFormatException) {
             System.out.println(dataFormatException.getMessage());
         }
