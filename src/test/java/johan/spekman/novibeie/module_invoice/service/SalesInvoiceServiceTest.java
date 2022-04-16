@@ -84,7 +84,14 @@ public class SalesInvoiceServiceTest {
 
     @Test
     public void shouldCreateNewPayment() {
+        SalesOrder salesOrder = new SalesOrder();
+        Payment payment = new Payment();
+        payment.setSalesOrder(salesOrder);
+        salesOrder.setTotalItems(3);
 
+        underTest.createPayment(payment, salesOrder);
+        Payment savedPayment = paymentRepository.getById(1L);
+        assertThat(savedPayment.getSalesOrder().getTotalItems()).isEqualTo(savedPayment.getSalesOrder().getTotalItems());
     }
 
     @Test
