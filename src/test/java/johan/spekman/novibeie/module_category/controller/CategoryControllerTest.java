@@ -1,6 +1,5 @@
 package johan.spekman.novibeie.module_category.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_category.model.Category;
 import johan.spekman.novibeie.module_category.repository.CategoryRepository;
@@ -37,8 +36,6 @@ public class CategoryControllerTest {
 
     @Mock
     Category category;
-
-    private final String uri = "/api/v1/category/save";
 
     @Test
     void canGetAllCategoriesWhenExists() {
