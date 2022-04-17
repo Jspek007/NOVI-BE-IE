@@ -89,6 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
             Arrays.stream(skus).forEach(sku -> {
                 Product product = productRepository.findBySku(sku);
                 category.getProductList().remove(product);
+                categoryRepository.save(category);
             });
         } catch (Exception exception) {
             throw new ApiRequestException("Products could not be removed from the category" + exception.getMessage());

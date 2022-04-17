@@ -10,36 +10,43 @@ import johan.spekman.novibeie.utililies.InputValidation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.validation.BindException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 public class CategoryServiceTest {
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
-    @Autowired
+    @Mock
     private CategoryRepository categoryRepository;
-    @Autowired
-    private InputValidation inputValidation;
+
+    @InjectMocks
+    CategoryServiceImpl underTest;
+
+    @Mock
+    private Category category;
+
+    @Mock
+    InputValidation inputValidation;
+
+    @Mock
+    BindingResult bindingResult;
 
     @MockBean
-    private CategoryServiceImpl underTest;
-    private AutoCloseable autoCloseable;
+    AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
@@ -54,48 +61,41 @@ public class CategoryServiceTest {
 
     @Test
     void shouldCreateNewCategory() {
+        when(inputValidation.validate(bindingResult)).thenReturn(null);
+
         CategoryDto categoryDto = new CategoryDto(
                 "Test category",
                 "This is a test category"
         );
-        BindingResult bindingResult = new BindException(categoryDto, "category");
 
-        underTest.createCategory(categoryDto, bindingResult);
-
-        ArgumentCaptor<Category> categoryArgumentCaptor = ArgumentCaptor.forClass(Category.class);
-
-        Category capturedCategory = categoryArgumentCaptor.getValue();
-        assertThat(capturedCategory.getCategoryName()).isEqualTo(categoryDto.getCategoryName());
-
+        ResponseEntity<Object> storedCategory = underTest.createCategory(categoryDto, bindingResult);
+        assertThat(storedCategory.getBody()).isEqualTo("Category has been created!");
     }
 
     @Test
     void shouldAddProductsToCategory() {
-        Category category = new Category();
-        category.setId(1L);
-        category.setCategoryName("Test category");
-        category.setCategoryDescription("This is a test category");
-        category.setProductList(new ArrayList<>());
+        Category category = new Category(
+                1L,
+                "Test category to add products",
+                "This category will have products added",
+                new ArrayList<>()
+        );
         Product product = new Product();
         product.setSku("sku_123456");
         String[] skus = {"sku_123456"};
-        productRepository.save(product);
-        categoryRepository.save(category);
+
+        when(categoryRepository.getById(1L)).thenReturn(category);
+        when(productRepository.findBySku(anyString())).thenReturn(product);
 
         underTest.addProductsToCategory(1L, skus);
 
         Category capturedCategory = categoryRepository.getById(1L);
+        assertThat(capturedCategory.getProductList().get(0).getSku()).isEqualTo("sku_123456");
 
-        assertThat(capturedCategory.getProductList().get(0).getSku()).isEqualTo(product.getSku());
     }
 
     @Test
     void shouldReturnException_productNotFound() {
-        Category category = new Category();
-        category.setId(1L);
-        category.setCategoryName("Test category");
-        category.setCategoryDescription("This is a test category");
-        category.setProductList(new ArrayList<>());
         String[] skus = {"sku_123456"};
         categoryRepository.save(category);
 
@@ -104,18 +104,26 @@ public class CategoryServiceTest {
 
     @Test
     void removeProductFromCategory() {
-        Category category = new Category();
+        Category category = new Category(
+                1L,
+                "Test category to add products",
+                "This category will have products added",
+                new ArrayList<>()
+        );
         List<Product> productList = new ArrayList<>();
+        category.setProductList(productList);
         Product product = new Product();
         Product product1 = new Product();
         product.setSku("sku_123456");
         product1.setSku("sku_123457");
         productList.add(product);
         productList.add(product1);
-        category.setProductList(productList);
         categoryRepository.save(category);
 
         String[] skus = {"sku_123456"};
+
+        when(categoryRepository.getById(1L)).thenReturn(category);
+        when(productRepository.findBySku(anyString())).thenReturn(product);
 
         underTest.removeProductFromCategory(1L, skus);
 
