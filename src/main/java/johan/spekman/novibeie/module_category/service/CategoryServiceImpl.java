@@ -70,15 +70,15 @@ public class CategoryServiceImpl implements CategoryService {
                     if (category.getProductList().contains(product)) {
                         return;
                     }
-                    product.getCategories().add(category);
-                    productRepository.save(product);
+                    category.getProductList().add(product);
+                    categoryRepository.save(category);
                 }
             });
+            return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
+                    "updated: " + Arrays.toString(skus));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+            throw new ApiRequestException("Category could not be saved: " + exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
-                "updated: " + Arrays.toString(skus));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Arrays.stream(skus).forEach(sku -> {
                 Product product = productRepository.findBySku(sku);
-                product.getCategories().remove(category);
+                category.getProductList().remove(product);
             });
         } catch (Exception exception) {
             throw new ApiRequestException("Products could not be removed from the category" + exception.getMessage());

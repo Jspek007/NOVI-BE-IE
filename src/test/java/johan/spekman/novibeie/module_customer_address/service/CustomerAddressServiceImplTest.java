@@ -92,6 +92,6 @@ class CustomerAddressServiceImplTest {
         long result = customerAddressRepository.count();
         long expected = 1;
 
-        assertThat(expected == result);
+        assertThat(result).isEqualTo(expected);
     }
 }
