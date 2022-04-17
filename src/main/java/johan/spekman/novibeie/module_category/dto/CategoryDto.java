@@ -1,13 +1,13 @@
-package johan.spekman.novibeie.module_catalog.dto;
+package johan.spekman.novibeie.module_category.dto;
 
 import javax.validation.constraints.NotBlank;
 
 public class CategoryDto {
     @NotBlank
-    private String categoryName;
+    private final String categoryName;
 
     @NotBlank
-    private String categoryDescription;
+    private final String categoryDescription;
 
     public CategoryDto(String categoryName, String categoryDescription) {
         this.categoryName = categoryName;

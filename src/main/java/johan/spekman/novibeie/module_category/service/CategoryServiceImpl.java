@@ -1,9 +1,9 @@
-package johan.spekman.novibeie.module_catalog.service;
+package johan.spekman.novibeie.module_category.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
-import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
-import johan.spekman.novibeie.module_catalog.model.Category;
-import johan.spekman.novibeie.module_catalog.repository.CategoryRepository;
+import johan.spekman.novibeie.module_category.dto.CategoryDto;
+import johan.spekman.novibeie.module_category.model.Category;
+import johan.spekman.novibeie.module_category.repository.CategoryRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.utililies.InputValidation;
