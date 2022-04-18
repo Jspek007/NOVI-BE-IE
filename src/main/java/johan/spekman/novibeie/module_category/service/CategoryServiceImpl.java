@@ -1,9 +1,9 @@
-package johan.spekman.novibeie.module_catalog.service;
+package johan.spekman.novibeie.module_category.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
-import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
-import johan.spekman.novibeie.module_catalog.model.Category;
-import johan.spekman.novibeie.module_catalog.repository.CategoryRepository;
+import johan.spekman.novibeie.module_category.dto.CategoryDto;
+import johan.spekman.novibeie.module_category.model.Category;
+import johan.spekman.novibeie.module_category.repository.CategoryRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.utililies.InputValidation;
@@ -70,15 +70,15 @@ public class CategoryServiceImpl implements CategoryService {
                     if (category.getProductList().contains(product)) {
                         return;
                     }
-                    product.getCategories().add(category);
-                    productRepository.save(product);
+                    category.getProductList().add(product);
+                    categoryRepository.save(category);
                 }
             });
+            return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
+                    "updated: " + Arrays.toString(skus));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+            throw new ApiRequestException("Category could not be saved: " + exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
-                "updated: " + Arrays.toString(skus));
     }
 
     @Override
@@ -88,7 +88,8 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Arrays.stream(skus).forEach(sku -> {
                 Product product = productRepository.findBySku(sku);
-                product.getCategories().remove(category);
+                category.getProductList().remove(product);
+                categoryRepository.save(category);
             });
         } catch (Exception exception) {
             throw new ApiRequestException("Products could not be removed from the category" + exception.getMessage());

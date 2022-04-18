@@ -1,7 +1,7 @@
-package johan.spekman.novibeie.module_catalog.service;
+package johan.spekman.novibeie.module_category.service;
 
-import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
-import johan.spekman.novibeie.module_catalog.model.Category;
+import johan.spekman.novibeie.module_category.dto.CategoryDto;
+import johan.spekman.novibeie.module_category.model.Category;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 

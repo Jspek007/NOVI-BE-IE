@@ -3,7 +3,6 @@ package johan.spekman.novibeie.module_order.service;
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
-import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import johan.spekman.novibeie.module_orders.dto.SalesOrderItemDto;
 import johan.spekman.novibeie.module_orders.model.SalesOrder;
@@ -36,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
-public class SalesOrderServiceImplTest {
+public class SalesOrderServiceTest {
     @Autowired
     private SalesOrderRepository salesOrderRepository;
     @Autowired

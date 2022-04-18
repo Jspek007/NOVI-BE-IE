@@ -1,9 +1,8 @@
-package johan.spekman.novibeie.module_catalog.controller;
+package johan.spekman.novibeie.module_category.controller;
 
-import johan.spekman.novibeie.exceptions.ApiRequestException;
-import johan.spekman.novibeie.module_catalog.dto.CategoryDto;
-import johan.spekman.novibeie.module_catalog.model.Category;
-import johan.spekman.novibeie.module_catalog.service.CategoryService;
+import johan.spekman.novibeie.module_category.dto.CategoryDto;
+import johan.spekman.novibeie.module_category.model.Category;
+import johan.spekman.novibeie.module_category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController

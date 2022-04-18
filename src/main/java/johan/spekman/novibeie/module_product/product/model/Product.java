@@ -3,7 +3,7 @@ package johan.spekman.novibeie.module_product.product.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import johan.spekman.novibeie.module_catalog.model.Category;
+import johan.spekman.novibeie.module_category.model.Category;
 import johan.spekman.novibeie.module_product.product_media.model.ProductMedia;
 
 import javax.persistence.*;
