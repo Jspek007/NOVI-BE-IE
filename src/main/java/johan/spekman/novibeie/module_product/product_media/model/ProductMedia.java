@@ -23,6 +23,16 @@ public class ProductMedia {
     @Lob
     private byte[] data;
 
+    public ProductMedia() {
+    }
+
+    public ProductMedia(Product product, Long id, String fileName, byte[] data) {
+        this.product = product;
+        this.id = id;
+        this.fileName = fileName;
+        this.data = data;
+    }
+
     public Long getId() {
         return id;
     }
