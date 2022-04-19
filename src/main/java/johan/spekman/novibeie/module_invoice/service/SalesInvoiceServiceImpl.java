@@ -11,8 +11,6 @@ import johan.spekman.novibeie.module_invoice.repository.SalesInvoiceRepository;
 import johan.spekman.novibeie.module_orders.model.SalesOrder;
 import johan.spekman.novibeie.module_orders.repository.SalesOrderRepository;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +40,8 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     }
 
     @Override
-    public ResponseEntity<Object> processPayment(@PathVariable("orderId") Long orderId,
-                                                 @RequestBody Payment request) {
+    public SalesInvoice processPayment(@PathVariable("orderId") Long orderId,
+                                       @RequestBody Payment request) {
         try {
             SalesOrder salesOrder = salesOrderRepository.getById(orderId);
             Customer customer = salesOrder.getCustomer();
@@ -57,7 +55,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
             } else {
                 createPayment(request, salesOrder);
                 salesOrder.setAmountPaid(request.getPaymentAmount());
-                return new ResponseEntity<>(createInvoice(request, salesOrder, customer), HttpStatus.CREATED);
+                return createInvoice(request, salesOrder, customer);
             }
         } catch (Exception exception) {
             throw new ApiRequestException("Payment could not be processed successfully: " + exception.getMessage());
@@ -81,15 +79,17 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
         } catch (Exception exception) {
             throw new ApiRequestException("Addresses could nog be saved to the invoice: " + exception.getMessage());
         }
-        return salesInvoiceRepository.save(salesInvoice);
+        salesInvoiceRepository.save(salesInvoice);
+        return salesInvoice;
     }
 
     @Override
-    public void createPayment(Payment payment, SalesOrder salesOrder) {
+    public Payment createPayment(Payment payment, SalesOrder salesOrder) {
         payment.setSalesOrder(salesOrder);
         payment.setCustomer(salesOrder.getCustomer());
         payment.setPaymentAmount(salesOrder.getGrandTotal());
         paymentRepository.save(payment);
+        return payment;
     }
 
     @Override

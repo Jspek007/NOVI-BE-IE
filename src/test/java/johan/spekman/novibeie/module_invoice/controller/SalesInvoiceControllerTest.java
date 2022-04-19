@@ -33,13 +33,13 @@ public class SalesInvoiceControllerTest {
     private SalesInvoiceService salesInvoiceService;
 
     @Test
-    void correctPayment_ShouldReturn200OkStatus() throws Exception {
+    void correctPayment_ShouldReturn201CreatedStatus() throws Exception {
         String uri = "/api/v1/sales_orders/payment/process/{orderId}";
 
         mockMvc.perform(post(uri, 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(payment)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

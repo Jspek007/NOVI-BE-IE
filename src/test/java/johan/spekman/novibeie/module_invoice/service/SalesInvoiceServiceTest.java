@@ -3,6 +3,8 @@ package johan.spekman.novibeie.module_invoice.service;
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import johan.spekman.novibeie.module_invoice.model.Payment;
 import johan.spekman.novibeie.module_invoice.model.SalesInvoice;
@@ -23,22 +25,27 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
 public class SalesInvoiceServiceTest {
-    @Autowired
+    @Mock
     private SalesOrderRepository salesOrderRepository;
-    @Autowired
+    @Mock
     private PaymentRepository paymentRepository;
     @Autowired
     private CreateTimeStamp createTimeStamp;
-    @Autowired
+    @Mock
     private SalesInvoiceRepository salesInvoiceRepository;
-    @Autowired
+    @Mock
     private CustomerAddressRepository customerAddressRepository;
     @Autowired
     private CustomerRepository customerRepository;
@@ -76,9 +83,22 @@ public class SalesInvoiceServiceTest {
         SalesOrder salesOrder = new SalesOrder();
         salesOrder.setCustomer(customer);
         customerRepository.save(customer);
+        CustomerAddress customerAddress = new CustomerAddress();
+        customerAddress.setCustomerId(1L);
+        customerAddress.setCustomer(customer);
+        customerAddress.setStreetName("Teststreet");
+        customerAddress.setAddition("");
+        customerAddress.setPostalCode("1111AA");
+        customerAddress.setHouseNumber(11);
+        customerAddress.setCustomerAddressType(CustomerAddressType.billing);
+        customerAddress.setCustomerAddressType(CustomerAddressType.shipping);
+        salesOrder.setBillingAddress(customerAddress);
+        salesOrder.setShippingAddress(customerAddress);
 
-        underTest.createInvoice(payment, salesOrder, customer);
-        SalesInvoice savedSalesInvoice = salesInvoiceRepository.getById(1L);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "shipping")).thenReturn(customerAddress);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "billing")).thenReturn(customerAddress);
+
+        SalesInvoice savedSalesInvoice = underTest.createInvoice(payment, salesOrder, customer);
         assertThat(savedSalesInvoice.getCustomer().getEmailAddress()).isEqualTo(customer.getEmailAddress());
 
     }
@@ -90,8 +110,7 @@ public class SalesInvoiceServiceTest {
         payment.setSalesOrder(salesOrder);
         salesOrder.setTotalItems(3);
 
-        underTest.createPayment(payment, salesOrder);
-        Payment savedPayment = paymentRepository.getById(1L);
+        Payment savedPayment = underTest.createPayment(payment, salesOrder);
         assertThat(savedPayment.getSalesOrder().getTotalItems()).isEqualTo(savedPayment.getSalesOrder().getTotalItems());
     }
 
@@ -106,6 +125,15 @@ public class SalesInvoiceServiceTest {
                 "+31612345678",
                 "Test@test.nl",
                 "Test123");
+        CustomerAddress customerAddress = new CustomerAddress();
+        customerAddress.setCustomerId(1L);
+        customerAddress.setCustomer(customer);
+        customerAddress.setStreetName("Teststreet");
+        customerAddress.setAddition("");
+        customerAddress.setPostalCode("1111AA");
+        customerAddress.setHouseNumber(11);
+        customerAddress.setCustomerAddressType(CustomerAddressType.billing);
+        customerAddress.setCustomerAddressType(CustomerAddressType.shipping);
         SalesOrder salesOrder = new SalesOrder();
         salesOrder.setEntityId(1L);
         salesOrder.setGrandTotal(11.99);
@@ -114,10 +142,12 @@ public class SalesInvoiceServiceTest {
         Payment payment = new Payment();
         payment.setPaymentAmount(11.99);
         payment.setSalesOrder(salesOrder);
-        paymentRepository.save(payment);
 
+        when(salesOrderRepository.getById(anyLong())).thenReturn(salesOrder);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "shipping")).thenReturn(customerAddress);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "billing")).thenReturn(customerAddress);
 
-        underTest.processPayment(1L, payment);
+        SalesInvoice capturedSalesInvoice = underTest.processPayment(1L, payment);
+        assertThat(capturedSalesInvoice.getCustomer().getCustomerId()).isEqualTo(customer.getCustomerId());
     }
-
 }
