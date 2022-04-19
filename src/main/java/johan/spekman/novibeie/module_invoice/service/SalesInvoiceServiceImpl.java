@@ -2,6 +2,7 @@ package johan.spekman.novibeie.module_invoice.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import johan.spekman.novibeie.module_invoice.model.Payment;
 import johan.spekman.novibeie.module_invoice.model.SalesInvoice;
@@ -66,18 +67,20 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     @Override
     public SalesInvoice createInvoice(Payment payment, SalesOrder salesOrder, Customer customer) throws ParseException {
         SalesInvoice salesInvoice = new SalesInvoice();
-        salesInvoice.setCustomer(salesOrder.getCustomer());
+        try {
+            prepareCustomer(salesOrder, salesInvoice);
+        } catch (Exception exception) {
+            throw new ApiRequestException("Customer could not be saved to the invoice: " + exception.getMessage());
+        }
         salesInvoice.setSalesOrder(salesOrder);
         salesInvoice.setCreatedAtDate(createTimeStamp.createTimeStamp());
         salesInvoice.setGrandTotal(payment.getPaymentAmount());
-        salesInvoice.setBillingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(
-                        salesOrder.getCustomer().getId(), "billing"
-                )
-        );
-        salesInvoice.setShippingAddress(customerAddressRepository.getCustomerAddressByCustomerAndType(
-                        salesOrder.getCustomer().getId(), "shipping"
-                )
-        );
+        try {
+            prepareBillingAddress(salesOrder, salesInvoice);
+            prepareShippingAddress(salesOrder, salesInvoice);
+        } catch (Exception exception) {
+            throw new ApiRequestException("Addresses could nog be saved to the invoice: " + exception.getMessage());
+        }
         return salesInvoiceRepository.save(salesInvoice);
     }
 
@@ -87,5 +90,42 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
         payment.setCustomer(salesOrder.getCustomer());
         payment.setPaymentAmount(salesOrder.getGrandTotal());
         paymentRepository.save(payment);
+    }
+
+    @Override
+    public void prepareCustomer(SalesOrder salesOrder, SalesInvoice salesInvoice) {
+        Customer customer = salesOrder.getCustomer();
+        salesInvoice.setCustomer(customer);
+        salesInvoice.setCustomerFirstName(customer.getFirstName());
+        salesInvoice.setCustomerInsertion(customer.getInsertion());
+        salesInvoice.setCustomerLastName(customer.getLastName());
+        salesInvoice.setCustomerEmail(customer.getEmailAddress());
+        salesInvoice.setCustomerPhoneNumber(customer.getPhoneNumber());
+    }
+
+    @Override
+    public void prepareShippingAddress(SalesOrder salesOrder, SalesInvoice salesInvoice) {
+        CustomerAddress customerAddress = customerAddressRepository.getCustomerAddressByCustomerAndType(
+                salesOrder.getCustomer().getId(), "shipping"
+        );
+        salesInvoice.setShippingAddress(customerAddress);
+        salesInvoice.setShippingAddressStreet(customerAddress.getStreetName());
+        salesInvoice.setShippingAddressAddition(customerAddress.getAddition());
+        salesInvoice.setShippingAddressCity(customerAddress.getCity());
+        salesInvoice.setShippingAddressPostalCode(customerAddress.getPostalCode());
+        salesInvoice.setShippingAddressHouseNumber(customerAddress.getHouseNumber());
+    }
+
+    @Override
+    public void prepareBillingAddress(SalesOrder salesOrder, SalesInvoice salesInvoice) {
+        CustomerAddress customerAddress = customerAddressRepository.getCustomerAddressByCustomerAndType(
+                salesOrder.getCustomer().getId(), "billing"
+        );
+        salesInvoice.setBillingAddress(customerAddress);
+        salesInvoice.setBillingAddressStreet(customerAddress.getStreetName());
+        salesInvoice.setBillingAddressAddition(customerAddress.getAddition());
+        salesInvoice.setBillingAddressCity(customerAddress.getCity());
+        salesInvoice.setBillingAddressPostalCode(customerAddress.getPostalCode());
+        salesInvoice.setBillingAddressHouseNumber(customerAddress.getHouseNumber());
     }
 }
