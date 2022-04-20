@@ -81,9 +81,4 @@ public class CreditmemoServiceImpl implements CreditmemoService {
         salesOrderRepository.save(salesOrder);
         return creditmemo;
     }
-
-    @Override
-    public void createCreditmemo() {
-
-    }
 }

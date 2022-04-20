@@ -10,6 +10,4 @@ public interface CreditmemoService {
 
     Creditmemo processCreditmemoRequest(@PathVariable("orderId") Long orderId,
                                         @RequestBody String[] skus) throws ParseException;
-
-    void createCreditmemo();
 }
