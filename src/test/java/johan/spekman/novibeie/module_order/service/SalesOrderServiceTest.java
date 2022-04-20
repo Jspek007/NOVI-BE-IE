@@ -91,7 +91,7 @@ public class SalesOrderServiceTest {
         salesOrderItems.add(product);
         productRepository.save(product);
 
-        List<SalesOrderItem> salesOrderItemList = underTest.saveOrderItems(salesOrderItems, salesOrder, customer);
+        List<SalesOrderItem> salesOrderItemList = underTest.saveOrderItems(salesOrderItems, salesOrder);
 
         int actual = salesOrderItemList.size();
         int expected = 1;
@@ -105,7 +105,7 @@ public class SalesOrderServiceTest {
         List<Product> salesOrderItems = new ArrayList<>();
         salesOrderItems.add(product);
 
-        assertThrows(ApiRequestException.class, () -> underTest.saveOrderItems(salesOrderItems, salesOrder, customer));
+        assertThrows(ApiRequestException.class, () -> underTest.saveOrderItems(salesOrderItems, salesOrder));
     }
 
     @Test
