@@ -1,29 +1,19 @@
-package johan.spekman.novibeie.module_sales.invoice.model;
+package johan.spekman.novibeie.module_sales;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_sales.SalesActionRequest;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "sales_order_payments")
-public class Payment extends SalesActionRequest {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SalesActionRequest {
     private Long entityId;
-    private double paymentAmount;
-    @OneToOne
     private Customer customer;
-    @OneToOne
     private SalesOrder salesOrder;
 
-    public double getPaymentAmount() {
-        return paymentAmount;
+    public Long getEntityId() {
+        return entityId;
     }
 
-    public void setPaymentAmount(double paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setEntityId(Long entityId) {
+        this.entityId = entityId;
     }
 
     public Customer getCustomer() {

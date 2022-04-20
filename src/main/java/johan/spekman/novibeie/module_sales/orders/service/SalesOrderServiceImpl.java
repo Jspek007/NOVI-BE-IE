@@ -50,8 +50,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.productRepository = productRepository;
     }
 
-    public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder,
-            Customer existingCustomer) {
+    public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder) {
         List<SalesOrderItem> salesOrderItems = new ArrayList<>();
         for (Product product : products) {
             SalesOrderItem salesOrderItem = new SalesOrderItem();
@@ -61,8 +60,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
             salesOrderItem.setOrderItem(productRepository.findBySku(orderItem.getSku()));
             salesOrderItem.setProductPrice(orderItem.getProductPrice());
-            salesOrderItem.setCustomer(existingCustomer);
             salesOrderItem.setOrderId(salesOrder);
+            salesOrderItem.setSku(product.getSku());
             salesOrderItemRepository.save(salesOrderItem);
             salesOrderItems.add(salesOrderItem);
         }
@@ -111,7 +110,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         List<Product> products = salesOrderItemDto.getProducts();
 
         try {
-            saveOrderItems(products, salesOrder, existingCustomer);
+            saveOrderItems(products, salesOrder);
         } catch (Exception exception) {
             throw new ApiRequestException("Could not save order items: " + exception.getMessage());
         }

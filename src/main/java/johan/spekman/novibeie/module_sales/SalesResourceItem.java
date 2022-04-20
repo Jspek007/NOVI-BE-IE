@@ -1,28 +1,20 @@
-package johan.spekman.novibeie.module_sales.orders.model;
+package johan.spekman.novibeie.module_sales;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_product.product.model.Product;
+import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "sales_order_items")
-public class SalesOrderItem {
-    @Id
-    @Column(name = "entity_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SalesResourceItem {
     private Long id;
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_entity_id")
     private SalesOrder orderId;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_item_entity_id")
-    @JsonIgnoreProperties({"productMediaList", "categories", "createdAtDate", "enabled", "productDescription"})
     private Product orderItem;
     private String sku;
+    private Product product;
+    private Customer customer;
     private double productPrice;
 
     public Long getId() {
@@ -55,6 +47,22 @@ public class SalesOrderItem {
 
     public void setSku(String sku) {
         this.sku = sku;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public double getProductPrice() {
