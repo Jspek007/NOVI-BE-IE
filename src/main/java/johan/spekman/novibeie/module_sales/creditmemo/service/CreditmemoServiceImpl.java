@@ -2,12 +2,10 @@ package johan.spekman.novibeie.module_sales.creditmemo.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.module_sales.creditmemo.model.Creditmemo;
 import johan.spekman.novibeie.module_sales.creditmemo.model.CreditmemoItem;
-import johan.spekman.novibeie.module_sales.creditmemo.repository.CreditmemoItemRepository;
 import johan.spekman.novibeie.module_sales.creditmemo.repository.CreditmemoRepository;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrderItem;
@@ -29,19 +27,16 @@ public class CreditmemoServiceImpl implements CreditmemoService {
     private final CreditmemoRepository creditmemoRepository;
     private final ProductRepository productRepository;
     private final SalesOrderRepository salesOrderRepository;
-    private final CreditmemoItemRepository creditmemoItemRepository;
     private final CreditmemoHelper creditmemoHelper;
     private final SalesResourceService salesResourceService;
 
     public CreditmemoServiceImpl(CreditmemoRepository creditmemoRepository,
                                  ProductRepository productRepository,
                                  SalesOrderRepository salesOrderRepository,
-                                 CreditmemoItemRepository creditmemoItemRepository,
                                  CreditmemoHelper creditmemoHelper, SalesResourceService salesResourceService) {
         this.creditmemoRepository = creditmemoRepository;
         this.productRepository = productRepository;
         this.salesOrderRepository = salesOrderRepository;
-        this.creditmemoItemRepository = creditmemoItemRepository;
         this.creditmemoHelper = creditmemoHelper;
         this.salesResourceService = salesResourceService;
     }
@@ -51,8 +46,13 @@ public class CreditmemoServiceImpl implements CreditmemoService {
                                                @RequestBody String[] skus) throws ParseException {
         SalesOrder salesOrder = salesOrderRepository.getById(orderId);
         List<SalesOrderItem> salesOrderItems = salesOrder.getOrderItemList();
+        List<CreditmemoItem> creditmemoItemList = new ArrayList<>();
         Customer customer = salesOrder.getCustomer();
         Creditmemo creditmemo = new Creditmemo();
+
+        if (salesOrder.getAmountRefunded() == salesOrder.getAmountPaid()) {
+            throw new ApiRequestException("This order has already been refunded.");
+        }
 
         Arrays.stream(skus).forEach(sku -> {
             if (!creditmemoHelper.checkIfOrderContainsRequestedItems(salesOrder, skus)) {
@@ -61,10 +61,9 @@ public class CreditmemoServiceImpl implements CreditmemoService {
             } else {
                 Product product = productRepository.findBySku(sku);
                 CreditmemoItem creditmemoItem = new CreditmemoItem();
-                creditmemoItem.setSalesOrder(salesOrder);
                 creditmemoItem.setItemPrice(product.getProductPrice());
                 creditmemoItem.setSku(product.getSku());
-                creditmemoItemRepository.save(creditmemoItem);
+                creditmemoItemList.add(creditmemoItem);
             }
         });
         double sum = 0;
@@ -75,6 +74,7 @@ public class CreditmemoServiceImpl implements CreditmemoService {
         salesResourceService.prepareCustomerShippingAddress(creditmemo, customer);
         salesResourceService.prepareCustomerBillingAddress(creditmemo, customer);
         creditmemo.setSalesOrder(salesOrder);
+        creditmemo.setCreditmemoItemList(creditmemoItemList);
         creditmemo.setAmountRefunded(sum);
         salesOrder.setAmountRefunded(sum);
         creditmemoRepository.save(creditmemo);

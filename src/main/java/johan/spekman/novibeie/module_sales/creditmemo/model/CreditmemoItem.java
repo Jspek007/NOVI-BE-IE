@@ -1,7 +1,6 @@
 package johan.spekman.novibeie.module_sales.creditmemo.model;
 
 import johan.spekman.novibeie.module_sales.SalesResourceItem;
-import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
 
@@ -14,8 +13,8 @@ public class CreditmemoItem extends SalesResourceItem {
     private String sku;
     private double itemPrice;
     @ManyToOne
-    @JoinColumn(name = "sales_order_entity_id")
-    private SalesOrder salesOrder;
+    @JoinColumn(name = "creditmemo_entity_id")
+    private Creditmemo creditmemo;
 
     @Override
     public String getSku() {
@@ -33,13 +32,5 @@ public class CreditmemoItem extends SalesResourceItem {
 
     public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
-    }
-
-    public SalesOrder getSalesOrder() {
-        return salesOrder;
-    }
-
-    public void setSalesOrder(SalesOrder salesOrder) {
-        this.salesOrder = salesOrder;
     }
 }
