@@ -31,6 +31,7 @@ public class SalesOrder {
     @Column(name = "grand_total")
     private double grandTotal;
     private double amountPaid;
+    private double amountRefunded;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_address_id")
     private CustomerAddress shippingAddress;
@@ -84,6 +85,14 @@ public class SalesOrder {
 
     public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
+    }
+
+    public double getAmountRefunded() {
+        return amountRefunded;
+    }
+
+    public void setAmountRefunded(double amountRefunded) {
+        this.amountRefunded = amountRefunded;
     }
 
     public double getAmountPaid() {

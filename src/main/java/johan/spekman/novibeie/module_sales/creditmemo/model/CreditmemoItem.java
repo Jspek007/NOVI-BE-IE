@@ -16,4 +16,30 @@ public class CreditmemoItem extends SalesResourceItem {
     @ManyToOne
     @JoinColumn(name = "sales_order_entity_id")
     private SalesOrder salesOrder;
+
+    @Override
+    public String getSku() {
+        return sku;
+    }
+
+    @Override
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public double getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(double itemPrice) {
+        this.itemPrice = itemPrice;
+    }
+
+    public SalesOrder getSalesOrder() {
+        return salesOrder;
+    }
+
+    public void setSalesOrder(SalesOrder salesOrder) {
+        this.salesOrder = salesOrder;
+    }
 }

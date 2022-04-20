@@ -11,10 +11,9 @@ import java.util.Date;
 public class CreateTimeStamp {
 
     public Date createTimeStamp() throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date((System.currentTimeMillis()));
         String currentDate = format.format(date);
-        Date createdAtDate = format.parse(currentDate);
-        return createdAtDate;
+        return format.parse(currentDate);
     }
 }

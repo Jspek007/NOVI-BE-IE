@@ -5,7 +5,6 @@ import java.util.Date;
 public class SalesResource {
     private Long customerId;
     private Date createdAtDate;
-    private double grandTotal;
     private String customerFirstName;
     private String customerInsertion;
     private String customerLastName;
@@ -36,14 +35,6 @@ public class SalesResource {
 
     public void setCreatedAtDate(Date createdAtDate) {
         this.createdAtDate = createdAtDate;
-    }
-
-    public double getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(double grandTotal) {
-        this.grandTotal = grandTotal;
     }
 
     public String getCustomerFirstName() {

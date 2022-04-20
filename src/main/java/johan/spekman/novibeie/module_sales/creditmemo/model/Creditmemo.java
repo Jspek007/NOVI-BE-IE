@@ -1,6 +1,6 @@
 package johan.spekman.novibeie.module_sales.creditmemo.model;
 
-import johan.spekman.novibeie.module_customer.model.Customer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import johan.spekman.novibeie.module_sales.SalesResource;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
@@ -15,11 +15,9 @@ public class Creditmemo extends SalesResource {
     private Long entityId;
     @ManyToOne
     @JoinColumn(name = "sales_order_entity_id")
+    @JsonIgnore
     private SalesOrder salesOrder;
-    @ManyToOne
-    @JoinColumn(name = "customer_entity_id")
-    private Customer customer;
-    private double grandTotal;
+    private double amountRefunded;
 
     public Long getEntityId() {
         return entityId;
@@ -37,11 +35,11 @@ public class Creditmemo extends SalesResource {
         this.salesOrder = salesOrder;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public double getAmountRefunded() {
+        return amountRefunded;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setAmountRefunded(double amountRefunded) {
+        this.amountRefunded = amountRefunded;
     }
 }
