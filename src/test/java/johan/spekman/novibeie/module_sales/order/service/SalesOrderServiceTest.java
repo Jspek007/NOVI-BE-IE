@@ -1,4 +1,4 @@
-package johan.spekman.novibeie.module_order.service;
+package johan.spekman.novibeie.module_sales.order.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;

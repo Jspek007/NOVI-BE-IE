@@ -1,4 +1,4 @@
-package johan.spekman.novibeie.module_order.controller;
+package johan.spekman.novibeie.module_sales.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

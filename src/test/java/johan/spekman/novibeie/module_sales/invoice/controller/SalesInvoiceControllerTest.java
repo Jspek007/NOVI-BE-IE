@@ -1,7 +1,6 @@
-package johan.spekman.novibeie.module_invoice.controller;
+package johan.spekman.novibeie.module_sales.invoice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import johan.spekman.novibeie.module_sales.invoice.controller.SalesInvoiceController;
 import johan.spekman.novibeie.module_sales.invoice.model.Payment;
 import johan.spekman.novibeie.module_sales.invoice.service.SalesInvoiceService;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,8 @@
 package johan.spekman.novibeie.module_sales;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
-
-import javax.persistence.*;
 
 public class SalesResourceItem {
     private Long id;

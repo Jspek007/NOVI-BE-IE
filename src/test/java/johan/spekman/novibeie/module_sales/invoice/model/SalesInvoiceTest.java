@@ -1,4 +1,4 @@
-package johan.spekman.novibeie.module_invoice.model;
+package johan.spekman.novibeie.module_sales.invoice.model;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

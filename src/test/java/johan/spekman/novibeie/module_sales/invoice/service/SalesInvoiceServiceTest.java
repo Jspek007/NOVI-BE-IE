@@ -1,4 +1,4 @@
-package johan.spekman.novibeie.module_invoice.service;
+package johan.spekman.novibeie.module_sales.invoice.service;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
@@ -7,7 +7,6 @@ import johan.spekman.novibeie.module_sales.invoice.model.Payment;
 import johan.spekman.novibeie.module_sales.invoice.model.SalesInvoice;
 import johan.spekman.novibeie.module_sales.invoice.repository.PaymentRepository;
 import johan.spekman.novibeie.module_sales.invoice.repository.SalesInvoiceRepository;
-import johan.spekman.novibeie.module_sales.invoice.service.SalesInvoiceServiceImpl;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderRepository;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
