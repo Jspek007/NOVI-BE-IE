@@ -23,13 +23,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
