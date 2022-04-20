@@ -2,10 +2,9 @@ package johan.spekman.novibeie.module_customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
-import johan.spekman.novibeie.module_orders.model.SalesOrder;
+import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
 import java.util.ArrayList;

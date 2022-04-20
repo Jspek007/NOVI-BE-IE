@@ -1,8 +1,9 @@
 package johan.spekman.novibeie.module_invoice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import johan.spekman.novibeie.module_invoice.model.Payment;
-import johan.spekman.novibeie.module_invoice.service.SalesInvoiceService;
+import johan.spekman.novibeie.module_sales.invoice.controller.SalesInvoiceController;
+import johan.spekman.novibeie.module_sales.invoice.model.Payment;
+import johan.spekman.novibeie.module_sales.invoice.service.SalesInvoiceService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
