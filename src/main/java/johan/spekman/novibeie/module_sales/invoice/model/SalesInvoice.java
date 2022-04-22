@@ -1,13 +1,9 @@
 package johan.spekman.novibeie.module_sales.invoice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_sales.SalesResource;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "sales_invoices")

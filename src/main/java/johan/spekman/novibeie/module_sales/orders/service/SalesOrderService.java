@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface SalesOrderService {
-    void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
+    SalesOrder createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
             BindingResult bindingResult) throws ParseException;
 
     List<SalesOrder> getOrdersByCustomerEmail(@RequestParam("email") String email);

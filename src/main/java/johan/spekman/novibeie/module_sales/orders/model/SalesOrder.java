@@ -3,6 +3,7 @@ package johan.spekman.novibeie.module_sales.orders.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
+import johan.spekman.novibeie.module_sales.SalesResource;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "sales_orders")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class SalesOrder {
+public class SalesOrder extends SalesResource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entity_id")

@@ -6,7 +6,6 @@ import johan.spekman.novibeie.module_sales.SalesResource;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
