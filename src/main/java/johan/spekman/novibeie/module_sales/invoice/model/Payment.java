@@ -1,14 +1,13 @@
 package johan.spekman.novibeie.module_sales.invoice.model;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_sales.SalesActionRequest;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "sales_order_payments")
-public class Payment extends SalesActionRequest {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long entityId;

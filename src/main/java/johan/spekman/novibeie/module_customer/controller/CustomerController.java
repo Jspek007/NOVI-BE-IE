@@ -91,7 +91,7 @@ public class CustomerController {
         } else {
             try {
                 customerService.saveAll(file);
-                message = "Uploaded the file succesfully: " + file.getOriginalFilename();
+                message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(message);
             } catch (Exception exception) {
                 message = "Could not upload the file: " + file.getOriginalFilename();

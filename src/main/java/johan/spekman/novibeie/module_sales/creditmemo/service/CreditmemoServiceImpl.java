@@ -45,7 +45,6 @@ public class CreditmemoServiceImpl implements CreditmemoService {
     public Creditmemo processCreditmemoRequest(@PathVariable("orderId") Long orderId,
                                                @RequestBody String[] skus) throws ParseException {
         SalesOrder salesOrder = salesOrderRepository.getById(orderId);
-        List<SalesOrderItem> salesOrderItems = salesOrder.getOrderItemList();
         List<CreditmemoItem> creditmemoItemList = new ArrayList<>();
         Customer customer = salesOrder.getCustomer();
         Creditmemo creditmemo = new Creditmemo();
@@ -61,21 +60,20 @@ public class CreditmemoServiceImpl implements CreditmemoService {
             } else {
                 Product product = productRepository.findBySku(sku);
                 CreditmemoItem creditmemoItem = new CreditmemoItem();
-                creditmemoItem.setItemPrice(product.getProductPrice());
-                creditmemoItem.setSku(product.getSku());
+                salesResourceService.prepareSalesResourceItemInformation(creditmemoItem, product);
                 creditmemoItemList.add(creditmemoItem);
             }
         });
         double sum = 0;
-        for (SalesOrderItem salesOrderItem : salesOrderItems) {
-            sum += salesOrderItem.getProductPrice();
+        for (CreditmemoItem creditmemoItem : creditmemoItemList) {
+            sum += creditmemoItem .getProductPrice();
         }
         salesResourceService.prepareCustomerData(creditmemo, customer);
         salesResourceService.prepareCustomerShippingAddress(creditmemo, customer);
         salesResourceService.prepareCustomerBillingAddress(creditmemo, customer);
         creditmemo.setSalesOrder(salesOrder);
         creditmemo.setCreditmemoItemList(creditmemoItemList);
-        creditmemo.setAmountRefunded(sum);
+        creditmemo.setAmountRefunded((sum + salesOrder.getAmountRefunded()));
         salesOrder.setAmountRefunded(sum);
         creditmemoRepository.save(creditmemo);
         salesOrderRepository.save(salesOrder);

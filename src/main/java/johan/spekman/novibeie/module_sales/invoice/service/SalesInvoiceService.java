@@ -16,9 +16,4 @@ public interface SalesInvoiceService {
     SalesInvoice createInvoice(Payment payment, SalesOrder salesOrder, Customer customer) throws ParseException;
 
     Payment createPayment(Payment payment, SalesOrder salesOrder);
-
-    void prepareCustomer(SalesOrder salesOrder, SalesInvoice salesInvoice);
-
-    void prepareShippingAddress(SalesOrder salesOrder, SalesInvoice salesInvoice);
-    void prepareBillingAddress(SalesOrder salesOrder, SalesInvoice salesInvoice);
 }

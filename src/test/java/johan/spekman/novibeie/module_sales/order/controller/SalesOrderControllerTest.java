@@ -42,7 +42,7 @@ public class SalesOrderControllerTest {
         mockMvc.perform(post("/api/v1/sales_orders/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(salesOrder)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

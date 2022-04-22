@@ -11,6 +11,7 @@ import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderItemRepos
 import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
+import johan.spekman.novibeie.module_sales.service.SalesResourceService;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import johan.spekman.novibeie.utililies.InputValidation;
 import org.springframework.stereotype.Service;
@@ -33,14 +34,16 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final CustomerAddressRepository customerAddressRepository;
     private final SalesOrderRepository salesOrderRepository;
     private final ProductRepository productRepository;
+    private final SalesResourceService salesResourceService;
 
     public SalesOrderServiceImpl(CustomerRepository customerRepository,
-            InputValidation inputValidation,
-            CreateTimeStamp createTimeStamp,
-            SalesOrderItemRepository salesOrderItemRepository,
-            CustomerAddressRepository customerAddressRepository,
-            SalesOrderRepository salesOrderRepository,
-            ProductRepository productRepository) {
+                                 InputValidation inputValidation,
+                                 CreateTimeStamp createTimeStamp,
+                                 SalesOrderItemRepository salesOrderItemRepository,
+                                 CustomerAddressRepository customerAddressRepository,
+                                 SalesOrderRepository salesOrderRepository,
+                                 ProductRepository productRepository,
+                                 SalesResourceService salesResourceService) {
         this.customerRepository = customerRepository;
         this.inputValidation = inputValidation;
         this.createTimeStamp = createTimeStamp;
@@ -48,6 +51,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.customerAddressRepository = customerAddressRepository;
         this.salesOrderRepository = salesOrderRepository;
         this.productRepository = productRepository;
+        this.salesResourceService = salesResourceService;
     }
 
     public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder) {
@@ -58,17 +62,16 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             if (orderItem == null) {
                 throw new ApiRequestException("No product found with SKU: " + product.getSku());
             }
-            salesOrderItem.setOrderItem(productRepository.findBySku(orderItem.getSku()));
-            salesOrderItem.setProductPrice(orderItem.getProductPrice());
+            salesResourceService.prepareSalesResourceItemInformation(salesOrderItem, product);
             salesOrderItem.setOrderId(salesOrder);
-            salesOrderItem.setSku(product.getSku());
-            salesOrderItemRepository.save(salesOrderItem);
             salesOrderItems.add(salesOrderItem);
+            salesOrderItemRepository.save(salesOrderItem);
         }
+        salesOrder.setOrderItemList(salesOrderItems);
         return salesOrderItems;
     }
 
-    public void saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer existingCustomer) {
+    public SalesOrder saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer customer) {
         String shipping = "shipping";
         String billing = "billing";
         try {
@@ -79,22 +82,26 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             salesOrder.setGrandTotal(sum);
             salesOrder.setTotalItems(products.size());
             salesOrder.setShippingAddress(
-                    customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                    customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
                             shipping));
             salesOrder.setBillingAddress(
-                    customerAddressRepository.getCustomerAddressByCustomerAndType(existingCustomer.getId(),
+                    customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
                             billing));
             salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
-            salesOrder.setCustomer(existingCustomer);
+            salesOrder.setCustomer(customer);
+            salesResourceService.prepareCustomerData(salesOrder, customer);
+            salesResourceService.prepareCustomerShippingAddress(salesOrder, customer);
+            salesResourceService.prepareCustomerBillingAddress(salesOrder, customer);
             salesOrderRepository.save(salesOrder);
+            return salesOrder;
         } catch (Exception exception) {
             throw new ApiRequestException("Sales order could not be saved: " + exception.getMessage());
         }
     }
 
     @Override
-    public void createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
-            BindingResult bindingResult) {
+    public SalesOrder createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
+                                  BindingResult bindingResult) {
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Invalid input" + bindingResult.getFieldErrors());
         }
@@ -114,9 +121,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         } catch (Exception exception) {
             throw new ApiRequestException("Could not save order items: " + exception.getMessage());
         }
-
         try {
-            saveSalesOrder(products, salesOrder, existingCustomer);
+            return saveSalesOrder(products, salesOrder, existingCustomer);
         } catch (Exception exception) {
             throw new ApiRequestException("Could not save sales order: " + exception.getMessage());
         }

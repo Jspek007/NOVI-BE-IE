@@ -3,7 +3,9 @@ package johan.spekman.novibeie.module_sales.service;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
+import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_sales.SalesResource;
+import johan.spekman.novibeie.module_sales.SalesResourceItem;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,11 @@ public record SalesResourceService(CustomerAddressRepository customerAddressRepo
         salesResource.setBillingAddressAddition(customerAddress.getAddition());
         salesResource.setBillingAddressPostalCode(customerAddress.getPostalCode());
         salesResource.setBillingAddressCity(customerAddress.getCity());
+    }
+
+    public void prepareSalesResourceItemInformation(SalesResourceItem salesResourceItem, Product product) {
+        salesResourceItem.setSku(product.getSku());
+        salesResourceItem.setProductTitle(product.getProductTitle());
+        salesResourceItem.setProductPrice(product.getProductPrice());
     }
 }
