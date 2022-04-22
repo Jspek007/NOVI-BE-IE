@@ -92,6 +92,6 @@ public class CreditmemoServiceTest {
         when(productRepository.findBySku(anyString())).thenReturn(product);
         Creditmemo capturedCreditmemo = underTest.processCreditmemoRequest(1L, skus);
 
-        assertThat(capturedCreditmemo.getAmountRefunded()).isEqualTo(testOrder.getAmountPaid());
+        assertThat(capturedCreditmemo.getCreditmemoItemList().size()).isEqualTo(productList.size());
     }
 }

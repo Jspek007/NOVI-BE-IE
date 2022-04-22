@@ -11,6 +11,7 @@ import johan.spekman.novibeie.module_sales.invoice.repository.PaymentRepository;
 import johan.spekman.novibeie.module_sales.invoice.repository.SalesInvoiceRepository;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderRepository;
+import johan.spekman.novibeie.module_sales.service.SalesResourceService;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,30 +19,35 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@DataJpaTest
 @Transactional
 public class SalesInvoiceServiceTest {
     @Mock
     private SalesOrderRepository salesOrderRepository;
     @Mock
     private PaymentRepository paymentRepository;
-    @Autowired
+    @MockBean
     private CreateTimeStamp createTimeStamp;
+    @MockBean
+    private SalesResourceService salesResourceService;
     @Mock
     private SalesInvoiceRepository salesInvoiceRepository;
     @Mock
     private CustomerAddressRepository customerAddressRepository;
-    @Autowired
+    @Mock
     private CustomerRepository customerRepository;
 
     @MockBean
@@ -55,7 +61,7 @@ public class SalesInvoiceServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new SalesInvoiceServiceImpl(salesOrderRepository, paymentRepository, createTimeStamp,
-                salesInvoiceRepository, customerAddressRepository);
+                salesInvoiceRepository, salesResourceService);
     }
 
     @AfterEach
@@ -84,16 +90,11 @@ public class SalesInvoiceServiceTest {
         customerAddress.setAddition("");
         customerAddress.setPostalCode("1111AA");
         customerAddress.setHouseNumber(11);
-        customerAddress.setCustomerAddressType(CustomerAddressType.billing);
-        customerAddress.setCustomerAddressType(CustomerAddressType.shipping);
-        salesOrder.setBillingAddress(customerAddress);
-        salesOrder.setShippingAddress(customerAddress);
 
-        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "shipping")).thenReturn(customerAddress);
-        when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "billing")).thenReturn(customerAddress);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(any(), anyString())).thenReturn(customerAddress);
 
         SalesInvoice savedSalesInvoice = underTest.createInvoice(payment, salesOrder, customer);
-        assertThat(savedSalesInvoice.getCustomer().getEmailAddress()).isEqualTo(customer.getEmailAddress());
+        assertThat(savedSalesInvoice.getSalesOrder().getCustomer().getEmailAddress()).isEqualTo(customer.getEmailAddress());
 
     }
 
@@ -142,6 +143,6 @@ public class SalesInvoiceServiceTest {
         when(customerAddressRepository.getCustomerAddressByCustomerAndType(1L, "billing")).thenReturn(customerAddress);
 
         SalesInvoice capturedSalesInvoice = underTest.processPayment(1L, payment);
-        assertThat(capturedSalesInvoice.getCustomer().getCustomerId()).isEqualTo(customer.getCustomerId());
+        assertThat(capturedSalesInvoice.getGrandTotal()).isEqualTo(salesOrder.getGrandTotal());
     }
 }

@@ -93,10 +93,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             salesResourceService.prepareCustomerShippingAddress(salesOrder, customer);
             salesResourceService.prepareCustomerBillingAddress(salesOrder, customer);
             salesOrderRepository.save(salesOrder);
+            return salesOrder;
         } catch (Exception exception) {
             throw new ApiRequestException("Sales order could not be saved: " + exception.getMessage());
         }
-        return salesOrder;
     }
 
     @Override
