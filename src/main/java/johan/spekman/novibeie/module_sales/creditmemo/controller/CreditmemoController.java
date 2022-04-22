@@ -1,9 +1,7 @@
 package johan.spekman.novibeie.module_sales.creditmemo.controller;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
-import johan.spekman.novibeie.module_sales.creditmemo.model.Creditmemo;
 import johan.spekman.novibeie.module_sales.creditmemo.service.CreditmemoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

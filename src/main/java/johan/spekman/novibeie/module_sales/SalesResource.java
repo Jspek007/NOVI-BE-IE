@@ -1,7 +1,9 @@
 package johan.spekman.novibeie.module_sales;
 
+import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
+@MappedSuperclass
 public class SalesResource {
     private Long customerId;
     private Date createdAtDate;
