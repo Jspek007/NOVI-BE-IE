@@ -73,7 +73,7 @@ public class ProductController {
     @PostMapping(path = "/import")
     public ResponseEntity<Object> productImport(@RequestParam("file") MultipartFile file) {
         String message;
-        if (csvFormatCheck.hasCSVFormat(file)) {
+        if (CSVFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
             throw new ApiRequestException(message);
         } else {

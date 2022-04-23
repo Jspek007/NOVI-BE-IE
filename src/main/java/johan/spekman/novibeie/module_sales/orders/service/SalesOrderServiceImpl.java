@@ -131,8 +131,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public List<SalesOrder> getOrdersByCustomerEmail(String email) {
         try {
-            Long customerId = customerRepository.findByEmailAddress(email).getId();
-            return salesOrderRepository.findByCustomerId(customerId);
+            return salesOrderRepository.findByCustomerEmail(email);
         } catch (Exception exception) {
             throw new ApiRequestException("No existing customer found with: " + email);
         }

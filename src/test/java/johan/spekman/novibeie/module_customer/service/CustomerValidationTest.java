@@ -13,20 +13,20 @@ class CustomerValidationTest {
 
     @Test
     void shouldReturnFalseOnCustomerPhoneNumberCheck() {
-        String phonenumber = "12345";
+        String phoneNumber = "12345";
 
         boolean expected = false;
-        boolean result = CustomerValidation.checkCustomerPhoneNumber(phonenumber);
+        boolean result = CustomerValidation.checkCustomerPhoneNumber(phoneNumber);
 
         assertEquals(expected, result);
     }
 
     @Test
     void shouldReturnTrueOnCustomerPhoneNumberCheck() {
-        String phonenumber = "+31612345678";
+        String phoneNumber = "+31612345678";
 
         boolean expected = true;
-        boolean result = CustomerValidation.checkCustomerPhoneNumber(phonenumber);
+        boolean result = CustomerValidation.checkCustomerPhoneNumber(phoneNumber);
 
         assertEquals(expected, result);
     }

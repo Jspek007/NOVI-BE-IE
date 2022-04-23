@@ -1,9 +1,12 @@
 package johan.spekman.novibeie.module_sales;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 @MappedSuperclass
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class SalesResource {
     private Long customerId;
     private Date createdAtDate;

@@ -16,7 +16,7 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    Date date = new Date(System.currentTimeMillis());
+    final Date date = new Date(System.currentTimeMillis());
 
     @Test
     void shouldFindProductBySku() {
