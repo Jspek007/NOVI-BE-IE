@@ -2,6 +2,7 @@ package johan.spekman.novibeie.module_sales.invoice.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_sales.invoice.model.Payment;
 import johan.spekman.novibeie.module_sales.invoice.model.SalesInvoice;
 import johan.spekman.novibeie.module_sales.invoice.repository.PaymentRepository;
@@ -25,17 +26,20 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     private final CreateTimeStamp createTimeStamp;
     private final SalesInvoiceRepository salesInvoiceRepository;
     private final SalesResourceService salesResourceService;
+    private final CustomerRepository customerRepository;
 
     public SalesInvoiceServiceImpl(SalesOrderRepository salesOrderRepository,
                                    PaymentRepository paymentRepository,
                                    CreateTimeStamp createTimeStamp,
                                    SalesInvoiceRepository salesInvoiceRepository,
-                                   SalesResourceService salesResourceService) {
+                                   SalesResourceService salesResourceService,
+                                   CustomerRepository customerRepository) {
         this.salesOrderRepository = salesOrderRepository;
         this.paymentRepository = paymentRepository;
         this.createTimeStamp = createTimeStamp;
         this.salesInvoiceRepository = salesInvoiceRepository;
         this.salesResourceService = salesResourceService;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
                                        @RequestBody Payment request) {
         try {
             SalesOrder salesOrder = salesOrderRepository.getById(orderId);
-            Customer customer = salesOrder.getCustomer();
+            Customer customer = customerRepository.findByEmailAddress(salesOrder.getCustomerEmail());
 
             if (salesOrder.getAmountPaid() != 0) {
                 throw new ApiRequestException("Order is already paid.");
@@ -52,7 +56,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
             if (salesOrder.getGrandTotal() != request.getPaymentAmount()) {
                 throw new ApiRequestException("Paid amount is not sufficient for orders grand total.");
             } else {
-                createPayment(request, salesOrder);
+                createPayment(request, salesOrder, customer);
                 salesOrder.setAmountPaid(request.getPaymentAmount());
                 return createInvoice(request, salesOrder, customer);
             }
@@ -66,26 +70,22 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
         SalesInvoice salesInvoice = new SalesInvoice();
         try {
             salesResourceService.prepareCustomerData(salesInvoice, customer);
-        } catch (Exception exception) {
-            throw new ApiRequestException("Customer could not be saved to the invoice: " + exception.getMessage());
-        }
-        salesInvoice.setSalesOrder(salesOrder);
-        salesInvoice.setCreatedAtDate(createTimeStamp.createTimeStamp());
-        salesInvoice.setGrandTotal(payment.getPaymentAmount());
-        try {
+            salesInvoice.setSalesOrder(salesOrder);
+            salesInvoice.setCreatedAtDate(createTimeStamp.createTimeStamp());
+            salesInvoice.setGrandTotal(payment.getPaymentAmount());
             salesResourceService.prepareCustomerBillingAddress(salesInvoice, customer);
             salesResourceService.prepareCustomerShippingAddress(salesInvoice, customer);
+            salesInvoiceRepository.save(salesInvoice);
+            return salesInvoice;
         } catch (Exception exception) {
-            throw new ApiRequestException("Addresses could nog be saved to the invoice: " + exception.getMessage());
+            throw new ApiRequestException("Invoice could not be created: " + exception.getMessage());
         }
-        salesInvoiceRepository.save(salesInvoice);
-        return salesInvoice;
     }
 
     @Override
-    public Payment createPayment(Payment payment, SalesOrder salesOrder) {
+    public Payment createPayment(Payment payment, SalesOrder salesOrder, Customer customer) {
         payment.setSalesOrder(salesOrder);
-        payment.setCustomer(salesOrder.getCustomer());
+        payment.setCustomer(customer);
         payment.setPaymentAmount(salesOrder.getGrandTotal());
         paymentRepository.save(payment);
         return payment;

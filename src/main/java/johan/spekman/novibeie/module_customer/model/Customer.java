@@ -34,9 +34,6 @@ public class Customer {
     @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SalesOrder> customerOrders = new ArrayList<>();
 
     public Customer() {
     }
@@ -122,14 +119,6 @@ public class Customer {
 
     public void setCustomerAddresses(List<CustomerAddress> customerAddresses) {
         this.customerAddresses = customerAddresses;
-    }
-
-    public List<SalesOrder> getCustomerOrders() {
-        return customerOrders;
-    }
-
-    public void setCustomerOrders(List<SalesOrder> customerOrders) {
-        this.customerOrders = customerOrders;
     }
 
     public void addCustomerAddress(CustomerAddress customerAddress) {

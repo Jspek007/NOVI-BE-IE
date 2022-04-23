@@ -55,7 +55,7 @@ public class CreditmemoServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new CreditmemoServiceImpl(creditmemoRepository, productRepository, salesOrderRepository,
-                creditmemoHelper, resourceService);
+                creditmemoHelper, resourceService, customerRepository);
     }
 
     @AfterEach

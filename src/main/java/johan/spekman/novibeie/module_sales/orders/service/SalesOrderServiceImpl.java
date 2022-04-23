@@ -72,8 +72,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     public SalesOrder saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer customer) {
-        String shipping = "shipping";
-        String billing = "billing";
         try {
             double sum = 0;
             for (Product product : products) {
@@ -81,14 +79,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
             salesOrder.setGrandTotal(sum);
             salesOrder.setTotalItems(products.size());
-            salesOrder.setShippingAddress(
-                    customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
-                            shipping));
-            salesOrder.setBillingAddress(
-                    customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(),
-                            billing));
             salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
-            salesOrder.setCustomer(customer);
             salesResourceService.prepareCustomerData(salesOrder, customer);
             salesResourceService.prepareCustomerShippingAddress(salesOrder, customer);
             salesResourceService.prepareCustomerBillingAddress(salesOrder, customer);

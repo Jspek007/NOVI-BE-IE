@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -58,7 +57,7 @@ public class SalesInvoiceServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new SalesInvoiceServiceImpl(salesOrderRepository, paymentRepository, createTimeStamp,
-                salesInvoiceRepository, salesResourceService);
+                salesInvoiceRepository, salesResourceService, customerRepository);
     }
 
     @AfterEach

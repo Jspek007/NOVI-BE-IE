@@ -17,12 +17,6 @@ public class SalesOrder extends SalesResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entity_id")
     private Long entityId;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_entity_id")
-    @JsonIgnoreProperties("password")
-    private Customer customer;
-    @Column(name = "created_at_date")
-    private Date createdAtDate;
     @JsonIgnoreProperties("productPrice")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_entity_id")
@@ -33,12 +27,6 @@ public class SalesOrder extends SalesResource {
     private double grandTotal;
     private double amountPaid;
     private double amountRefunded;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shipping_address_id")
-    private CustomerAddress shippingAddress;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "billing_address_id")
-    private CustomerAddress billingAddress;
 
     public Long getEntityId() {
         return entityId;
@@ -46,22 +34,6 @@ public class SalesOrder extends SalesResource {
 
     public void setEntityId(Long entityId) {
         this.entityId = entityId;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Date getCreatedAtDate() {
-        return createdAtDate;
-    }
-
-    public void setCreatedAtDate(Date createdAtDate) {
-        this.createdAtDate = createdAtDate;
     }
 
     public List<SalesOrderItem> getOrderItemList() {
@@ -88,14 +60,6 @@ public class SalesOrder extends SalesResource {
         this.grandTotal = grandTotal;
     }
 
-    public double getAmountRefunded() {
-        return amountRefunded;
-    }
-
-    public void setAmountRefunded(double amountRefunded) {
-        this.amountRefunded = amountRefunded;
-    }
-
     public double getAmountPaid() {
         return amountPaid;
     }
@@ -104,19 +68,11 @@ public class SalesOrder extends SalesResource {
         this.amountPaid = amountPaid;
     }
 
-    public CustomerAddress getShippingAddress() {
-        return shippingAddress;
+    public double getAmountRefunded() {
+        return amountRefunded;
     }
 
-    public void setShippingAddress(CustomerAddress shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
-    public CustomerAddress getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(CustomerAddress billingAddress) {
-        this.billingAddress = billingAddress;
+    public void setAmountRefunded(double amountRefunded) {
+        this.amountRefunded = amountRefunded;
     }
 }

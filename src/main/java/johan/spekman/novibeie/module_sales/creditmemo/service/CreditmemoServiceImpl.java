@@ -2,13 +2,13 @@ package johan.spekman.novibeie.module_sales.creditmemo.service;
 
 import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.module_sales.creditmemo.model.Creditmemo;
 import johan.spekman.novibeie.module_sales.creditmemo.model.CreditmemoItem;
 import johan.spekman.novibeie.module_sales.creditmemo.repository.CreditmemoRepository;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
-import johan.spekman.novibeie.module_sales.orders.model.SalesOrderItem;
 import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderRepository;
 import johan.spekman.novibeie.module_sales.service.SalesResourceService;
 import org.springframework.stereotype.Service;
@@ -29,16 +29,20 @@ public class CreditmemoServiceImpl implements CreditmemoService {
     private final SalesOrderRepository salesOrderRepository;
     private final CreditmemoHelper creditmemoHelper;
     private final SalesResourceService salesResourceService;
+    private final CustomerRepository customerRepository;
 
     public CreditmemoServiceImpl(CreditmemoRepository creditmemoRepository,
                                  ProductRepository productRepository,
                                  SalesOrderRepository salesOrderRepository,
-                                 CreditmemoHelper creditmemoHelper, SalesResourceService salesResourceService) {
+                                 CreditmemoHelper creditmemoHelper,
+                                 SalesResourceService salesResourceService,
+                                 CustomerRepository customerRepository) {
         this.creditmemoRepository = creditmemoRepository;
         this.productRepository = productRepository;
         this.salesOrderRepository = salesOrderRepository;
         this.creditmemoHelper = creditmemoHelper;
         this.salesResourceService = salesResourceService;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class CreditmemoServiceImpl implements CreditmemoService {
                                                @RequestBody String[] skus) throws ParseException {
         SalesOrder salesOrder = salesOrderRepository.getById(orderId);
         List<CreditmemoItem> creditmemoItemList = new ArrayList<>();
-        Customer customer = salesOrder.getCustomer();
+        Customer customer = customerRepository.findByEmailAddress(salesOrder.getCustomerEmail());
         Creditmemo creditmemo = new Creditmemo();
 
         if (salesOrder.getAmountRefunded() == salesOrder.getAmountPaid()) {
