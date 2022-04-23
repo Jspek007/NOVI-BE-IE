@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findByCustomerId(Long customerId);
     Customer findByEmailAddress(String emailAddress);
+    void deleteByEmailAddress(String customerEmail);
 }

@@ -52,9 +52,9 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(customerService.createCustomer(customerDto, bindingResult));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteCustomerById(@PathVariable("id") Long customerId) {
-        customerService.deleteCustomerById(customerId);
+    @DeleteMapping("/delete/{email}")
+    public void deleteCustomerById(@PathVariable("email") String customerEmail) {
+        customerService.deleteCustomerByCustomerEmail(customerEmail);
     }
 
     @PutMapping(path = "/update/{id}")

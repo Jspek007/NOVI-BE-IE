@@ -20,7 +20,7 @@ public interface CustomerService {
 
     void saveAll(MultipartFile file);
 
-    void deleteCustomerById(Long customerId);
+    void deleteCustomerByCustomerEmail(String customerEmail);
 
     ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
 
