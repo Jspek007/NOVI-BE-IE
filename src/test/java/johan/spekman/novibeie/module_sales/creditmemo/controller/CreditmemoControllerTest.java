@@ -28,7 +28,7 @@ public class CreditmemoControllerTest {
     @MockBean
     private CreditmemoService creditmemoService;
 
-    String[] skus = {"sku_123456"};
+    final String[] skus = {"sku_123456"};
 
 
     @Test

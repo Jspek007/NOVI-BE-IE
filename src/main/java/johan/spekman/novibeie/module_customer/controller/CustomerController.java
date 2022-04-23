@@ -24,11 +24,9 @@ import java.util.List;
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
-    private final CSVFormatCheck csvFormatCheck;
 
-    public CustomerController(CustomerService customerService, CSVFormatCheck csvFormatCheck) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.csvFormatCheck = csvFormatCheck;
     }
 
     @GetMapping("/get/all")

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 public class JwtUtil extends UsernamePasswordAuthenticationFilter {
-    public static Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+    public static final Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
 
     public static User getUser(Authentication authentication) {
         return (User) authentication.getPrincipal();

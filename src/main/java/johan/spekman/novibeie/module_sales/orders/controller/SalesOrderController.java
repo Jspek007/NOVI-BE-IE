@@ -42,7 +42,7 @@ public class SalesOrderController {
     }
 
     @GetMapping(path = "/get/{email}")
-    public List<SalesOrder> getOrdersByCustomerEmail(@PathVariable("email") String email) {
-        return salesOrderService.getOrdersByCustomerEmail(email);
+    public ResponseEntity<Object> getOrdersByCustomerEmail(@PathVariable("email") String email) {
+        return ResponseEntity.ok(salesOrderService.getOrdersByCustomerEmail(email));
     }
 }

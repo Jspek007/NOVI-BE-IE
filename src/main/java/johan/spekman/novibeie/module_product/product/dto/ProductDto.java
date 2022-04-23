@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class ProductDto {
     @NotBlank
-    @Pattern(regexp = "sku_[0-9]{6}")
+    @Pattern(regexp = "sku_\\d{6}")
     private String sku;
 
     @NotBlank

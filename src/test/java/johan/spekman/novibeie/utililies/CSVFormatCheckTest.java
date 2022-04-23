@@ -26,13 +26,13 @@ class CSVFormatCheckTest {
         MockMultipartFile wrongFileFormat = new MockMultipartFile("data", "filename.txt", "text/plain",
                 "some xml".getBytes());
 
-        assertFalse(csvFormatCheck.hasCSVFormat(wrongFileFormat));
+        assertFalse(CSVFormatCheck.hasCSVFormat(wrongFileFormat));
     }
 
     @Test
     public void csvFileFormatShouldReturnTrue() {
     MockMultipartFile mockMultipartFile = new MockMultipartFile("data", "dummy.csv", "text/csv",
             "some dataset".getBytes());
-    assertTrue(csvFormatCheck.hasCSVFormat(mockMultipartFile));
+    assertTrue(CSVFormatCheck.hasCSVFormat(mockMultipartFile));
     }
 }
