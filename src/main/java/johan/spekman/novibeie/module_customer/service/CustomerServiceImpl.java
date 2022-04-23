@@ -67,8 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
             } else {
                 customer.setPhoneNumber(customerDto.getPhoneNumber());
             }
-            Customer customerByEmail = customerRepository.findByEmailAddress(customerDto.getEmailAddress());
-            if (customerByEmail != null) {
+            if (customerRepository.findByEmailAddress(customerDto.getEmailAddress()) != null) {
                 return new ResponseEntity<>("Account with this e-mail already exists", HttpStatus.FORBIDDEN);
             }
             customer.setFirstName(customerDto.getFirstName());
@@ -84,9 +83,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long customerId) {
-        Long entityId = customerRepository.findByCustomerId(customerId).getId();
-        customerRepository.deleteById(entityId);
+    public void deleteCustomerByCustomerEmail(String customerEmail) {
+        customerRepository.deleteByEmailAddress(customerEmail);
     }
 
     @Override

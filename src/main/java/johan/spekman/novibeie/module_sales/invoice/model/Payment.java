@@ -2,6 +2,8 @@ package johan.spekman.novibeie.module_sales.invoice.model;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -12,9 +14,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long entityId;
     private double paymentAmount;
-    @OneToOne
-    private Customer customer;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "sales_order_entity_id")
     private SalesOrder salesOrder;
 
     public double getPaymentAmount() {
@@ -23,14 +24,6 @@ public class Payment {
 
     public void setPaymentAmount(double paymentAmount) {
         this.paymentAmount = paymentAmount;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public SalesOrder getSalesOrder() {

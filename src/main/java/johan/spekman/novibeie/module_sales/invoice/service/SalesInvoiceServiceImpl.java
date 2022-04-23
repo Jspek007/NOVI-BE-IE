@@ -56,7 +56,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
             if (salesOrder.getGrandTotal() != request.getPaymentAmount()) {
                 throw new ApiRequestException("Paid amount is not sufficient for orders grand total.");
             } else {
-                createPayment(request, salesOrder, customer);
+                createPayment(request, salesOrder);
                 salesOrder.setAmountPaid(request.getPaymentAmount());
                 return createInvoice(request, salesOrder, customer);
             }
@@ -66,7 +66,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     }
 
     @Override
-    public SalesInvoice createInvoice(Payment payment, SalesOrder salesOrder, Customer customer) throws ParseException {
+    public SalesInvoice createInvoice(Payment payment, SalesOrder salesOrder, Customer customer) {
         SalesInvoice salesInvoice = new SalesInvoice();
         try {
             salesResourceService.prepareCustomerData(salesInvoice, customer);
@@ -83,9 +83,8 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     }
 
     @Override
-    public Payment createPayment(Payment payment, SalesOrder salesOrder, Customer customer) {
+    public Payment createPayment(Payment payment, SalesOrder salesOrder) {
         payment.setSalesOrder(salesOrder);
-        payment.setCustomer(customer);
         payment.setPaymentAmount(salesOrder.getGrandTotal());
         paymentRepository.save(payment);
         return payment;
