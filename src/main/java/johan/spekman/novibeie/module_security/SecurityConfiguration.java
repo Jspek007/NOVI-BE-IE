@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -37,8 +37,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/login").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/api/v1/sales_orders/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/sales_orders/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/**").hasAuthority("ADMIN");
+        http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

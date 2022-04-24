@@ -35,7 +35,7 @@ public class JwtUtil extends UsernamePasswordAuthenticationFilter {
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 100 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("authorities",
+                .withClaim("roles",
                         user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
