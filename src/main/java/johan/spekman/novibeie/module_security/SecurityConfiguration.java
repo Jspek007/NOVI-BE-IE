@@ -38,20 +38,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/v1/sales_orders/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(POST, "/api/v1/sales_orders/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(GET, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(POST, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(PUT, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(DELETE, "/api/v1/customers/**").hasAuthority("CUSTOMERSERVICE");
-        http.authorizeRequests().antMatchers(GET, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(POST, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(PUT, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(DELETE, "/api/v1/products/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(GET, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(POST, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(PUT, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
-        http.authorizeRequests().antMatchers(DELETE, "/api/v1/category/**").hasAuthority("PRODUCTMANAGER");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/sales_orders/**").hasAnyAuthority("CUSTOMERSERVICE",
+                "ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/sales_orders/**").hasAnyAuthority("CUSTOMERSERVICE",
+                "ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/customers/**").hasAnyAuthority("CUSTOMERSERVICE", "ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/customers/**").hasAnyAuthority("CUSTOMERSERVICE", "ADMIN");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/customers/**").hasAnyAuthority("CUSTOMERSERVICE", "ADMIN");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/customers/**").hasAnyAuthority("CUSTOMERSERVICE", "ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/products/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/products/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/products/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/products/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/category/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/category/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/category/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
+        http.authorizeRequests().antMatchers(DELETE, "/api/v1/category/**").hasAnyAuthority("PRODUCTMANAGER", "ADMIN");
         http.authorizeRequests().antMatchers(GET, "/api/v1/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers(POST, "/api/v1/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers(PUT, "/api/v1/**").hasAuthority("ADMIN");
