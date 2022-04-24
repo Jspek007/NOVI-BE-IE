@@ -1,8 +1,8 @@
 package johan.spekman.novibeie.module_authentication.appuser.service;
 
 import johan.spekman.novibeie.module_authentication.appuser.model.AppUser;
-import johan.spekman.novibeie.module_authentication.authority.model.Authority;
-import johan.spekman.novibeie.module_authentication.authority.repository.AuthorityRepository;
+import johan.spekman.novibeie.module_authentication.role.model.Role;
+import johan.spekman.novibeie.module_authentication.role.repository.RoleRepository;
 import johan.spekman.novibeie.module_authentication.appuser.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,13 +22,13 @@ import java.util.List;
 @Slf4j
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AppUserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository,
+    public AppUserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -40,7 +40,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        appUser.getAuthorities().forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority.getName())));
+        appUser.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new org.springframework.security.core.userdetails.User(
                 appUser.getUsername(),
                 appUser.getPassword(),
@@ -54,15 +54,15 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public Authority saveAuthority(Authority authority) {
-        return authorityRepository.save(authority);
+    public Role saveRole(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override
     public void addRoleToAppUser(String username, String roleName) {
         AppUser appUser = userRepository.findByUsername(username);
-        Authority authority = authorityRepository.findByName(roleName);
-        appUser.getAuthorities().add(authority);
+        Role role = roleRepository.findByName(roleName);
+        appUser.getRoles().add(role);
     }
 
     @Override

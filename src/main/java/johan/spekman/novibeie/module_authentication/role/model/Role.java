@@ -1,20 +1,20 @@
-package johan.spekman.novibeie.module_authentication.authority.model;
+package johan.spekman.novibeie.module_authentication.role.model;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "authorities")
-public class Authority {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
 
-    public Authority() {
+    public Role() {
 
     }
 
-    public Authority(Long id, String name) {
+    public Role(Long id, String name) {
         this.id = id;
         this.name = name;
     }
