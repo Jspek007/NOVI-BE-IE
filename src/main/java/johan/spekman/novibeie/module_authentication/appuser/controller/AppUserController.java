@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_authentication.appuser.model.AppUser;
-import johan.spekman.novibeie.module_authentication.authority.model.Authority;
+import johan.spekman.novibeie.module_authentication.role.model.Role;
 import johan.spekman.novibeie.module_authentication.appuser.service.AppUserService;
 import johan.spekman.novibeie.module_security.jwt.JwtResponse;
 import org.springframework.http.ResponseEntity;
@@ -64,15 +64,15 @@ public class AppUserController {
         return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
     }
 
-    @PostMapping("/authority/save")
-    public ResponseEntity<Authority> saveAuthority(@RequestBody Authority authority) {
+    @PostMapping("/role/save")
+    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri =
                 URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/authority/save").toUriString());
-        return ResponseEntity.created(uri).body(appUserService.saveAuthority(authority));
+        return ResponseEntity.created(uri).body(appUserService.saveRole(role));
     }
 
-    @PostMapping("/authority/saveroletouser")
-    public ResponseEntity<Authority> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+    @PostMapping("/role/saveroletouser")
+    public ResponseEntity<Role> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
         appUserService.addRoleToAppUser(roleToUserForm.getUsername(), roleToUserForm.roleName);
         return ResponseEntity.ok().build();
     }
@@ -93,7 +93,7 @@ public class AppUserController {
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("authorities",
-                                appUser.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList()))
+                                appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
