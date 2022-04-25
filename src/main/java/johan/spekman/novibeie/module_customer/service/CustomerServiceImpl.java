@@ -50,9 +50,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
+    public Customer createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult) {
         if (inputValidation.validate(bindingResult) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(inputValidation.validate(bindingResult));
+            throw new ApiRequestException(bindingResult.getFieldError().toString());
         } else {
             String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
 
@@ -63,12 +63,12 @@ public class CustomerServiceImpl implements CustomerService {
 
             Customer customer = new Customer();
             if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.getPhoneNumber())) {
-                return new ResponseEntity<>("Incorrect phone number format", HttpStatus.BAD_REQUEST);
+                throw new ApiRequestException("Incorrect phone number format");
             } else {
                 customer.setPhoneNumber(customerDto.getPhoneNumber());
             }
             if (customerRepository.findByEmailAddress(customerDto.getEmailAddress()) != null) {
-                return new ResponseEntity<>("Account with this e-mail already exists", HttpStatus.FORBIDDEN);
+                throw new ApiRequestException("Account with this e-mail already exists");
             }
             customer.setFirstName(customerDto.getFirstName());
             customer.setInsertion(customerDto.getInsertion());
@@ -78,7 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setCustomerId(customerId);
 
             Customer savedCustomer = customerRepository.save(customer);
-            return new ResponseEntity<>("Customer has been created: " + savedCustomer, HttpStatus.CREATED);
+            return savedCustomer;
         }
     }
 
@@ -88,13 +88,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto,
-            BindingResult bindingResult) {
+    public ResponseEntity<Object> updateCustomer(String customerEmail, CustomerDto newCustomerDto,
+                                                 BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
-            throw new ApiRequestException("Request could not be processed: " + bindingResult.getFieldErrorCount());
+            throw new ApiRequestException("Request could not be processed: " + bindingResult.getFieldError().toString());
         } else {
-            Customer foundCustomer = customerRepository.findByCustomerId(customerId);
+            Customer foundCustomer = customerRepository.findByEmailAddress(customerEmail);
             String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
 
             if (foundCustomer != null) {

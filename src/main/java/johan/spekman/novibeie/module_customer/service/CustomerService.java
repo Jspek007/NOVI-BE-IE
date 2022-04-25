@@ -16,13 +16,14 @@ public interface CustomerService {
 
     Customer getCustomerByEmailAddress(String emailAddress);
 
-    ResponseEntity<Object> createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
+    Customer createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult);
 
     void saveAll(MultipartFile file);
 
     void deleteCustomerByCustomerEmail(String customerEmail);
 
-    ResponseEntity<Object> updateCustomer(Long customerId, CustomerDto newCustomerDto, BindingResult bindingResult);
+    ResponseEntity<Object> updateCustomer(String customerEmail, CustomerDto newCustomerDto,
+                                          BindingResult bindingResult);
 
     void exportCustomersToCsv(Writer writer);
 

@@ -57,10 +57,10 @@ public class CustomerController {
         customerService.deleteCustomerByCustomerEmail(customerEmail);
     }
 
-    @PutMapping(path = "/update/{id}")
-    public ResponseEntity<Object> updateCustomer(@PathVariable("id") Long customerId,
+    @PutMapping(path = "/update/{email}")
+    public ResponseEntity<Object> updateCustomer(@PathVariable("email") String customerEmail,
                                                  @Valid @RequestBody CustomerDto newCustomer, BindingResult bindingResult) {
-        ResponseEntity<Object> customer = customerService.updateCustomer(customerId, newCustomer, bindingResult);
+        ResponseEntity<Object> customer = customerService.updateCustomer(customerEmail, newCustomer, bindingResult);
 
         if (customer == null) {
             return ResponseEntity.notFound().build();
