@@ -68,11 +68,16 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     public List<byte[]> getAllMediaBySku(String sku) {
         Long parentId = productRepository.findBySku(sku).getId();
         List<ProductMedia> compressedMediaFiles = productMediaRepository.findByParentId(parentId);
-        List<byte[]> decompressedMedia = new ArrayList<>();
 
-        compressedMediaFiles.forEach(productMedia ->
-                decompressedMedia.add(ProductMediaCompressor.decompressBytes(productMedia.getData()))
-        );
-        return decompressedMedia;
+        if (compressedMediaFiles.size() == 0) {
+            throw new ApiRequestException("No media files found for this sku: " + sku);
+        } else {
+            List<byte[]> decompressedMedia = new ArrayList<>();
+
+            compressedMediaFiles.forEach(productMedia ->
+                    decompressedMedia.add(ProductMediaCompressor.decompressBytes(productMedia.getData()))
+            );
+            return decompressedMedia;
+        }
     }
 }
