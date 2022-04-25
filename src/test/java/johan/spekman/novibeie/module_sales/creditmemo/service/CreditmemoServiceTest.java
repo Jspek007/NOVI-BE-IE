@@ -1,6 +1,7 @@
 package johan.spekman.novibeie.module_sales.creditmemo.service;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
+import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import johan.spekman.novibeie.module_sales.creditmemo.model.Creditmemo;
@@ -48,6 +49,8 @@ public class CreditmemoServiceTest {
     @Mock
     private SalesOrderRepository salesOrderRepository;
     @Mock
+    private CustomerRepository customerRepository;
+    @Mock
     private SalesOrder salesOrder;
 
 
@@ -82,7 +85,7 @@ public class CreditmemoServiceTest {
         salesOrderItem.setProductPrice(11);
         productList.add(salesOrderItem);
         testOrder.setOrderItemList(productList);
-        testOrder.setCustomer(customer);
+        testOrder.setCustomerFirstName(customer.getFirstName());
         testOrder.setAmountPaid(11);
         String[] skus = {"sku_123456"};
 

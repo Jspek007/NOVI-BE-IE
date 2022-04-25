@@ -47,7 +47,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
             product.addProductMedia(productMedia);
             productMediaRepository.save(productMedia);
         } catch (Exception exception) {
-            throw new ApiRequestException("File could nog be processed: " + exception.getMessage());
+            throw new ApiRequestException("File could not be processed: " + exception.getMessage());
         }
     }
 

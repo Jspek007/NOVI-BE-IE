@@ -144,7 +144,7 @@ public class SalesOrderServiceTest {
         productRepository.save(product);
 
         SalesOrder capturedSalesOrder = underTest.saveSalesOrder(salesOrderItems, salesOrder, customer);
-        assertThat(capturedSalesOrder.getCustomer().getFirstName()).isEqualTo(customer.getFirstName());
+        assertThat(capturedSalesOrder.getGrandTotal()).isEqualTo(product.getProductPrice());
     }
 
     @Test

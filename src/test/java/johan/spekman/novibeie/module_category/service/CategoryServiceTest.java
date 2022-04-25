@@ -90,8 +90,7 @@ public class CategoryServiceTest {
 
         underTest.addProductsToCategory(1L, skus);
 
-        Category capturedCategory = categoryRepository.getById(1L);
-        assertThat(capturedCategory.getProductList().get(0).getSku()).isEqualTo("sku_123456");
+        assertThat(product.getCategories().get(0).getCategoryName()).isEqualTo(category.getCategoryName());
 
     }
 

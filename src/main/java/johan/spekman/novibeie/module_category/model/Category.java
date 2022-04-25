@@ -25,7 +25,7 @@ public class Category {
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categories")
-    private List<Product> productList = new ArrayList<Product>();
+    private List<Product> productList = new ArrayList<>();
 
     public Long getId() {
         return id;

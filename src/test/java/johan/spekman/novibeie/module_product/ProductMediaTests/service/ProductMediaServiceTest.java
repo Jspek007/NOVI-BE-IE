@@ -89,7 +89,7 @@ public class ProductMediaServiceTest {
                 "image/png",
                 "image".getBytes());
 
-        String expectedException = "Invalid file name";
+        String expectedException = "File could not be processed: Invalid file name";
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> underTest.storeFile(file,
                 "sku_123456"));
         assertEquals(expectedException, exception.getMessage());
@@ -103,7 +103,8 @@ public class ProductMediaServiceTest {
                 "image/jpg",
                 "image".getBytes());
 
-        String expectedException = "Uploaded content type is not supported, please upload: image/png";
+        String expectedException = "File could not be processed: Uploaded content type is not supported, please " +
+                "upload: image/png";
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> underTest.storeFile(file,
                 "sku_123456"));
         assertEquals(expectedException, exception.getMessage());
@@ -117,7 +118,7 @@ public class ProductMediaServiceTest {
                 "image/png",
                 "image".getBytes());
 
-        String expectedException = "No product found with sku: sku_123456";
+        String expectedException = "File could not be processed: No product found with sku: sku_123456";
 
         when(productRepository.findBySku(anyString())).thenReturn(null);
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> underTest.storeFile(file,

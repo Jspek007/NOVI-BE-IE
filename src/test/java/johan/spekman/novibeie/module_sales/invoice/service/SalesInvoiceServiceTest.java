@@ -77,7 +77,7 @@ public class SalesInvoiceServiceTest {
                 "Test@test.nl",
                 "Test123");
         SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setCustomer(customer);
+        salesOrder.setCustomerFirstName(customer.getFirstName());
         customerRepository.save(customer);
         CustomerAddress customerAddress = new CustomerAddress();
         customerAddress.setCustomerId(1L);
@@ -90,7 +90,7 @@ public class SalesInvoiceServiceTest {
         when(customerAddressRepository.getCustomerAddressByCustomerAndType(any(), anyString())).thenReturn(customerAddress);
 
         SalesInvoice savedSalesInvoice = underTest.createInvoice(payment, salesOrder, customer);
-        assertThat(savedSalesInvoice.getSalesOrder().getCustomer().getEmailAddress()).isEqualTo(customer.getEmailAddress());
+        assertThat(savedSalesInvoice.getSalesOrder().getCustomerFirstName()).isEqualTo(customer.getFirstName());
 
     }
 
@@ -128,7 +128,7 @@ public class SalesInvoiceServiceTest {
         SalesOrder salesOrder = new SalesOrder();
         salesOrder.setEntityId(1L);
         salesOrder.setGrandTotal(11.99);
-        salesOrder.setCustomer(customer);
+        salesOrder.setCustomerEmail(customer.getEmailAddress());
         salesOrderRepository.save(salesOrder);
         Payment payment = new Payment();
         payment.setPaymentAmount(11.99);
