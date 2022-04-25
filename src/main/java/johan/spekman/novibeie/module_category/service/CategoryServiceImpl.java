@@ -59,9 +59,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         try {
             Arrays.stream(skus).forEach(sku -> {
-                if (productRepository.findBySku(sku) == null) {
-                    throw new ApiRequestException("No product found with sku: " + sku);
-                } else {
+                try {
+                    productRepository.findBySku(sku);
                     Product product = productRepository.findBySku(sku);
                     /*
                         Check if the category is already linked to one of the products
@@ -70,8 +69,10 @@ public class CategoryServiceImpl implements CategoryService {
                     if (category.getProductList().contains(product)) {
                         return;
                     }
-                    category.getProductList().add(product);
-                    categoryRepository.save(category);
+                    product.getCategories().add(category);
+                    productRepository.save(product);
+                } catch (Exception exception){
+                    throw new ApiRequestException("Category could not be saved: " + exception.getMessage());
                 }
             });
             return ResponseEntity.status(HttpStatus.OK).body("Category " + category.getCategoryName() + " has been " +
@@ -88,8 +89,9 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Arrays.stream(skus).forEach(sku -> {
                 Product product = productRepository.findBySku(sku);
-                category.getProductList().remove(product);
-                categoryRepository.save(category);
+
+                product.getCategories().remove(category);
+                productRepository.save(product);
             });
         } catch (Exception exception) {
             throw new ApiRequestException("Products could not be removed from the category" + exception.getMessage());
