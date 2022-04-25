@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface ProductService {
-    void createProduct(@Valid ProductDto productDto, BindingResult bindingResult) throws ParseException;
+    Product createProduct(@Valid ProductDto productDto, BindingResult bindingResult) throws ParseException;
 
     List<Product> getAllProducts();
 

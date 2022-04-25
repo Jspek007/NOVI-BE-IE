@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createProduct(ProductDto productDto, BindingResult bindingResult) throws ParseException {
+    public Product createProduct(ProductDto productDto, BindingResult bindingResult) throws ParseException {
         // Validate the input before attempting to create a new product
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
@@ -99,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
             product.setEnabled(productDto.isEnabled());
             productRepository.save(product);
             ResponseEntity.status(HttpStatus.CREATED).body(product);
+            return product;
         }
     }
 

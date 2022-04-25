@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,9 +57,11 @@ public class ProductController {
 
     @PostMapping(path = "/save")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createProduct(@Valid @RequestBody ProductDto productDto,
-                                                BindingResult bindingResult) throws ParseException {
-        productService.createProduct(productDto, bindingResult);
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto productDto,
+                                                 BindingResult bindingResult) throws ParseException {
+        URI uri =
+                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/products/save").toUriString());
+        return ResponseEntity.created(uri).body(productService.createProduct(productDto, bindingResult));
     }
 
     @GetMapping(path = "/export/all", produces = "text/csv")
