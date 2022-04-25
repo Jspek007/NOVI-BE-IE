@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(String sku, ProductDto productDto, BindingResult bindingResult) {
+    public Product updateProduct(String sku, ProductDto productDto, BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException(bindingResult.toString());
@@ -72,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
                 existingProduct.setEnabled(productDto.isEnabled());
                 productRepository.save(existingProduct);
                 ResponseEntity.ok().body("Product with sku: " + sku + " has been updated");
+                return existingProduct;
             }
         }
     }
@@ -86,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ApiRequestException("Product with this sku already exists.");
         } else {
             Product product = new Product();
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date((System.currentTimeMillis()));
             String currentDate = format.format(date);
             Date createdAtDate = format.parse(currentDate);

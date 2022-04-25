@@ -20,7 +20,7 @@ public interface ProductService {
 
     void deleteProductBySku(String sku);
 
-    void updateProduct(String sku, ProductDto productDto, BindingResult bindingResult);
+    Product updateProduct(String sku, ProductDto productDto, BindingResult bindingResult);
 
     void productExport(Writer writer);
 

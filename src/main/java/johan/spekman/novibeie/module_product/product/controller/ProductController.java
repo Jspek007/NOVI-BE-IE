@@ -49,10 +49,10 @@ public class ProductController {
     }
 
     @PutMapping(path = "/update/{sku}")
-    public void updateProduct(@PathVariable("sku") String sku,
+    public ResponseEntity<Product> updateProduct(@PathVariable("sku") String sku,
                                                 @Valid @RequestBody ProductDto productDto,
                                                 BindingResult bindingResult) {
-        productService.updateProduct(sku, productDto, bindingResult);
+        return ResponseEntity.ok().body(productService.updateProduct(sku, productDto, bindingResult));
     }
 
     @PostMapping(path = "/save")

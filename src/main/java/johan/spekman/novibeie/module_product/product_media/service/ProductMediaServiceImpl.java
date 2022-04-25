@@ -28,23 +28,27 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     @Override
     public void storeFile(MultipartFile file, String sku)
             throws IOException {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String contentType = "image/png";
-        Product product = productRepository.findBySku(sku);
-        if (fileName.contains("..")) {
-            throw new ApiRequestException("Invalid file name");
+        try {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            String contentType = "image/png";
+            Product product = productRepository.findBySku(sku);
+            if (fileName.contains("..")) {
+                throw new ApiRequestException("Invalid file name");
+            }
+            if (!Objects.equals(file.getContentType(), contentType)) {
+                throw new ApiRequestException("Uploaded content type is not supported, please upload: " + contentType);
+            }
+            if (product == null) {
+                throw new ApiRequestException("No product found with sku: " + sku);
+            }
+            ProductMedia productMedia = new ProductMedia();
+            productMedia.setData(ProductMediaCompressor.compressBytes(file.getBytes()));
+            productMedia.setFileName(fileName);
+            product.addProductMedia(productMedia);
+            productMediaRepository.save(productMedia);
+        } catch (Exception exception) {
+            throw new ApiRequestException("File could nog be processed: " + exception.getMessage());
         }
-        if (!Objects.equals(file.getContentType(), contentType)) {
-            throw new ApiRequestException("Uploaded content type is not supported, please upload: " + contentType);
-        }
-        if (product == null) {
-            throw new ApiRequestException("No product found with sku: " + sku);
-        }
-        ProductMedia productMedia = new ProductMedia();
-        productMedia.setData(ProductMediaCompressor.compressBytes(file.getBytes()));
-        productMedia.setFileName(fileName);
-        product.addProductMedia(productMedia);
-        productMediaRepository.save(productMedia);
     }
 
     @Override
