@@ -58,6 +58,11 @@ public class AppUserController {
         return ResponseEntity.ok().body(appUserService.getAppUsers());
     }
 
+    @GetMapping("/appusers/{username}")
+    public ResponseEntity<AppUser> getSpecificAppUser(@PathVariable("username") String username) {
+        return ResponseEntity.ok().body(appUserService.getAppUser(username));
+    }
+
     @PostMapping("/appuser/save")
     public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/appuser/save").toUriString());
@@ -73,7 +78,7 @@ public class AppUserController {
 
     @PostMapping("/role/saveroletouser")
     public ResponseEntity<Role> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
-        appUserService.addRoleToAppUser(roleToUserForm.getUsername(), roleToUserForm.roleName);
+        appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName);
         return ResponseEntity.ok().build();
     }
 

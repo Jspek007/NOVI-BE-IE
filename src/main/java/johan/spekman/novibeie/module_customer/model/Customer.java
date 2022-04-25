@@ -31,7 +31,6 @@ public class Customer {
     private String emailAddress;
     @JsonIgnore
     private String password;
-    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerAddress> customerAddresses = new ArrayList<>();
 
