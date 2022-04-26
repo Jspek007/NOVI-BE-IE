@@ -77,9 +77,8 @@ public class AppUserController {
     }
 
     @PostMapping("/roles/saveroletouser")
-    public ResponseEntity<Role> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
-        appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName);
-        return ResponseEntity.ok().build();
+    public ResponseEntity addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+        return ResponseEntity.ok().body(appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName));
     }
 
     @GetMapping("/token/refresh")
