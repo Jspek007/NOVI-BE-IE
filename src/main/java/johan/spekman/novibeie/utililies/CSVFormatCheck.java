@@ -9,6 +9,11 @@ import java.util.Objects;
 public class CSVFormatCheck {
     public static boolean hasCSVFormat(MultipartFile file) {
         String TYPE = "text/csv";
-        return TYPE.matches(Objects.requireNonNull(file.getContentType()));
+        System.out.println(file.getContentType());
+        if (!TYPE.matches(file.getContentType())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

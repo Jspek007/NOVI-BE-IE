@@ -83,7 +83,7 @@ public class CustomerController {
     @PostMapping(path = "/import")
     public ResponseEntity<Object> importCustomers(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (CSVFormatCheck.hasCSVFormat(file)) {
+        if (!CSVFormatCheck.hasCSVFormat(file)) {
             message = "Please upload a csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         } else {
