@@ -32,8 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final InputValidation inputValidation;
 
     public CustomerServiceImpl(CustomerRepository customerRepository,
-            PasswordEncoder passwordEncoder,
-            InputValidation inputValidation) {
+                               PasswordEncoder passwordEncoder,
+                               InputValidation inputValidation) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.inputValidation = inputValidation;
@@ -46,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerByEmailAddress(String emailAddress) {
-        return customerRepository.findByEmailAddress(emailAddress);
+            return customerRepository.findByEmailAddress(emailAddress);
     }
 
     @Override
@@ -118,8 +118,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void exportCustomersToCsv(Writer writer) {
-        String[] headers = { "Id", "Customer Id", "Firstname", "Insertion", "Lastname", "E-mail", "Password",
-                "Phone number" };
+        String[] headers = {"Id", "Customer Id", "Firstname", "Insertion", "Lastname", "E-mail", "Password",
+                "Phone number"};
 
         List<Customer> customerList = getAllCustomers();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(headers))) {
@@ -136,20 +136,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> csvToCustomers(InputStream inputStream) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                CSVParser csvParser = new CSVParser(fileReader,
-                        CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
             List<Customer> customers = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
-                Customer customer = new Customer(
-                        Long.parseLong(csvRecord.get("Id")),
-                        Long.parseLong(csvRecord.get("Customer Id")),
-                        csvRecord.get("Firstname"),
-                        csvRecord.get("Insertion"),
-                        csvRecord.get("Lastname"),
-                        csvRecord.get("E-mail"),
-                        csvRecord.get("Password"),
-                        csvRecord.get("Phone number"));
+                Customer customer = new Customer();
+                customer.setId(Long.valueOf(csvRecord.get("Id")));
+                customer.setCustomerId(Long.valueOf(csvRecord.get("Customer Id")));
+                customer.setFirstName(csvRecord.get("Firstname"));
+                customer.setInsertion(csvRecord.get("Insertion"));
+                customer.setLastName(csvRecord.get("Lastname"));
+                customer.setEmailAddress(csvRecord.get("E-mail"));
+                customer.setPassword(csvRecord.get("Password"));
+                customer.setPhoneNumber(csvRecord.get("Phone number"));
                 customers.add(customer);
             }
             return customers;

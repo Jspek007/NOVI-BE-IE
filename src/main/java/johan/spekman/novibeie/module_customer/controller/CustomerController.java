@@ -1,5 +1,6 @@
 package johan.spekman.novibeie.module_customer.controller;
 
+import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.dto.CustomerDto;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.service.CustomerService;
@@ -35,8 +36,12 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/get/{email}")
-    public Customer getCustomerByEmailAddress(@PathVariable("email") String customerEmail) {
-        return customerService.getCustomerByEmailAddress(customerEmail);
+    public ResponseEntity<Customer> getCustomerByEmailAddress(@PathVariable("email") String customerEmail) {
+        if (customerService.getCustomerByEmailAddress(customerEmail) == null) {
+            throw new ApiRequestException("No customer found with this email adress: " + customerEmail);
+        } else {
+            return ResponseEntity.ok().body(customerService.getCustomerByEmailAddress(customerEmail));
+        }
     }
 
     @PostMapping("/save")

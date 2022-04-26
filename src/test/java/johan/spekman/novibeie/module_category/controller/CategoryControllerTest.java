@@ -53,7 +53,7 @@ public class CategoryControllerTest {
 
     @Test
     void whenValidInput_CreateNewCategory_andReturn200Ok() throws Exception {
-        mockMvc.perform(post("/api/v1/category/save")
+        mockMvc.perform(post("/api/v1/categories/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(category)))
                 .andExpect(status().isCreated());
@@ -61,7 +61,7 @@ public class CategoryControllerTest {
 
     @Test
     void whenInvalidInput_returnStatus400BadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/category/save")
+        mockMvc.perform(post("/api/v1/categories/save")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -69,7 +69,7 @@ public class CategoryControllerTest {
     @Test
     void whenValidInput_shouldAddProductsToCategory() throws Exception {
         String[] products = {"sku_123456"};
-        mockMvc.perform(post("/api/v1/category/products/save/1")
+        mockMvc.perform(post("/api/v1/categories/products/save/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(products)))
                 .andExpect(status().isOk());
@@ -77,7 +77,7 @@ public class CategoryControllerTest {
 
     @Test
     void whenInvalidInput_shouldReturnStatus400BadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/category/products/save/1")
+        mockMvc.perform(post("/api/v1/categories/products/save/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
