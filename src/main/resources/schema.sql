@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses`
 (
     `id`                    bigint NOT NULL AUTO_INCREMENT,
@@ -13,6 +15,7 @@ CREATE TABLE `addresses`
     PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `app_users`;
 CREATE TABLE `app_users`
 (
     `id`       bigint NOT NULL,
@@ -22,6 +25,7 @@ CREATE TABLE `app_users`
     PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `authorities`;
 CREATE TABLE `authorities`
 (
     `id`   bigint NOT NULL,
@@ -29,6 +33,7 @@ CREATE TABLE `authorities`
     PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `app_users_roles`;
 CREATE TABLE `app_users_roles`
 (
     `app_user_id` bigint NOT NULL,
@@ -39,6 +44,7 @@ CREATE TABLE `app_users_roles`
     CONSTRAINT `FKjbe8lt8c1um2wc23xniiakyuf` FOREIGN KEY (`app_user_id`) REFERENCES `app_users` (`id`)
 );
 
+DROP TABLE IF EXISTS `catalog_products`;
 CREATE TABLE `catalog_products`
 (
     `entity_id`           bigint NOT NULL AUTO_INCREMENT,
@@ -51,6 +57,7 @@ CREATE TABLE `catalog_products`
     PRIMARY KEY (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories`
 (
     `entity_id`            bigint NOT NULL AUTO_INCREMENT,
@@ -59,6 +66,7 @@ CREATE TABLE `categories`
     PRIMARY KEY (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `catalog_category_products`;
 CREATE TABLE `catalog_category_products`
 (
     `product_id`  bigint NOT NULL,
@@ -69,6 +77,7 @@ CREATE TABLE `catalog_category_products`
     CONSTRAINT `FK76jxs9ncg5gj6hp9fsino2egh` FOREIGN KEY (`product_id`) REFERENCES `catalog_products` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `customers`;
 CREATE TABLE `customers`
 (
     `entity_id`     bigint NOT NULL AUTO_INCREMENT,
@@ -82,11 +91,13 @@ CREATE TABLE `customers`
     PRIMARY KEY (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `hibernate_sequence`;
 CREATE TABLE `hibernate_sequence`
 (
     `next_val` bigint DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS `product_media_gallery`;
 CREATE TABLE `product_media_gallery`
 (
     `id`        bigint NOT NULL AUTO_INCREMENT,
@@ -98,6 +109,7 @@ CREATE TABLE `product_media_gallery`
     CONSTRAINT `FK5fw9wphgyculx2xef13uox7j4` FOREIGN KEY (`parent_id`) REFERENCES `catalog_products` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_orders`;
 CREATE TABLE `sales_orders`
 (
     `entity_id`                     bigint NOT NULL AUTO_INCREMENT,
@@ -125,6 +137,7 @@ CREATE TABLE `sales_orders`
     PRIMARY KEY (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_order_items`;
 CREATE TABLE `sales_order_items`
 (
     `entity_id`       bigint NOT NULL AUTO_INCREMENT,
@@ -137,6 +150,7 @@ CREATE TABLE `sales_order_items`
     CONSTRAINT `FKdtoiu7vnmywpfulevjj3jcv64` FOREIGN KEY (`order_entity_id`) REFERENCES `sales_orders` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_order_payments`;
 CREATE TABLE `sales_order_payments`
 (
     `entity_id`             bigint NOT NULL AUTO_INCREMENT,
@@ -147,6 +161,7 @@ CREATE TABLE `sales_order_payments`
     CONSTRAINT `FKmydpg4c1d8kx61n9q40aty33t` FOREIGN KEY (`sales_order_entity_id`) REFERENCES `sales_orders` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_creditmemo`;
 CREATE TABLE `sales_creditmemo`
 (
     `entity_id`                     bigint NOT NULL AUTO_INCREMENT,
@@ -174,6 +189,7 @@ CREATE TABLE `sales_creditmemo`
     CONSTRAINT `FKl0iibtrism518yyww91wqr4gv` FOREIGN KEY (`sales_order_entity_id`) REFERENCES `sales_orders` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_creditmemo_items`;
 CREATE TABLE `sales_creditmemo_items`
 (
     `entity_id`            bigint NOT NULL AUTO_INCREMENT,
@@ -186,6 +202,7 @@ CREATE TABLE `sales_creditmemo_items`
     CONSTRAINT `FKmyh7bqu6gc3pnqeol1sxttcrs` FOREIGN KEY (`creditmemo_entity_id`) REFERENCES `sales_creditmemo` (`entity_id`)
 );
 
+DROP TABLE IF EXISTS `sales_invoices`;
 CREATE TABLE `sales_invoices`
 (
     `entity_id`                     bigint NOT NULL AUTO_INCREMENT,
@@ -212,3 +229,4 @@ CREATE TABLE `sales_invoices`
     KEY `FKjobifb2nthitdxjqmrln8rcaq` (`sales_order_entity_id`),
     CONSTRAINT `FKjobifb2nthitdxjqmrln8rcaq` FOREIGN KEY (`sales_order_entity_id`) REFERENCES `sales_orders` (`entity_id`)
 );
+SET FOREIGN_KEY_CHECKS=1;

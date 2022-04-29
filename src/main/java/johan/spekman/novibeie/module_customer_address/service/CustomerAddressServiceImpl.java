@@ -49,12 +49,12 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
         CustomerAddress defaultShippingAddress =
                 customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(), "shipping");
 
-        if (customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.billing) {
+        if (defaultBillingAddress != null && customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.billing) {
             defaultBillingAddress.setDefaultAddress(false);
             customerAddressRepository.save(defaultBillingAddress);
         }
 
-        if (customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.shipping) {
+        if (defaultShippingAddress != null && customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.shipping) {
             defaultShippingAddress.setDefaultAddress(false);
             customerAddressRepository.save(defaultShippingAddress);
         }

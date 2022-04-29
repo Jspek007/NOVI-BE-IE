@@ -3,17 +3,20 @@ package johan.spekman.novibeie.module_product.ProductTests.repository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 public class ProductRepositoryTest {
 
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
 
     final Date date = new Date(System.currentTimeMillis());
@@ -29,8 +32,8 @@ public class ProductRepositoryTest {
                 date,
                 false
         );
-        productRepository.save(product);
 
+        when(productRepository.findBySku(anyString())).thenReturn(product);
         Product found = productRepository.findBySku("sku_123456");
 
         String expected = "This is a test product";

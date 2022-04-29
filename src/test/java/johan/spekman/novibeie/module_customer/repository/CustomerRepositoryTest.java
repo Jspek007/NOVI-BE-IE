@@ -1,16 +1,18 @@
 package johan.spekman.novibeie.module_customer.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import johan.spekman.novibeie.module_customer.model.Customer;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 class CustomerRepositoryTest {
 
-    @Autowired
+    @Mock
     private CustomerRepository underTest;
 
     @Test
@@ -28,6 +30,7 @@ class CustomerRepositoryTest {
         underTest.save(customer);
 
         // when
+        when(underTest.findByCustomerId(123456L)).thenReturn(customer);
         Customer found = underTest.findByCustomerId(123456L);
 
         // then
@@ -51,6 +54,7 @@ class CustomerRepositoryTest {
         underTest.save(customer);
 
         // when
+        when(underTest.findByEmailAddress("Test@test.nl")).thenReturn(customer);
         Customer found = underTest.findByEmailAddress("Test@test.nl");
 
         // then

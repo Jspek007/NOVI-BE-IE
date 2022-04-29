@@ -31,7 +31,7 @@ import javax.transaction.Transactional;
 @Transactional
 class CustomerAddressServiceImplTest {
 
-    @Autowired
+    @Mock
     private CustomerRepository customerRepository;
     @Mock
     private CustomerAddressRepository customerAddressRepository;
@@ -97,6 +97,7 @@ class CustomerAddressServiceImplTest {
         BindingResult bindingResult = new BindException(customerAddressDto, "customerAddress");
         CustomerAddress customerAddress = new CustomerAddress();
 
+        when(customerRepository.findByEmailAddress(anyString())).thenReturn(customer);
         when(customerAddressRepository.getCustomerAddressByCustomerAndType(anyLong(), anyString())).thenReturn(customerAddress);
 
         CustomerAddress capturedCustomerAddress =  underTest.createNewAddress(customerAddressDto, bindingResult);
