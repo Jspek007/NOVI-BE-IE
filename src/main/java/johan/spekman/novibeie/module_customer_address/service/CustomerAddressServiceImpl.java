@@ -30,8 +30,8 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
     }
 
     @Override
-    public ResponseEntity<Object> createNewAddress(@Valid @RequestBody CustomerAddressDto customerAddressDto,
-            BindingResult bindingResult) {
+    public CustomerAddress createNewAddress(@Valid @RequestBody CustomerAddressDto customerAddressDto,
+                                            BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Malformed input: " + bindingResult.getFieldError());
@@ -71,7 +71,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
         customerAddress.setDefaultAddress(customerAddressDto.isDefaultAddress());
 
         customer.addCustomerAddress(customerAddress);
-        return new ResponseEntity<>(customerAddress, HttpStatus.CREATED);
+        return customerAddress;
     }
 
     @Override
