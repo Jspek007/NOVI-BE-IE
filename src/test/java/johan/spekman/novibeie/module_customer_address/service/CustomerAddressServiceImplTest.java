@@ -51,6 +51,7 @@ class CustomerAddressServiceImplTest {
         // Given
         CustomerAddressDto customerAddressDto = new CustomerAddressDto(
                 111111L,
+                "test@test.nl",
                 "Teststreet",
                 12,
                 "A6",
@@ -79,6 +80,7 @@ class CustomerAddressServiceImplTest {
         customerRepository.save(customer);
         CustomerAddressDto customerAddressDto = new CustomerAddressDto(
                 111111L,
+                "Test@test.nl",
                 "Teststreet",
                 12,
                 "A6",

@@ -27,7 +27,6 @@ public class Product {
     private String productTitle;
     private String productDescription;
     private double productPrice;
-    private int taxPercentage;
     private Date createdAtDate;
     private boolean enabled;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -45,14 +44,13 @@ public class Product {
     }
 
     public Product(Long id, String sku, String productTitle, String productDescription,
-                   double productPrice, int taxPercentage, Date createdAtDate,
+                   double productPrice, Date createdAtDate,
                    boolean enabled) {
         this.id = id;
         this.sku = sku;
         this.productTitle = productTitle;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
-        this.taxPercentage = taxPercentage;
         this.createdAtDate = createdAtDate;
         this.enabled = enabled;
     }
@@ -95,14 +93,6 @@ public class Product {
 
     public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
-    }
-
-    public int getTaxPercentage() {
-        return taxPercentage;
-    }
-
-    public void setTaxPercentage(int taxPercentage) {
-        this.taxPercentage = taxPercentage;
     }
 
     public Date getCreatedAtDate() {

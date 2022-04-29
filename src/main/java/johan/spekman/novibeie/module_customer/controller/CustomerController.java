@@ -58,7 +58,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete/{email}")
-    public void deleteCustomerById(@PathVariable("email") String customerEmail) {
+    public void deleteCustomerByEmail(@PathVariable("email") String customerEmail) {
         customerService.deleteCustomerByCustomerEmail(customerEmail);
     }
 

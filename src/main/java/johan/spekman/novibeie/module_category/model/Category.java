@@ -2,8 +2,6 @@ package johan.spekman.novibeie.module_category.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import johan.spekman.novibeie.module_product.product.model.Product;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,8 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-@AllArgsConstructor
-@NoArgsConstructor
 public class Category {
     @Id
     @Column(name = "entity_id")
@@ -26,6 +22,16 @@ public class Category {
     @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categories")
     private List<Product> productList = new ArrayList<>();
+
+    public Category() {
+    }
+
+    public Category(Long id, String categoryName, String categoryDescription, List<Product> productList) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+        this.productList = productList;
+    }
 
     public Long getId() {
         return id;
