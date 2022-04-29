@@ -20,3 +20,22 @@ VALUES
     (7, 6),
     (8, 4),
     (9, 5);
+INSERT INTO `addresses` (`id`, `addition`, `city`, `customer_address_type`, `customer_id`, `default_address`, `house_number`, `postal_code`, `street_name`, `parent_id`)
+VALUES
+    (1, 'a6', 'Poststad', 'shipping', 670271, 1, 12, '4112AL', 'Poststraat', 1),
+    (2, 'a6', 'Poststad', 'billing', 670271, 1, 12, '4112AL', 'Poststraat', 1);
+INSERT INTO `catalog_products` (`entity_id`, `created_at_date`, `enabled`, `product_description`, `product_price`, `product_title`, `sku`)
+VALUES
+    (1, '2022-04-29 15:33:52.000000', 1, 'De nieuwe jeans van dit moment', 64.99, 'Skinny jeans', 'sku_123456'),
+    (2, '2022-04-29 15:34:13.000000', 1, 'Comfortabel en modieus', 120.99, 'Baggy jeans', 'sku_123341'),
+    (3, '2022-04-29 15:34:36.000000', 0, 'Comfortabel en modieus', 74.99, 'Oversized tee', 'sku_123342');
+INSERT INTO `categories` (`entity_id`, `category_description`, `category_name`)
+VALUES
+    (1, 'Get your new jeans now!', 'Jeans'),
+    (2, 'Get your new tees now!', 'Tees');
+INSERT INTO `catalog_category_products` (`product_id`, `category_id`)
+VALUES
+    (1, 1),
+    (2, 1),
+    (3, 2);
+
