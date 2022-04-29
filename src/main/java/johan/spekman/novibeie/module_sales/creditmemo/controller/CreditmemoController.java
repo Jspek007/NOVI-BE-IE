@@ -28,4 +28,13 @@ public class CreditmemoController {
             throw new ApiRequestException("Creditmemo could not be processed: " + exception.getMessage());
         }
     }
+
+    @GetMapping(path = "/get/{email}")
+    public ResponseEntity<Object> getCreditmemoByCustomerEmail(@PathVariable("email") String customerEmail) throws Exception {
+        try {
+            return ResponseEntity.ok().body(creditmemoService.getCreditByCustomerEmail(customerEmail));
+        } catch (Exception exception) {
+            throw new Exception(exception.getMessage());
+        }
+    }
 }

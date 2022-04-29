@@ -46,6 +46,15 @@ public class CreditmemoServiceImpl implements CreditmemoService {
     }
 
     @Override
+    public List<Creditmemo> getCreditByCustomerEmail(String customerEmail) {
+        try {
+            return creditmemoRepository.findByCustomerEmail(customerEmail);
+        } catch (Exception exception) {
+            throw new ApiRequestException("No creditmemo found for this email: " + customerEmail);
+        }
+    }
+
+    @Override
     public Creditmemo processCreditmemoRequest(@PathVariable("orderId") Long orderId,
                                                @RequestBody String[] skus) throws ParseException {
         SalesOrder salesOrder = salesOrderRepository.getById(orderId);
