@@ -33,6 +33,7 @@ public class CustomerAddress {
     private String city;
     @Enumerated(EnumType.STRING)
     private CustomerAddressType customerAddressType;
+    private boolean defaultAddress;
 
     public Long getId() {
         return id;
@@ -104,5 +105,13 @@ public class CustomerAddress {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public boolean isDefaultAddress() {
+        return defaultAddress;
+    }
+
+    public void setDefaultAddress(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 }

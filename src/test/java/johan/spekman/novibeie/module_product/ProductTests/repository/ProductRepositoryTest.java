@@ -26,7 +26,6 @@ public class ProductRepositoryTest {
                 "Test product",
                 "This is a test product",
                 11.99,
-                9,
                 date,
                 false
         );
@@ -48,7 +47,6 @@ public class ProductRepositoryTest {
                 "Test product",
                 "This is a test product",
                 11.99,
-                9,
                 date,
                 false
         );

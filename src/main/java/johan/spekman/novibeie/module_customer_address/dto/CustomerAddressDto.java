@@ -14,6 +14,9 @@ public class CustomerAddressDto {
     private Long parentId;
 
     @NotBlank
+    private String customerEmail;
+
+    @NotBlank
     private String streetName;
 
     private int houseNumber;
@@ -27,20 +30,21 @@ public class CustomerAddressDto {
     @NotBlank
     private String city;
 
-    private CustomerAddressType customerAddressType;
+    private boolean defaultAddress;
 
-    public CustomerAddressDto() {
-    }
-
-    public CustomerAddressDto(Long parentId, String streetName, int houseNumber, String addition, String postalCode, String city, CustomerAddressType customerAddressType) {
+    public CustomerAddressDto(Long parentId, String customerEmail, String streetName, int houseNumber, String addition, String postalCode, String city, boolean defaultAddress, CustomerAddressType customerAddressType) {
         this.parentId = parentId;
+        this.customerEmail = customerEmail;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
         this.addition = addition;
         this.postalCode = postalCode;
         this.city = city;
+        this.defaultAddress = defaultAddress;
         this.customerAddressType = customerAddressType;
     }
+
+    private CustomerAddressType customerAddressType;
 
     public Long getParentId() {
         return parentId;
@@ -48,6 +52,14 @@ public class CustomerAddressDto {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public String getStreetName() {
@@ -96,5 +108,13 @@ public class CustomerAddressDto {
 
     public void setCustomerAddressType(CustomerAddressType customerAddressType) {
         this.customerAddressType = customerAddressType;
+    }
+
+    public boolean isDefaultAddress() {
+        return defaultAddress;
+    }
+
+    public void setDefaultAddress(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 }

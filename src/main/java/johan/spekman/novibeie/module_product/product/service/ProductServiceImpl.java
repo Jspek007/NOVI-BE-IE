@@ -118,7 +118,6 @@ public class ProductServiceImpl implements ProductService {
                         product.getProductTitle(),
                         product.getProductDescription(),
                         product.getProductPrice(),
-                        product.getTaxPercentage(),
                         product.getCreatedAtDate(),
                         product.isEnabled()
                 );
@@ -146,7 +145,6 @@ public class ProductServiceImpl implements ProductService {
                         csvRecord.get("productTitle"),
                         csvRecord.get("productDescription"),
                         Double.parseDouble(csvRecord.get("productPrice")),
-                        Integer.parseInt(csvRecord.get("taxPercentage")),
                         createdDate,
                         Boolean.parseBoolean(csvRecord.get("isEnabled"))
                 );

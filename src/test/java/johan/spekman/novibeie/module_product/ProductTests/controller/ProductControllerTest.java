@@ -54,7 +54,7 @@ public class ProductControllerTest {
         Product product1 = new Product();
         product1.setProductDescription("Test product");
         product1.setId(1L);
-        product1.setTaxPercentage(21);
+        product1.setProductPrice(21.0);
         product1.setEnabled(true);
         List<Product> productList = List.of(product, product1);
 
@@ -64,7 +64,7 @@ public class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[1].taxPercentage", is(21)))
+                .andExpect(jsonPath("$[1].productPrice", is(21.0)))
                 .andExpect(jsonPath("$[0].productTitle", is("Test product")));
     }
 

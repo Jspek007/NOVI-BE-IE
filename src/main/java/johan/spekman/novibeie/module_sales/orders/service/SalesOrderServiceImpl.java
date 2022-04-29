@@ -62,6 +62,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             if (orderItem == null) {
                 throw new ApiRequestException("No product found with SKU: " + product.getSku());
             }
+            if (!orderItem.isEnabled()) {
+                throw new ApiRequestException("Product could not be ordered because it's status is disabled: " + product.getSku());
+            }
             salesResourceService.prepareSalesResourceItemInformation(salesOrderItem, product);
             salesOrderItem.setOrderId(salesOrder);
             salesOrderItems.add(salesOrderItem);

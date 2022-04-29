@@ -88,7 +88,6 @@ public class SalesOrderServiceTest {
                 "Test product",
                 "This is a test",
                 11.99,
-                21,
                 new Date(),
                 true
         );
@@ -124,7 +123,6 @@ public class SalesOrderServiceTest {
                 "Test product",
                 "This is a test",
                 11.99,
-                21,
                 new Date(),
                 true
         );
@@ -155,7 +153,6 @@ public class SalesOrderServiceTest {
                 "Test product",
                 "This is a test",
                 11.99,
-                21,
                 new Date(),
                 true
         );

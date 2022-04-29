@@ -4,11 +4,13 @@ import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.dto.CustomerAddressDto;
+import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,9 @@ import org.springframework.validation.BindingResult;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import javax.transaction.Transactional;
 
@@ -28,7 +33,7 @@ class CustomerAddressServiceImplTest {
 
     @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
+    @Mock
     private CustomerAddressRepository customerAddressRepository;
 
     @MockBean
@@ -51,11 +56,13 @@ class CustomerAddressServiceImplTest {
         // Given
         CustomerAddressDto customerAddressDto = new CustomerAddressDto(
                 111111L,
+                "test@test.nl",
                 "Teststreet",
                 12,
                 "A6",
                 "1111",
                 "Testcity",
+                true,
                 CustomerAddressType.billing);
         BindingResult bindingResult = new BindException(customerAddressDto, "customerAddress");
 
@@ -79,19 +86,21 @@ class CustomerAddressServiceImplTest {
         customerRepository.save(customer);
         CustomerAddressDto customerAddressDto = new CustomerAddressDto(
                 111111L,
+                "Test@test.nl",
                 "Teststreet",
                 12,
                 "A6",
                 "1111AA",
                 "Testcity",
+                true,
                 CustomerAddressType.billing);
         BindingResult bindingResult = new BindException(customerAddressDto, "customerAddress");
+        CustomerAddress customerAddress = new CustomerAddress();
 
-        underTest.createNewAddress(customerAddressDto, bindingResult);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(anyLong(), anyString())).thenReturn(customerAddress);
+
+        CustomerAddress capturedCustomerAddress =  underTest.createNewAddress(customerAddressDto, bindingResult);
         // Then
-        long result = customerAddressRepository.count();
-        long expected = 1;
-
-        assertThat(result).isEqualTo(expected);
+        assertThat(capturedCustomerAddress.getCustomerAddressType()).isEqualTo(customerAddressDto.getCustomerAddressType());
     }
 }
