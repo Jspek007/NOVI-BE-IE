@@ -26,11 +26,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                JwtUtil.getUsername(request),
-                JwtUtil.getPassword(request)
-        );
-        return authenticationManager.authenticate(authenticationToken);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    JwtUtil.getUsername(request),
+                    JwtUtil.getPassword(request)
+            );
+            return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override

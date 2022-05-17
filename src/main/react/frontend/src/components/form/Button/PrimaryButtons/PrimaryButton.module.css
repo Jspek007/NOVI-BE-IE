@@ -1,0 +1,16 @@
+@import '../../../../design-tokens/css-globals.css';
+
+.primary_button {
+    height: 50px;
+    width: 220px;
+    font-size: 18px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.primary_button:disabled {
+    background: var(--color-disabled-button);
+    cursor: auto;
+}

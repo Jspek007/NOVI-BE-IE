@@ -1,0 +1,19 @@
+.nav_item_link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    font-style: italic;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+
+.nav_item_link:visited, .nav_item_link:hover, .nav_item_link:focus {
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar_item_container {
+    width: 200px;
+    border-right: 1px solid var(--color-primary);
+}

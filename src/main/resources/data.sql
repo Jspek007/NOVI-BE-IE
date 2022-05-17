@@ -14,12 +14,15 @@ INSERT INTO `app_users` (`id`, `name`, `password`, `username`)
 VALUES
     (7, 'adminUser', '$2a$10$w.DX9QllVg.JV4C5koz0iO4E3gxHFI/ohrPUmWK86GfFhER2yJYWO', 'adminUser'),
     (8, 'customerService', '$2a$10$ep8lJWOFg3o/nVt7rxn7nOjQmjkrSbvuw.lwujq5XCL5yfz9Xigbu', 'customerService'),
-    (9, 'productManager', '$2a$10$AsLKfNCYklZmOZbleXqLruGS4d/dmrTinczdjraC.StWNf8fKzLva', 'productManager');
+    (9, 'productManager', '$2a$10$AsLKfNCYklZmOZbleXqLruGS4d/dmrTinczdjraC.StWNf8fKzLva', 'productManager'),
+    (10, 'Test user', '$2a$10$Fl0DCRxYjRsm6ztr75hJQejokGYMe54b9LU0S7F73GI7apDxXNeQK', 'test');
+
 INSERT INTO `app_users_roles` (`app_user_id`, `roles_id`)
 VALUES
     (7, 6),
     (8, 4),
-    (9, 5);
+    (9, 5),
+    (10, 6);
 INSERT INTO `addresses` (`id`, `addition`, `city`, `customer_address_type`, `customer_id`, `default_address`, `house_number`, `postal_code`, `street_name`, `parent_id`)
 VALUES
     (1, 'a6', 'Poststad', 'shipping', 670271, 1, 12, '4112AL', 'Poststraat', 1),
@@ -38,4 +41,7 @@ VALUES
     (1, 1),
     (2, 1),
     (3, 2);
+INSERT INTO `hibernate_sequence` (next_val)
+VALUES
+    (20);
 

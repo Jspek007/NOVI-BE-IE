@@ -1,0 +1,16 @@
+.admin_table {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.admin_table_head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin_table_row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

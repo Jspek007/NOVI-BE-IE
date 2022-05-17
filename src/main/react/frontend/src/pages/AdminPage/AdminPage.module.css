@@ -1,0 +1,13 @@
+.page_container {
+    display: flex;
+}
+
+.sidebar_container {
+    height: 100vh;
+}
+
+.table_container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

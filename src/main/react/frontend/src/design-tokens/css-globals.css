@@ -1,0 +1,30 @@
+:root {
+    --color-primary: hsla(208, 78%, 47%, 0.66);
+    --color-secondary: hsl(227, 5%, 37%);
+    --color-accent: hsl(0, 1%, 55%);
+    --color-black: hsl(0, 0%, 10%);
+    --color-white: hsl(0, 0%, 94%);
+    --color-error-text: hsl(360, 100%, 50%);
+    --color-notice-good: hsl(95, 94%, 21%);
+    --color-disabled-button: hsla(0, 0%, 50%, 0.34);
+    --color-container-background: hsl(12, 16%, 82%);
+
+    --font-family-standard: "Roboto Standard", Helvetica, sans-serif;
+    --font-family-italic: "Roboto Italic", Helvetica, sans-serif;
+    --font-family-bold: "Roboto Bold", Helvetica, sans-serif;
+
+    --font-weight-thin: 200;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.loading_spinner {
+    margin-right: 5px;
+    animation: loader-spin 1s infinite;
+}
