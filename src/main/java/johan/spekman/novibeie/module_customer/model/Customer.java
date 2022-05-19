@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
-import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,10 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Customer {
     @Id
@@ -37,7 +33,8 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, Long customerId, String firstName, String insertion, String lastName, String phoneNumber, String emailAddress, String password) {
+    public Customer(Long id, Long customerId, String firstName, String insertion, String lastName, String phoneNumber,
+            String emailAddress, String password) {
         this.id = id;
         this.customerId = customerId;
         this.firstName = firstName;

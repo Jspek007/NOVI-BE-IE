@@ -1,16 +1,16 @@
-.admin_table {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+th, td {
+    padding: 0 35px;
+    border: 1px solid black;
 }
 
-.admin_table_head {
-    display: flex;
-    justify-content: space-between;
+tr {
+    height: 25px;
+}
+
+.admin_table {
+    align-self: baseline;
 }
 
 .admin_table_row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+    background-color: var(--color-primary);
 }

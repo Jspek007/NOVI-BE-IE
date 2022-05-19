@@ -2,7 +2,6 @@ package johan.spekman.novibeie.module_customer.model;
 
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;

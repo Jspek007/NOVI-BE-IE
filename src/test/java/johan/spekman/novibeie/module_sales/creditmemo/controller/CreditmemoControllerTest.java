@@ -3,7 +3,6 @@ package johan.spekman.novibeie.module_sales.creditmemo.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import johan.spekman.novibeie.module_sales.creditmemo.service.CreditmemoService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,8 +27,7 @@ public class CreditmemoControllerTest {
     @MockBean
     private CreditmemoService creditmemoService;
 
-    final String[] skus = {"sku_123456"};
-
+    final String[] skus = { "sku_123456" };
 
     @Test
     void correctRequest_shouldReturn201CreatedStatus() throws Exception {

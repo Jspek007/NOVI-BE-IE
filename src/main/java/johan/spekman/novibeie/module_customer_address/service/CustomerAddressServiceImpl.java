@@ -8,8 +8,6 @@ import johan.spekman.novibeie.module_customer_address.model.CustomerAddress;
 import johan.spekman.novibeie.module_customer_address.model.CustomerAddressType;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
 import johan.spekman.novibeie.utililies.InputValidation;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +29,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
 
     @Override
     public CustomerAddress createNewAddress(@Valid @RequestBody CustomerAddressDto customerAddressDto,
-                                            BindingResult bindingResult) {
+            BindingResult bindingResult) {
         InputValidation inputValidation = new InputValidation();
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Malformed input: " + bindingResult.getFieldError());
@@ -44,17 +42,19 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
             throw new ApiRequestException("Customer not found");
         }
 
-        CustomerAddress defaultBillingAddress =
-                customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(), "billing");
-        CustomerAddress defaultShippingAddress =
-                customerAddressRepository.getCustomerAddressByCustomerAndType(customer.getId(), "shipping");
+        CustomerAddress defaultBillingAddress = customerAddressRepository
+                .getCustomerAddressByCustomerAndType(customer.getId(), "billing");
+        CustomerAddress defaultShippingAddress = customerAddressRepository
+                .getCustomerAddressByCustomerAndType(customer.getId(), "shipping");
 
-        if (defaultBillingAddress != null && customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.billing) {
+        if (defaultBillingAddress != null && customerAddressDto.isDefaultAddress()
+                && customerAddressDto.getCustomerAddressType() == CustomerAddressType.billing) {
             defaultBillingAddress.setDefaultAddress(false);
             customerAddressRepository.save(defaultBillingAddress);
         }
 
-        if (defaultShippingAddress != null && customerAddressDto.isDefaultAddress() && customerAddressDto.getCustomerAddressType() == CustomerAddressType.shipping) {
+        if (defaultShippingAddress != null && customerAddressDto.isDefaultAddress()
+                && customerAddressDto.getCustomerAddressType() == CustomerAddressType.shipping) {
             defaultShippingAddress.setDefaultAddress(false);
             customerAddressRepository.save(defaultShippingAddress);
         }

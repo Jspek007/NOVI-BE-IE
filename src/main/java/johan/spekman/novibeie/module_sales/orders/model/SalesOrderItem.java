@@ -1,10 +1,6 @@
 package johan.spekman.novibeie.module_sales.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import johan.spekman.novibeie.module_customer.model.Customer;
-import johan.spekman.novibeie.module_product.product.model.Product;
-import johan.spekman.novibeie.module_sales.SalesResource;
 import johan.spekman.novibeie.module_sales.SalesResourceItem;
 
 import javax.persistence.*;

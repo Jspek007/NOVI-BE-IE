@@ -1,9 +1,6 @@
 package johan.spekman.novibeie.module_sales.invoice.model;
 
-import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 

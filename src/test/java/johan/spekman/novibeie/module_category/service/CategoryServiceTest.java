@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
@@ -66,8 +65,7 @@ public class CategoryServiceTest {
 
         CategoryDto categoryDto = new CategoryDto(
                 "Test category",
-                "This is a test category"
-        );
+                "This is a test category");
 
         ResponseEntity<Object> storedCategory = underTest.createCategory(categoryDto, bindingResult);
         assertThat(storedCategory.getBody()).isEqualTo("Category has been created!");
@@ -79,11 +77,10 @@ public class CategoryServiceTest {
                 1L,
                 "Test category to add products",
                 "This category will have products added",
-                new ArrayList<>()
-        );
+                new ArrayList<>());
         Product product = new Product();
         product.setSku("sku_123456");
-        String[] skus = {"sku_123456"};
+        String[] skus = { "sku_123456" };
 
         when(categoryRepository.getById(1L)).thenReturn(category);
         when(productRepository.findBySku(anyString())).thenReturn(product);
@@ -96,7 +93,7 @@ public class CategoryServiceTest {
 
     @Test
     void shouldReturnException_productNotFound() {
-        String[] skus = {"sku_123456"};
+        String[] skus = { "sku_123456" };
         categoryRepository.save(category);
 
         assertThrows(ApiRequestException.class, () -> underTest.addProductsToCategory(1L, skus));
@@ -108,8 +105,7 @@ public class CategoryServiceTest {
                 1L,
                 "Test category to add products",
                 "This category will have products added",
-                new ArrayList<>()
-        );
+                new ArrayList<>());
         List<Product> productList = new ArrayList<>();
         category.setProductList(productList);
         Product product = new Product();
@@ -120,7 +116,7 @@ public class CategoryServiceTest {
         productList.add(product1);
         categoryRepository.save(category);
 
-        String[] skus = {"sku_123456"};
+        String[] skus = { "sku_123456" };
 
         when(categoryRepository.getById(1L)).thenReturn(category);
         when(productRepository.findBySku(anyString())).thenReturn(product);

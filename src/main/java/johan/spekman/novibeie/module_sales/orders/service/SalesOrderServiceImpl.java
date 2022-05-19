@@ -31,24 +31,22 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final InputValidation inputValidation;
     private final CreateTimeStamp createTimeStamp;
     private final SalesOrderItemRepository salesOrderItemRepository;
-    private final CustomerAddressRepository customerAddressRepository;
     private final SalesOrderRepository salesOrderRepository;
     private final ProductRepository productRepository;
     private final SalesResourceService salesResourceService;
 
     public SalesOrderServiceImpl(CustomerRepository customerRepository,
-                                 InputValidation inputValidation,
-                                 CreateTimeStamp createTimeStamp,
-                                 SalesOrderItemRepository salesOrderItemRepository,
-                                 CustomerAddressRepository customerAddressRepository,
-                                 SalesOrderRepository salesOrderRepository,
-                                 ProductRepository productRepository,
-                                 SalesResourceService salesResourceService) {
+            InputValidation inputValidation,
+            CreateTimeStamp createTimeStamp,
+            SalesOrderItemRepository salesOrderItemRepository,
+            CustomerAddressRepository customerAddressRepository,
+            SalesOrderRepository salesOrderRepository,
+            ProductRepository productRepository,
+            SalesResourceService salesResourceService) {
         this.customerRepository = customerRepository;
         this.inputValidation = inputValidation;
         this.createTimeStamp = createTimeStamp;
         this.salesOrderItemRepository = salesOrderItemRepository;
-        this.customerAddressRepository = customerAddressRepository;
         this.salesOrderRepository = salesOrderRepository;
         this.productRepository = productRepository;
         this.salesResourceService = salesResourceService;
@@ -63,7 +61,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 throw new ApiRequestException("No product found with SKU: " + product.getSku());
             }
             if (!orderItem.isEnabled()) {
-                throw new ApiRequestException("Product could not be ordered because it's status is disabled: " + product.getSku());
+                throw new ApiRequestException(
+                        "Product could not be ordered because it's status is disabled: " + product.getSku());
             }
             salesResourceService.prepareSalesResourceItemInformation(salesOrderItem, product);
             salesOrderItem.setOrderId(salesOrder);
@@ -95,7 +94,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public SalesOrder createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
-                                  BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException("Invalid input" + bindingResult.getFieldErrors());
         }

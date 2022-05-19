@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
-import java.text.ParseException;
 
 @Service
 @Transactional
@@ -29,11 +28,11 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
     private final CustomerRepository customerRepository;
 
     public SalesInvoiceServiceImpl(SalesOrderRepository salesOrderRepository,
-                                   PaymentRepository paymentRepository,
-                                   CreateTimeStamp createTimeStamp,
-                                   SalesInvoiceRepository salesInvoiceRepository,
-                                   SalesResourceService salesResourceService,
-                                   CustomerRepository customerRepository) {
+            PaymentRepository paymentRepository,
+            CreateTimeStamp createTimeStamp,
+            SalesInvoiceRepository salesInvoiceRepository,
+            SalesResourceService salesResourceService,
+            CustomerRepository customerRepository) {
         this.salesOrderRepository = salesOrderRepository;
         this.paymentRepository = paymentRepository;
         this.createTimeStamp = createTimeStamp;
@@ -44,7 +43,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 
     @Override
     public SalesInvoice processPayment(@PathVariable("orderId") Long orderId,
-                                       @RequestBody Payment request) {
+            @RequestBody Payment request) {
         try {
             SalesOrder salesOrder = salesOrderRepository.getById(orderId);
             Customer customer = customerRepository.findByEmailAddress(salesOrder.getCustomerEmail());

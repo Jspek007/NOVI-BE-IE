@@ -26,11 +26,9 @@ import java.util.List;
 @RequestMapping(path = "api/v1/products")
 public class ProductController {
     private final ProductService productService;
-    private final CSVFormatCheck csvFormatCheck;
 
     public ProductController(ProductService productService, CSVFormatCheck csvFormatCheck) {
         this.productService = productService;
-        this.csvFormatCheck = csvFormatCheck;
     }
 
     @GetMapping(path = "/get/all")
@@ -50,17 +48,17 @@ public class ProductController {
 
     @PutMapping(path = "/update/{sku}")
     public ResponseEntity<Product> updateProduct(@PathVariable("sku") String sku,
-                                                @Valid @RequestBody ProductDto productDto,
-                                                BindingResult bindingResult) {
+            @Valid @RequestBody ProductDto productDto,
+            BindingResult bindingResult) {
         return ResponseEntity.ok().body(productService.updateProduct(sku, productDto, bindingResult));
     }
 
     @PostMapping(path = "/save")
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto productDto,
-                                                 BindingResult bindingResult) throws ParseException {
-        URI uri =
-                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/products/save").toUriString());
+            BindingResult bindingResult) throws ParseException {
+        URI uri = URI.create(
+                ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/products/save").toUriString());
         return ResponseEntity.created(uri).body(productService.createProduct(productDto, bindingResult));
     }
 

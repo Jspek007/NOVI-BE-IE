@@ -3,7 +3,6 @@ package johan.spekman.novibeie.module_category.repository;
 import johan.spekman.novibeie.module_category.model.Category;
 import johan.spekman.novibeie.module_category.service.CategoryServiceImpl;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
-import johan.spekman.novibeie.module_product.product.service.ProductServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

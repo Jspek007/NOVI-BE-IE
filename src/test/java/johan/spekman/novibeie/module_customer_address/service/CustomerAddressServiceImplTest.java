@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.validation.BindException;
@@ -98,10 +97,12 @@ class CustomerAddressServiceImplTest {
         CustomerAddress customerAddress = new CustomerAddress();
 
         when(customerRepository.findByEmailAddress(anyString())).thenReturn(customer);
-        when(customerAddressRepository.getCustomerAddressByCustomerAndType(anyLong(), anyString())).thenReturn(customerAddress);
+        when(customerAddressRepository.getCustomerAddressByCustomerAndType(anyLong(), anyString()))
+                .thenReturn(customerAddress);
 
-        CustomerAddress capturedCustomerAddress =  underTest.createNewAddress(customerAddressDto, bindingResult);
+        CustomerAddress capturedCustomerAddress = underTest.createNewAddress(customerAddressDto, bindingResult);
         // Then
-        assertThat(capturedCustomerAddress.getCustomerAddressType()).isEqualTo(customerAddressDto.getCustomerAddressType());
+        assertThat(capturedCustomerAddress.getCustomerAddressType())
+                .isEqualTo(customerAddressDto.getCustomerAddressType());
     }
 }

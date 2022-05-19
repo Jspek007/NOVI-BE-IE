@@ -49,20 +49,22 @@ public class AppUserController {
 
     @PostMapping("/appusers/save")
     public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/appuser/save").toUriString());
+        URI uri = URI
+                .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/appuser/save").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
     }
 
     @PostMapping("/roles/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
-        URI uri =
-                URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/authority/save").toUriString());
+        URI uri = URI
+                .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/authority/save").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveRole(role));
     }
 
     @PostMapping("/roles/saveroletouser")
-    public ResponseEntity addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
-        return ResponseEntity.ok().body(appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName));
+    public ResponseEntity<Object> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+        return ResponseEntity.ok()
+                .body(appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName));
     }
 
     @GetMapping("/token/refresh")

@@ -4,7 +4,6 @@ import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
@@ -30,8 +29,7 @@ public class ProductRepositoryTest {
                 "This is a test product",
                 11.99,
                 date,
-                false
-        );
+                false);
 
         when(productRepository.findBySku(anyString())).thenReturn(product);
         Product found = productRepository.findBySku("sku_123456");
@@ -51,8 +49,7 @@ public class ProductRepositoryTest {
                 "This is a test product",
                 11.99,
                 date,
-                false
-        );
+                false);
 
         productRepository.save(product);
 

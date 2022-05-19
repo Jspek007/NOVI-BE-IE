@@ -20,8 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.validation.BindException;
@@ -63,16 +61,15 @@ public class SalesOrderServiceTest {
 
     private AutoCloseable autoCloseable;
 
-
     @Mock
     Customer customer;
-
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new SalesOrderServiceImpl(customerRepository, inputValidation, createTimeStamp,
-                salesOrderItemRepository, customerAddressRepository, salesOrderRepository, productRepository, salesResourceService);
+                salesOrderItemRepository, customerAddressRepository, salesOrderRepository, productRepository,
+                salesResourceService);
     }
 
     @AfterEach
@@ -89,8 +86,7 @@ public class SalesOrderServiceTest {
                 "This is a test",
                 11.99,
                 new Date(),
-                true
-        );
+                true);
         SalesOrder salesOrder = new SalesOrder();
         List<Product> salesOrderItems = new ArrayList<>();
         salesOrderItems.add(product);
@@ -124,8 +120,7 @@ public class SalesOrderServiceTest {
                 "This is a test",
                 11.99,
                 new Date(),
-                true
-        );
+                true);
         Customer customer = new Customer(
                 1L,
                 123456L,
@@ -154,8 +149,7 @@ public class SalesOrderServiceTest {
                 "This is a test",
                 11.99,
                 new Date(),
-                true
-        );
+                true);
         ArrayList<Product> salesOrderItems = new ArrayList<>();
         salesOrderItems.add(product);
         productRepository.save(product);
@@ -172,8 +166,7 @@ public class SalesOrderServiceTest {
 
         SalesOrderItemDto salesOrderItemDto = new SalesOrderItemDto(
                 customer,
-                salesOrderItems
-        );
+                salesOrderItems);
         BindingResult bindingResult = new BindException(salesOrderItemDto, "salesOrder");
 
         when(customerRepository.findByEmailAddress(anyString())).thenReturn(customer);
@@ -181,6 +174,7 @@ public class SalesOrderServiceTest {
 
         SalesOrder capturedSalesOrder = underTest.createOrder(salesOrderItemDto, bindingResult);
 
-        assertThat(capturedSalesOrder.getOrderItemList().get(0).getOrderId().getGrandTotal()).isEqualTo(product.getProductPrice());
+        assertThat(capturedSalesOrder.getOrderItemList().get(0).getOrderId().getGrandTotal())
+                .isEqualTo(product.getProductPrice());
     }
 }
