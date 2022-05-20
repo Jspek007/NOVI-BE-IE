@@ -16,4 +16,5 @@ public interface SalesOrderService {
             BindingResult bindingResult) throws ParseException;
 
     List<SalesOrder> getOrdersByCustomerEmail(@RequestParam("email") String email);
+    List<SalesOrder> getAllOrders();
 }

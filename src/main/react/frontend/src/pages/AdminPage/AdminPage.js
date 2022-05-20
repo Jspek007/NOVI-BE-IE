@@ -20,7 +20,7 @@ const AdminPage = () => {
                     <Sidebar/>
                 </section>
                 <section className={styles.table_container}>
-                    {domain === "orders" && (
+                    {domain === "sales_orders" && (
                         <OrderData/>
                     )}
                     {domain === "customers" && (

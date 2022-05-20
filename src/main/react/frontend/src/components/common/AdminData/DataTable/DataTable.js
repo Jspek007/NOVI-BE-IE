@@ -21,6 +21,7 @@ const DataTable = (props) => {
                         quickFilterProps: { debounceMs: 500},
                     }
                 }}
+                getRowId={props.handleRowId}
             />
         </div>
     );

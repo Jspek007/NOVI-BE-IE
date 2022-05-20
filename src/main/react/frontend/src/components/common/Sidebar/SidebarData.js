@@ -15,7 +15,7 @@ export const SidebarData = [
         items: [
             {
                 title: "Orders",
-                to: "/admin/orders"
+                to: "/admin/sales_orders"
             },
             {
                 title: "Invoices",

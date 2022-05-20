@@ -129,4 +129,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             throw new ApiRequestException("No existing customer found with: " + email);
         }
     }
+
+    @Override
+    public List<SalesOrder> getAllOrders() {
+        return salesOrderRepository.findAll();
+    }
 }
