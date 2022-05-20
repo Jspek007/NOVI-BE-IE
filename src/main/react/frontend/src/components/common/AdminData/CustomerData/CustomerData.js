@@ -2,8 +2,6 @@ import React, {useState, useEffect} from "react";
 import {useParams} from "react-router";
 import AdminDataService from "../../../../services/adminData.service";
 import DataTable from "../DataTable/DataTable";
-import AdminDataHeader from "../AdminDataHeader/AdminDataHeader";
-import {CircularProgress} from "@mui/material";
 
 const CustomerData = () => {
     let {domain} = useParams();

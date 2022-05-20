@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './AdminDataHeader.module.css';
 import PrimaryButton from "../../../form/Button/PrimaryButtons";
 import {useNavigate, useParams} from "react-router";
@@ -10,7 +10,7 @@ const AdminDataHeader = () => {
         } else {
             return domain.charAt(0).toUpperCase() + domain.slice(1);
         }
-    }
+    };
 
     const {domain} = useParams();
     const domainName = prepareDomainName();
