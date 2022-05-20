@@ -1,5 +1,6 @@
 .admin_header_container {
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 1370px;
+    padding-left: 375px;
 }

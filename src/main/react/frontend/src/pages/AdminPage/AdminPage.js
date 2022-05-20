@@ -5,6 +5,7 @@ import {useParams} from "react-router";
 import styles from './AdminPage.module.css';
 import OrderData from "../../components/common/AdminData/OrderData/OrderData";
 import CustomerData from "../../components/common/AdminData/CustomerData/CustomerData";
+import AdminDataHeader from "../../components/common/AdminData/AdminDataHeader/AdminDataHeader";
 
 const AdminPage = () => {
 
@@ -15,6 +16,7 @@ const AdminPage = () => {
     return (
         <Fragment>
             <Header/>
+            <AdminDataHeader />
             <section className={styles.page_container}>
                 <section className={styles.sidebar_container}>
                     <Sidebar/>

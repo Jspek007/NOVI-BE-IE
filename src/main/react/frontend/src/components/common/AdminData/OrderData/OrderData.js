@@ -9,23 +9,24 @@ const OrderData = () => {
     let {domain} = useParams();
 
     const [orderData, setOrderData] = useState({});
-    const [loading, isLoading] = useState(false);
-    const [selectionModel, setSelectionModel] = useState([]);
+    const [loading, isLoading] = useState(true);
+    const [, setSelectionModel] = useState([]);
 
     const loadAllOrderData = () => {
-        AdminDataService.fetchData(domain)
-            .then((data) => {
-                setOrderData(data.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        setTimeout(() => {
+            AdminDataService.fetchData(domain)
+                .then((data) => {
+                    setOrderData(data.data);
+                })
+                .finally(() => isLoading(false))
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, 2000);
     };
 
     useEffect(() => {
-        isLoading(true);
         loadAllOrderData();
-        isLoading(false);
     }, []);
 
     const header = [
@@ -78,8 +79,6 @@ const OrderData = () => {
 
     return (
         <>
-            <h1 onClick={() => console.log(orderData)}>H1</h1>
-            <AdminDataHeader />
             <DataTable
                 data={orderData}
                 header={header}
@@ -89,6 +88,7 @@ const OrderData = () => {
                     }
                 }
                 handleRowId={(row) => row.entityId}
+                loading={loading}
             />
         </>
     );

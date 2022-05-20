@@ -1,11 +1,10 @@
 import React from 'react';
-import {CircularProgress} from "@mui/material";
+import {LinearProgress} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 
 const DataTable = (props) => {
     return (
         <div style={{ height: 750, width: "80%" }}>
-            {props.loading && <CircularProgress />}
             <DataGrid
                 rows={props.data}
                 columns={props.header}
@@ -14,7 +13,10 @@ const DataTable = (props) => {
                 checkboxSelection
                 onSelectionModelChange={props.handleChange}
                 selectionModel={props.selectionModel}
-                components={{ Toolbar: GridToolbar}}
+                components={{
+                    Toolbar: GridToolbar,
+                    LoadingOverlay: LinearProgress,
+            }}
                 componentsProps={{
                     toolbar: {
                         showQuickFilter: true,
@@ -22,6 +24,7 @@ const DataTable = (props) => {
                     }
                 }}
                 getRowId={props.handleRowId}
+                loading={props.loading}
             />
         </div>
     );

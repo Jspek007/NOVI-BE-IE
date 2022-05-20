@@ -3,27 +3,29 @@ import {useParams} from "react-router";
 import AdminDataService from "../../../../services/adminData.service";
 import DataTable from "../DataTable/DataTable";
 import AdminDataHeader from "../AdminDataHeader/AdminDataHeader";
+import {CircularProgress} from "@mui/material";
 
 const CustomerData = () => {
     let {domain} = useParams();
     const [customerData, setCustomerData] = useState([]);
-    const [loading, isLoading] = useState(false);
+    const [loading, isLoading] = useState(true);
     const [selectionModel, setSelectionModel] = useState([]);
 
     const loadAllCustomerData = () => {
-        AdminDataService.fetchData(domain)
-            .then((data) => {
-                setCustomerData(data.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        setTimeout(() => {
+            AdminDataService.fetchData(domain)
+                .then((data) => {
+                    setCustomerData(data.data);
+                })
+                .finally(() => isLoading(false))
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, 2000);
     };
 
     useEffect(() => {
-        isLoading(true);
         loadAllCustomerData();
-        isLoading(false);
     }, []);
 
     const header = [
@@ -66,7 +68,6 @@ const CustomerData = () => {
 
     return (
         <>
-            <AdminDataHeader />
             <DataTable
                 data={customerData}
                 header={header}
@@ -75,6 +76,7 @@ const CustomerData = () => {
                         setSelectionModel(newSelectionModel);
                     }
                 }
+                loading={loading}
             />
         </>
     );
