@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styles from './AdminDataHeader.module.css';
 import PrimaryButton from "../../../form/Button/PrimaryButtons";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 
 const AdminDataHeader = () => {
     const prepareDomainName = () => {
@@ -14,6 +14,12 @@ const AdminDataHeader = () => {
 
     const {domain} = useParams();
     const domainName = prepareDomainName();
+    const navigate = useNavigate();
+
+    const buttonLink = () => {
+        navigate(`${"new"}`);
+    }
+
 
     return (
         <section className={styles.admin_header_container}>
@@ -21,9 +27,9 @@ const AdminDataHeader = () => {
             <PrimaryButton
                 type="submit"
                 variant="primary"
-                clickHandler={() => console.log("hello")}
+                clickHandler={() => buttonLink()}
             >
-                Create customer
+                Create {domain}
             </PrimaryButton>
         </section>
     );

@@ -9,7 +9,7 @@ const CustomerData = () => {
     let {domain} = useParams();
     const [customerData, setCustomerData] = useState([]);
     const [loading, isLoading] = useState(true);
-    const [selectionModel, setSelectionModel] = useState([]);
+    const [, setSelectionModel] = useState([]);
 
     const loadAllCustomerData = () => {
         setTimeout(() => {
