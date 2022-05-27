@@ -14,13 +14,14 @@ const CreationForm = (props) => {
     return (
         <section className={styles.form_container}>
             <form onSubmit={submit}>
-                {formFields.map((form, index) => {
-                    return (
-                        <div key={index}>
-                            <TextField />
-                        </div>
-                    )
-                })}
+                <h1 onClick={submit}>Hello</h1>
+                {/*{formFields.map((form, index) => {*/}
+                {/*    return (*/}
+                {/*        <div key={index}>*/}
+                {/*            <TextField />*/}
+                {/*        </div>*/}
+                {/*    )*/}
+                {/*})}*/}
             </form>
         </section>
     );
