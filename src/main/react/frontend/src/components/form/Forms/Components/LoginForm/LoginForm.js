@@ -24,7 +24,7 @@ const LoginForm = () => {
         navigate("/admin");
       })
       .catch((error) => {
-        setMessage("Bad credentials");
+        setMessage(error.getMessage());
         console.warn(error);
         isLoading(false);
       });
