@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -39,6 +40,11 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
         this.salesInvoiceRepository = salesInvoiceRepository;
         this.salesResourceService = salesResourceService;
         this.customerRepository = customerRepository;
+    }
+
+    @Override
+    public List<SalesInvoice> getAllInvoices() {
+        return salesInvoiceRepository.findAll();
     }
 
     @Override

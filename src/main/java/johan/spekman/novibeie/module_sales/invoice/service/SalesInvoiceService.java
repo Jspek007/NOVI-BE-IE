@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
+import java.util.List;
 
 public interface SalesInvoiceService {
+    List<SalesInvoice> getAllInvoices();
+
     SalesInvoice processPayment(@PathVariable("orderId") Long orderId,
                                 @RequestBody Payment payment);
 

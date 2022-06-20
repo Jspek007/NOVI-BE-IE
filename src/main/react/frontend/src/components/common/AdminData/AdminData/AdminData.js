@@ -7,7 +7,7 @@ import DataTable from "../DataTable/DataTable";
 const AdminData = ({adminData, loading, headers}) => {
     const [, setSelectionModel] = useState([]);
 
-    let newArr = headers.map(function(value) {
+    let headerData = headers.map(function(value) {
         return {
             field: value
         };
@@ -18,7 +18,7 @@ const AdminData = ({adminData, loading, headers}) => {
             <AdminDataHeader state={adminData}/>
             <DataTable
                 data={adminData}
-                header={newArr}
+                header={headerData}
                 handleChange={(newSelectionModel) => {
                     setSelectionModel(newSelectionModel);
                 }}

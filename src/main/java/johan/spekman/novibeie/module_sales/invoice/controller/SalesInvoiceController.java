@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/sales_orders/payment")
+@RequestMapping("/api/v1/")
 public class SalesInvoiceController {
 
     private final SalesInvoiceService salesInvoiceService;
@@ -20,7 +21,12 @@ public class SalesInvoiceController {
         this.salesInvoiceService = salesInvoiceService;
     }
 
-    @PostMapping(path = "/process/{orderId}")
+    @GetMapping(path = "/invoices/get/all")
+    public List<SalesInvoice> getAllInvoices() {
+        return salesInvoiceService.getAllInvoices();
+    }
+
+    @PostMapping(path = "/sales_orders/payment/process/{orderId}")
     public ResponseEntity<SalesInvoice> processOrderPayment(@PathVariable("orderId") Long orderId,
                                                             @RequestBody Payment request) {
         try {
