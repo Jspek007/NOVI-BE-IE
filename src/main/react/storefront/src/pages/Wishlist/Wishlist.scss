@@ -1,0 +1,20 @@
+.wishlist-title-container {
+  display: flex;
+  justify-content: center;
+}
+
+.wishlist-content {
+  display: flex;
+  justify-content: center;
+}
+
+.wishlist-product-container,
+.wishlist-content {
+  min-height: 25vh;
+}
+
+@media screen and (min-width: 1280px) {
+  .wishlist-content {
+    min-height: 500px;
+  }
+}

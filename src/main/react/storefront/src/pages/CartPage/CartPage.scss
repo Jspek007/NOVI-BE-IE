@@ -1,0 +1,163 @@
+.cart-container {
+  min-height: 350px;
+  padding: 5px;
+}
+
+.cart-title {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.cart-item-table {
+  border-collapse: collapse;
+}
+
+.cart-header {
+  padding: 10px;
+}
+
+.cart-action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-image {
+  width: 25%;
+  height: auto;
+  margin-right: 5px;
+}
+
+.cart-item-table thead {
+  display: none;
+}
+
+.table.item {
+  text-align: left;
+}
+
+.item-info {
+  max-width: 100%;
+  position: relative;
+  height: 150px;
+}
+
+.item-info td {
+  border-bottom: 1px solid black;
+}
+
+.cart-product-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.cart-product-info span {
+  width: 100%;
+}
+
+.table.qty {
+  position: absolute;
+  bottom: 15px;
+  right: 0;
+  border-bottom: none;
+  width: 90px;
+}
+
+.item-qty {
+  margin: 0;
+}
+
+@media screen and (min-width: 1280px) {
+  .cart-container {
+    min-height: 50vh;
+  }
+
+  .cart-title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .cart-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    width: 60%;
+  }
+
+  .cart-action-buttons > span {
+    margin-left: 5px;
+  }
+
+  .cart-item-table {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    max-width: 100%;
+  }
+
+  .cart-item-table > thead {
+    font-family: var(--font-family-bold);
+  }
+
+  .table {
+    text-align: right;
+    padding: 25px;
+  }
+
+  .table.price {
+    padding-right: 30px;
+  }
+
+  .table.item {
+    text-align: left;
+  }
+
+  .table.qty {
+    position: relative;
+    border-bottom: 1px solid var(--color-accent);
+    bottom: inherit;
+    top: inherit;
+  }
+
+  .cart-product-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .cart-product-info > span {
+    padding-left: 25px;
+  }
+
+  .cart-link {
+    color: var(--color-dimmed-primary);
+    text-decoration: none;
+  }
+
+  .item-info > td {
+    padding: 15px;
+    border-bottom: 1px solid var(--color-accent);
+  }
+
+  .cart-image {
+    width: 110px;
+    height: 160px;
+  }
+
+  .cart-footer {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+  }
+}

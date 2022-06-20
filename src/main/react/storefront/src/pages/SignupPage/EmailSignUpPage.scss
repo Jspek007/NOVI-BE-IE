@@ -1,0 +1,34 @@
+.email-register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.email-register-container a {
+  font-family: var(--font-family-bold);
+}
+.email-register-method {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.terms-information-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (min-width: 1280px) {
+  .email-register-container {
+    height: 650px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .email-register-method {
+    margin: 40px 0;
+    width: 20%;
+  }
+}

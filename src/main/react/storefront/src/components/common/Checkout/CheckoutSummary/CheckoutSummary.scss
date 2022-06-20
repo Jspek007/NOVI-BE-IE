@@ -1,0 +1,18 @@
+.summary-container {
+  display: flex;
+  padding: 10px;
+  margin: 2px;
+  align-items: center;
+}
+
+.summary-container a {
+  padding-left: 25px;
+}
+
+.customer-data-container {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5rem;
+  margin-left: 5px;
+  width: 50%;
+}

@@ -1,0 +1,42 @@
+@import "../src/assets/fonts/fonts.css";
+
+body {
+  font-family: "Roboto Standard", Arial, Helvetica, sans-serif;
+}
+
+.link,
+.link:visited,
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.nav-link {
+  text-decoration: none;
+}
+
+.loading-spinner {
+  margin-right: 5px;
+  animation: loader-spin 1s infinite;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
+
+.succes-message {
+  color: green;
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

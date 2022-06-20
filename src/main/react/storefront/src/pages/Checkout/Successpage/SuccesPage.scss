@@ -1,0 +1,28 @@
+.order-success-container {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 25px;
+  text-align: center;
+}
+
+.checkout-success-image {
+  width: 90%;
+  height: auto;
+  padding-top: 15px;
+  box-shadow: 2px 2px 5px var(--color-dimmed-primary);
+  border-radius: 10%;
+}
+
+.customer-information {
+  padding-top: 15px;
+  font-family: var(--font-family-italic);
+}
+
+@media screen and (min-width: 1280px) {
+  .checkout-success-image {
+    height: 35vh;
+    width: auto;
+  }
+}

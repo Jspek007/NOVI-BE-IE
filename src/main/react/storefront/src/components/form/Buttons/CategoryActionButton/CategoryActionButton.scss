@@ -1,0 +1,25 @@
+.category-button {
+  background-color: var(--color-dimmed-primary);
+  color: var(--color-secondary);
+  position: relative;
+  height: 50px;
+  border: none;
+  transform: skewX(-30deg);
+  margin-top: 10px;
+}
+
+.category-button-text {
+  transform: skewX(30deg);
+}
+
+@media screen and (min-width: 1280px) {
+  .category-button {
+    background-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .category-button:hover {
+    background-color: var(--color-accent);
+    cursor: pointer;
+  }
+}

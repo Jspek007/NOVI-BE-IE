@@ -1,0 +1,47 @@
+.primary-button {
+  height: 50px;
+  width: 220px;
+  font-size: 18px;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.primary-button:disabled {
+  background: var(--color-disabled-button);
+  cursor: auto;
+}
+
+// Styling for the add to cart button
+.primary-button,
+.add_to_cart {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 50px;
+}
+
+.product-price,
+.add-to-cart-message {
+  font-size: 14px;
+  margin: 10px;
+}
+
+.add-to-cart-message {
+  font-family: var(--font-family-bold);
+}
+
+.primary-button, .not-found {
+  width: 300px;
+  margin-bottom: 25px;
+}
+
+@media screen and (min-width: 1280px) {
+  .primary-button,
+  .add_to_cart {
+    height: 50px;
+    width: 75%;
+  }
+}

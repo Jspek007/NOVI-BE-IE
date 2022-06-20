@@ -1,0 +1,78 @@
+.menu-container-user {
+  display: none;
+}
+
+@media screen and (min-width: 1280px) {
+  .menu-container-user,
+  .menu-container-cart {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: auto;
+  }
+
+  .menu {
+    background: #ffffff;
+    border-radius: 8px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 200px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    z-index: 25;
+  }
+
+  .menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu li {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  .menu li a {
+    text-decoration: none;
+    color: #333333;
+    padding: 15px 20px;
+    display: block;
+  }
+
+  .user-icon {
+    font-size: 25px;
+  }
+
+  .menu-trigger {
+    background: var(--color-secondary);
+    border-radius: 90px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+    border: none;
+    vertical-align: middle;
+  }
+
+  .menu-trigger span {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin: 0 10px;
+  }
+
+  .menu-trigger img {
+    border-radius: 90px;
+  }
+}

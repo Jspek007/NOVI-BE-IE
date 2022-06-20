@@ -1,0 +1,37 @@
+.menu-container-cart {
+  display: none;
+}
+
+@media screen and (min-width: 1280px) {
+.menu-container-cart {
+  font-size: 22px;
+  position: absolute;
+  right: 20px;
+}
+
+.minicart-menu {
+  background: #ffffff;
+  border-radius: 8px;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 400px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  z-index: 25;
+}
+
+.minicart-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  z-index: 10;
+  padding: 5px;
+  max-height: 450px;
+}
+}
+
+

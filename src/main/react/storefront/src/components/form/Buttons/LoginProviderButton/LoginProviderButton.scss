@@ -1,0 +1,27 @@
+.login-button {
+  height: 55px;
+  width: 250px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-bottom: 15px;
+}
+
+.login-button.facebook {
+  background-color: hsl(220, 46%, 48%);
+  color: var(--color-secondary);
+}
+
+.button-icon {
+  font-size: 40px;
+  padding-right: 10px;
+}
+
+.login-button.facebook .button-icon {
+  padding-right: 0;
+}

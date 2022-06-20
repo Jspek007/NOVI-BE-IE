@@ -1,0 +1,26 @@
+.change-credentials-form {
+  width: 100%;
+}
+
+.my-account-form > fieldset {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.my-account-item-title {
+  text-align: center;
+}
+
+@media screen and (min-width: 1280px) {
+  .change-credentials-container {
+    padding: 5px 20px 15px 20px;
+  }
+
+  .change-credentials-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 20px;
+  }
+}

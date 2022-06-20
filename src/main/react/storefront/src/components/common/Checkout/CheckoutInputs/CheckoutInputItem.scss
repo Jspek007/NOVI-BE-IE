@@ -1,0 +1,29 @@
+.inputs-container {
+  margin: 2px;
+  padding: 5px 12px;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.input-item label {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.option-image {
+  width: 50px;
+  height: 50px;
+  padding-left: 15px;
+}
+
+.input-text {
+  padding-left: 15px;
+  font-family: var(--font-family-italic);
+}

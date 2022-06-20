@@ -1,0 +1,112 @@
+.category-item.category-item.category-item-right {
+  background-image: url(../../../../assets/images/categoryImages/womens-fashion.jpg);
+  margin-top: 15px;
+}
+
+.category-item.category-item.category-item-left {
+  background-image: url(../../../../assets/images/categoryImages/mens-fashion.jpg);
+}
+
+.category-item.category-item-left,
+.category-item.category-item.category-item-right {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 250px;
+  width: auto;
+  position: relative;
+}
+
+.category-text {
+  position: absolute;
+  bottom: 0;
+  margin-left: 25px;
+  font-family: "Roboto Bold", Arial, Helvetica, sans-serif;
+  font-style: italic;
+  user-select: none;
+}
+
+.category-link {
+  color: var(--color-secondary);
+}
+
+@media screen and (min-width: 1280px) {
+  .category-container {
+    height: 650px;
+    position: relative;
+    margin: 10px;
+  }
+
+  .category-items-side-by-side {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .category-item {
+    position: absolute;
+    width: 66%;
+    height: 650px;
+    transition: all 0.5s ease-out;
+  }
+
+  .category-item.category-item-left,
+  .category-item.category-item.category-item-right {
+    background-image: url(../../../../assets/images/categoryImages/mens-fashion.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 650px;
+    width: 66%;
+    position: absolute;
+  }
+
+  .category-item.category-item.category-item-right {
+    background-image: url(../../../../assets/images/categoryImages/womens-fashion.jpg);
+    margin: 0;
+  }
+
+  .category-item.category-item-left:hover {
+    width: 75%;
+    z-index: 1;
+  }
+
+  .category-item.category-item-right:hover {
+    width: 75%;
+    z-index: 1;
+  }
+
+  .category-item.category-item-left {
+    left: 0;
+    top: 0;
+    clip-path: polygon(0 0, 100% 0%, 50% 100%, 0% 100%);
+  }
+
+  .category-item.category-item-right {
+    right: 0;
+    top: 0;
+    clip-path: polygon(50% 0, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  .category-text {
+    font-family: "Roboto Bold", Arial, Helvetica, sans-serif;
+    font-style: italic;
+    user-select: none;
+  }
+
+  .category-text-left {
+    width: 33%;
+    position: relative;
+    top: 40%;
+    left: 25%;
+  }
+
+  .category-text-right {
+    width: 33%;
+    right: 0;
+    position: absolute;
+    top: 40%;
+  }
+
+  .category-link {
+    color: black;
+  }
+}

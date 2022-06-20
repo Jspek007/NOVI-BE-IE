@@ -1,0 +1,19 @@
+#usp-banner-footer {
+  border-top: 1px solid var(--color-secondary);
+}
+
+.footer-usp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-dimmed-primary);
+  color: var(--color-secondary);
+  height: 65px;
+  font-family: var(--font-family-bold);
+}
+
+.usp-icon-footer {
+  height: 14px;
+  width: auto;
+  margin: 0 5px;
+}

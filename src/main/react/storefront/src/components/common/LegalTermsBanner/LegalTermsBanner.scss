@@ -1,0 +1,43 @@
+.legal-container {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-primary);
+  height: 25px;
+  padding-top: 10px;
+}
+
+.legal-item-left {
+  display: none;
+}
+
+.legal-container-item {
+  color: var(--color-accent);
+}
+
+.footer-link {
+  color: var(--color-accent);
+  font-weight: normal;
+  text-decoration: none;
+}
+
+@media screen and (min-width: 1280px) {
+  .legal-container {
+    height: 100px;
+  }
+
+  .legal-item-left {
+    display: flex;
+    margin-left: 20%;
+  }
+
+  .legal-item-right {
+    margin-right: 20%;
+  }
+
+  .legal-row-items {
+    margin: 0 10px;
+    font-weight: normal;
+  }
+
+
+}
