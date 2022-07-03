@@ -54,7 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (inputValidation.validate(bindingResult) != null) {
             throw new ApiRequestException(bindingResult.getFieldError().toString());
         } else {
-            String encryptedPassword = passwordEncoder.encode(customerDto.getPassword());
+            String encryptedPassword = passwordEncoder.encode(customerDto.password());
 
             Random random = new Random();
             long low = 100000L;
@@ -62,19 +62,19 @@ public class CustomerServiceImpl implements CustomerService {
             Long customerId = random.nextLong(high - low) + low;
 
             Customer customer = new Customer();
-            if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.getPhoneNumber())) {
+            if (!CustomerValidation.checkCustomerPhoneNumber(customerDto.phoneNumber())) {
                 throw new ApiRequestException("Incorrect phone number format");
             } else {
-                customer.setPhoneNumber(customerDto.getPhoneNumber());
+                customer.setPhoneNumber(customerDto.phoneNumber());
             }
-            if (customerRepository.findByEmailAddress(customerDto.getEmailAddress()) != null) {
+            if (customerRepository.findByEmailAddress(customerDto.emailAddress()) != null) {
                 throw new ApiRequestException("Account with this e-mail already exists");
             }
-            customer.setFirstName(customerDto.getFirstName());
-            customer.setInsertion(customerDto.getInsertion());
-            customer.setLastName(customerDto.getLastName());
+            customer.setFirstName(customerDto.firstName());
+            customer.setInsertion(customerDto.insertion());
+            customer.setLastName(customerDto.lastName());
             customer.setPassword(encryptedPassword);
-            customer.setEmailAddress(customerDto.getEmailAddress());
+            customer.setEmailAddress(customerDto.emailAddress());
             customer.setCustomerId(customerId);
 
             Customer savedCustomer = customerRepository.save(customer);
@@ -95,15 +95,15 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ApiRequestException("Request could not be processed: " + bindingResult.getFieldError().toString());
         } else {
             Customer foundCustomer = customerRepository.findByEmailAddress(customerEmail);
-            String encryptedPassword = passwordEncoder.encode(newCustomerDto.getPassword());
+            String encryptedPassword = passwordEncoder.encode(newCustomerDto.password());
 
             if (foundCustomer != null) {
                 try {
-                    foundCustomer.setFirstName(newCustomerDto.getFirstName());
-                    foundCustomer.setInsertion(newCustomerDto.getInsertion());
-                    foundCustomer.setLastName(newCustomerDto.getLastName());
-                    foundCustomer.setEmailAddress(newCustomerDto.getEmailAddress());
-                    foundCustomer.setPhoneNumber(newCustomerDto.getPhoneNumber());
+                    foundCustomer.setFirstName(newCustomerDto.firstName());
+                    foundCustomer.setInsertion(newCustomerDto.insertion());
+                    foundCustomer.setLastName(newCustomerDto.lastName());
+                    foundCustomer.setEmailAddress(newCustomerDto.emailAddress());
+                    foundCustomer.setPhoneNumber(newCustomerDto.phoneNumber());
                     foundCustomer.setPassword(encryptedPassword);
 
                     customerRepository.save(foundCustomer);

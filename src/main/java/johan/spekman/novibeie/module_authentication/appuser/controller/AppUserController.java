@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,22 @@ public class AppUserController {
     static class RoleToUserForm {
         private String username;
         private String roleName;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getRoleName() {
+            return roleName;
+        }
+
+        public void setRoleName(String roleName) {
+            this.roleName = roleName;
+        }
     }
 
     @GetMapping("/appusers")
@@ -48,7 +65,7 @@ public class AppUserController {
     }
 
     @PostMapping("/appusers/save")
-    public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser) {
+    public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser) throws ParseException {
         URI uri = URI
                 .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/appuser/save").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
@@ -62,7 +79,7 @@ public class AppUserController {
     }
 
     @PostMapping("/roles/saveroletouser")
-    public ResponseEntity<Object> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+    public ResponseEntity<Object> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) throws ParseException {
         return ResponseEntity.ok()
                 .body(appUserService.addRoleToAppUser(roleToUserForm.username, roleToUserForm.roleName));
     }

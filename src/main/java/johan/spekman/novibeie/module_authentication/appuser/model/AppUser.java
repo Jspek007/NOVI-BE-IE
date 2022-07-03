@@ -5,6 +5,7 @@ import johan.spekman.novibeie.module_authentication.role.model.Role;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "app_users")
@@ -14,19 +15,14 @@ public class AppUser {
     private Long id;
     private String name;
     private String username;
+    private String emailAddress;
     private String password;
+    private Date createdAtDate;
+    private Date updatedAtDate;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
     public AppUser() {
-    }
-
-    public AppUser(Long id, String name, String username, String password, Collection<Role> roles) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
     }
 
     public Long getId() {
@@ -59,6 +55,22 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getCreatedAtDate() {
+        return createdAtDate;
+    }
+
+    public void setCreatedAtDate(Date createdAtDate) {
+        this.createdAtDate = createdAtDate;
+    }
+
+    public Date getUpdatedAtDate() {
+        return updatedAtDate;
+    }
+
+    public void setUpdatedAtDate(Date updatedAtDate) {
+        this.updatedAtDate = updatedAtDate;
     }
 
     public Collection<Role> getRoles() {

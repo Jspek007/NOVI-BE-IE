@@ -5,26 +5,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class CustomerDto {
-    @NotBlank
-    private final String firstName;
-
-    private final String insertion;
-
-    @NotBlank
-    private final String lastName;
-
-    @NotBlank
-    private final String phoneNumber;
-
-    @NotEmpty
-    @Email
-    private final String emailAddress;
-
-    @NotBlank
-    @Size(min = 8, max = 40)
-    private final String password;
-
+public record CustomerDto(@NotBlank String firstName, String insertion, @NotBlank String lastName,
+                          @NotBlank String phoneNumber, @NotEmpty @Email String emailAddress,
+                          @NotBlank @Size(min = 8, max = 40) String password) {
     public CustomerDto(String firstName, String insertion, String lastName, String phoneNumber, String emailAddress, String password) {
         this.firstName = firstName;
         this.insertion = insertion;
@@ -34,27 +17,28 @@ public class CustomerDto {
         this.password = password;
     }
 
-    public String getFirstName() {
+    @Override
+    public String firstName() {
         return firstName;
     }
 
-    public String getInsertion() {
-        return insertion;
-    }
-
-    public String getLastName() {
+    @Override
+    public String lastName() {
         return lastName;
     }
 
-    public String getPhoneNumber() {
+    @Override
+    public String phoneNumber() {
         return phoneNumber;
     }
 
-    public String getEmailAddress() {
+    @Override
+    public String emailAddress() {
         return emailAddress;
     }
 
-    public String getPassword() {
+    @Override
+    public String password() {
         return password;
     }
 

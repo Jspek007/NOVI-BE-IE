@@ -83,6 +83,6 @@ public class CustomerServiceTest {
         verify(customerRepository).save(customerArgumentCaptor.capture());
 
         Customer capturedCustomer = customerArgumentCaptor.getValue();
-        assertThat(capturedCustomer.getEmailAddress()).isEqualTo(customerDto.getEmailAddress());
+        assertThat(capturedCustomer.getEmailAddress()).isEqualTo(customerDto.emailAddress());
     }
 }

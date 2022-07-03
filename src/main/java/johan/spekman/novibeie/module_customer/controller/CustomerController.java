@@ -47,7 +47,7 @@ public class CustomerController {
     @PostMapping("/save")
     public ResponseEntity<Object> saveNewCustomer(@Valid @RequestBody CustomerDto customerDto,
                                                   BindingResult bindingResult) {
-        Customer customer = customerService.getCustomerByEmailAddress(customerDto.getEmailAddress());
+        Customer customer = customerService.getCustomerByEmailAddress(customerDto.emailAddress());
         if (customer != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account with this e-mail already exists!");
         }
