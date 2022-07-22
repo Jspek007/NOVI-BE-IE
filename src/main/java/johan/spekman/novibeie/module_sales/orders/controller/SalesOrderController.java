@@ -24,6 +24,7 @@ public class SalesOrderController {
     @PostMapping(path = "/create")
     public ResponseEntity<Object> createOrder(@Valid @RequestBody SalesOrderItemDto salesOrderItemDto,
                                       BindingResult bindingResult) {
+        System.out.println(salesOrderItemDto.getVoucherCode());
         try {
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/sales_orders" +
                             "/create").toUriString());

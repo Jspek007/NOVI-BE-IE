@@ -25,6 +25,9 @@ public class SalesOrder extends SalesResource {
     private int totalItems;
     @Column(name = "grand_total")
     private double grandTotal;
+    private boolean hasPromotion;
+    private String voucherCode;
+    private double discountAmount;
     private double amountPaid;
     private double amountRefunded;
 
@@ -58,6 +61,30 @@ public class SalesOrder extends SalesResource {
 
     public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
+    }
+
+    public boolean getHasPromotion() {
+        return hasPromotion;
+    }
+
+    public void setHasPromotion(boolean hasPromotion) {
+        this.hasPromotion = hasPromotion;
+    }
+
+    public String getVoucherCode() {
+        return voucherCode;
+    }
+
+    public void setVoucherCode(String voucherCode) {
+        this.voucherCode = voucherCode;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     public double getAmountPaid() {
