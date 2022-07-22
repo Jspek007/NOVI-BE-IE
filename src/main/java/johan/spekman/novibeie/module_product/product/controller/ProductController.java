@@ -26,11 +26,9 @@ import java.util.List;
 @RequestMapping(path = "api/v1/products")
 public class ProductController {
     private final ProductService productService;
-    private final CSVFormatCheck csvFormatCheck;
 
     public ProductController(ProductService productService, CSVFormatCheck csvFormatCheck) {
         this.productService = productService;
-        this.csvFormatCheck = csvFormatCheck;
     }
 
     @GetMapping(path = "/get/all")
@@ -83,7 +81,7 @@ public class ProductController {
         } else {
             try {
                 productService.saveAll(file);
-                message = "Uploaded the file succesfully: " + file.getOriginalFilename();
+                message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(message);
             } catch (Exception exception) {
                 throw new ApiRequestException("Could not upload the file. " + exception.getMessage());

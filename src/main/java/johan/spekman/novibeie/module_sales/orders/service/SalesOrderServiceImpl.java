@@ -4,6 +4,7 @@ import johan.spekman.novibeie.exceptions.ApiRequestException;
 import johan.spekman.novibeie.module_customer.model.Customer;
 import johan.spekman.novibeie.module_customer.repository.CustomerRepository;
 import johan.spekman.novibeie.module_customer_address.repository.CustomerAddressRepository;
+import johan.spekman.novibeie.module_promotion.model.Promotion;
 import johan.spekman.novibeie.module_sales.orders.dto.SalesOrderItemDto;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrder;
 import johan.spekman.novibeie.module_sales.orders.model.SalesOrderItem;
@@ -11,6 +12,7 @@ import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderItemRepos
 import johan.spekman.novibeie.module_sales.orders.repository.SalesOrderRepository;
 import johan.spekman.novibeie.module_product.product.model.Product;
 import johan.spekman.novibeie.module_product.product.repository.ProductRepository;
+import johan.spekman.novibeie.module_sales.orders.util.SalesOrderPromotionUtil;
 import johan.spekman.novibeie.module_sales.service.SalesResourceService;
 import johan.spekman.novibeie.utililies.CreateTimeStamp;
 import johan.spekman.novibeie.utililies.InputValidation;
@@ -35,6 +37,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final SalesOrderRepository salesOrderRepository;
     private final ProductRepository productRepository;
     private final SalesResourceService salesResourceService;
+    private final SalesOrderPromotionUtil salesOrderPromotionUtil;
 
     public SalesOrderServiceImpl(CustomerRepository customerRepository,
                                  InputValidation inputValidation,
@@ -43,7 +46,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                                  CustomerAddressRepository customerAddressRepository,
                                  SalesOrderRepository salesOrderRepository,
                                  ProductRepository productRepository,
-                                 SalesResourceService salesResourceService) {
+                                 SalesResourceService salesResourceService,
+                                 SalesOrderPromotionUtil salesOrderPromotionUtil) {
         this.customerRepository = customerRepository;
         this.inputValidation = inputValidation;
         this.createTimeStamp = createTimeStamp;
@@ -52,6 +56,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         this.salesOrderRepository = salesOrderRepository;
         this.productRepository = productRepository;
         this.salesResourceService = salesResourceService;
+        this.salesOrderPromotionUtil = salesOrderPromotionUtil;
     }
 
     public List<SalesOrderItem> saveOrderItems(List<Product> products, SalesOrder salesOrder) {
@@ -75,12 +80,20 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     public SalesOrder saveSalesOrder(List<Product> products, SalesOrder salesOrder, Customer customer) {
+        boolean hasPromotion = salesOrderPromotionUtil.checkIfOrderHasPromotion(salesOrder);
+
         try {
             double sum = 0;
             for (Product product : products) {
                 sum += product.getProductPrice();
             }
             salesOrder.setGrandTotal(sum);
+
+            if (hasPromotion) {
+                Promotion promotion = salesOrderPromotionUtil.getPromotionOnOrder(salesOrder);
+                salesOrderPromotionUtil.prepareOrderWithPromotion(salesOrder, promotion);
+            }
+
             salesOrder.setTotalItems(products.size());
             salesOrder.setCreatedAtDate(createTimeStamp.createTimeStamp());
             salesResourceService.prepareCustomerData(salesOrder, customer);
@@ -105,6 +118,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
         SalesOrder salesOrder = new SalesOrder();
         salesOrderRepository.save(salesOrder);
+        salesOrder.setVoucherCode(salesOrderItemDto.voucherCode());
 
         Customer existingCustomer = customerRepository
                 .findByEmailAddress(salesOrderItemDto.getCustomer().getEmailAddress());
